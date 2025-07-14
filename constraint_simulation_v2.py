@@ -17,7 +17,7 @@ from typing import List, Dict, Optional, Tuple, Set
 from collections import defaultdict, deque
 from datetime import datetime
 import multiprocessing as mp
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, as_completed
 import traceback
 
 # Try to import seaborn for better visualizations
@@ -1162,15 +1162,15 @@ def run_mass_experiment(num_simulations: int = 100, use_multiprocessing: bool = 
             futures = [executor.submit(run_single_simulation, i) for i in range(num_simulations)]
             
             results = []
-            for i, future in enumerate(futures):
-                result = future.result()
+            for completed_future in as_completed(futures):
+                result = completed_future.result()
                 results.append(result)
                 
-                if (i + 1) % 10 == 0:
+                if len(results) % 10 == 0:
                     elapsed = time.time() - start_time
-                    rate = (i + 1) / elapsed
-                    eta = (num_simulations - (i + 1)) / rate
-                    print(f"⏳ Progress: {i + 1}/{num_simulations} ({(i+1)/num_simulations*100:.1f}%) | "
+                    rate = len(results) / elapsed
+                    eta = (num_simulations - len(results)) / rate
+                    print(f"⏳ Progress: {len(results)}/{num_simulations} ({len(results)/num_simulations*100:.1f}%) | "
                           f"Rate: {rate:.1f} sim/sec | ETA: {eta:.1f}s")
     else:
         print(f"🔧 TAKING SINGLE-THREADED PATH")
