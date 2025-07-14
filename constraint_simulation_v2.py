@@ -18,6 +18,7 @@ from collections import defaultdict, deque
 from datetime import datetime
 import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor
+import argparse
 import traceback
 
 # Try to import seaborn for better visualizations
@@ -1851,6 +1852,40 @@ def save_comprehensive_results(df: pd.DataFrame, thresholds: Dict):
 
 def main():
     """Run the complete enhanced mass experiment with inter-group dynamics"""
+    
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(
+        description='Enhanced Constraint Cascade Simulation - Mass Parameter Exploration',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python constraint_simulation_v2.py --num-runs 200 --multiprocessing
+  python constraint_simulation_v2.py -n 50 --single-thread
+  python constraint_simulation_v2.py -n 1000 -m
+  python constraint_simulation_v2.py (uses defaults: 100 runs, single-thread)
+        """
+    )
+    
+    parser.add_argument('-n', '--num-runs', type=int, default=100,
+                        help='Number of simulation runs to execute (default: 100)')
+    parser.add_argument('-m', '--multiprocessing', action='store_true',
+                        help='Enable multiprocessing for faster execution')
+    parser.add_argument('--single-thread', action='store_true',
+                        help='Force single-threaded execution (overrides --multiprocessing)')
+    
+    args = parser.parse_args()
+    
+    # Configuration from arguments
+    num_simulations = args.num_runs
+    
+    # Determine multiprocessing usage
+    if args.single_thread:
+        use_multiprocessing = False
+    elif args.multiprocessing:
+        use_multiprocessing = True
+    else:
+        use_multiprocessing = num_simulations >= 20  # Auto-enable for larger runs
+    
     print("🔬 Enhanced Constraint Cascade Simulation - Mass Parameter Exploration")
     print("="*80)
     print("🎯 Discovering emergent patterns with enhanced dynamics AND inter-group features")
@@ -1859,10 +1894,6 @@ def main():
     print("🆕              Reputational Spillover, Inter-group Institutions (Mixing Events)")
     print("📊 Full analysis and reporting capabilities (preserves ALL original functionality)")
     print(f"📂 Working directory: {os.getcwd()}")
-    
-    # Configuration
-    num_simulations = 100  # Reduced for testing
-    use_multiprocessing = False  # Single-threaded
     
     print(f"\n⚙️  Experiment Configuration:")
     print(f"   🔢 Number of simulations: {num_simulations}")
@@ -1875,7 +1906,7 @@ def main():
     print(f"   ⚡ Out-group surcharge: 1.0x-3.0x constraint amplification")
     print(f"   📢 Reputational spillover: 0-30% collective blame")
     print(f"   🎭 Mixing events: Periodic cross-group institutions")
-    print(f"   🖥️  Multiprocessing: {use_multiprocessing}")
+    print(f"   🖥️  Multiprocessing: {'✅ ENABLED' if use_multiprocessing else '❌ DISABLED'}")
     
     try:
         # Run mass experiment
