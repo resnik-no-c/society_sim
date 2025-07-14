@@ -1861,8 +1861,8 @@ def main():
     print(f"📂 Working directory: {os.getcwd()}")
     
     # Configuration
-    num_simulations = 100  # Reduced for testing
-    use_multiprocessing = False  # Single-threaded
+    num_simulations = 1500  # Reduced for testing
+    use_multiprocessing = True  # Single-threaded
     
     print(f"\n⚙️  Experiment Configuration:")
     print(f"   🔢 Number of simulations: {num_simulations}")
