@@ -26,6 +26,12 @@ import queue
 import pickle
 import heapq
 
+def timestamp_print(message: str):
+    """Print message with timestamp"""
+    timestamp = datetime.now().strftime('%H:%M:%S')
+    print(f"[{timestamp}] {message}")
+
+
 # Try to import seaborn for better visualizations
 try:
     import seaborn as sns
@@ -41,11 +47,6 @@ try:
 except ImportError:
     HAS_SCIPY = False
     timestamp_print("⚠️  SciPy not available - some statistical analysis will be limited")
-
-def timestamp_print(message: str):
-    """Print message with timestamp"""
-    timestamp = datetime.now().strftime('%H:%M:%S')
-    print(f"[{timestamp}] {message}")
 
 def save_simulation_result(result: EnhancedSimulationResults, results_dir: str = "simulation_results"):
     """Save individual simulation result immediately upon completion"""
