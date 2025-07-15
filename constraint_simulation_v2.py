@@ -1380,62 +1380,65 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
         
         while active_futures or not scheduler.work_queue.empty():
             # Wait for any task to complete
-            completed_futures = as_completed(active_futures, timeout=10)
-            
-            for future in completed_futures:
-                chunk = active_futures.pop(future)
-                
-                try:
-                    result_type, sim_id, data, exec_time, rounds_done = future.result()
+            try:
+                completed_futures = as_completed(active_futures, timeout=60)
+                for future in completed_futures:
+                    chunk = active_futures.pop(future)
                     
-                    # Update performance tracking
-                    scheduler.adjust_chunk_size(sim_id, exec_time, rounds_done)
+                    try:
+                        result_type, sim_id, data, exec_time, rounds_done = future.result()
+                        
+                        # Update performance tracking
+                        scheduler.adjust_chunk_size(sim_id, exec_time, rounds_done)
+                        
+                        if result_type == 'complete':
+                            results[sim_id] = data
+                            completed_simulations += 1
+                            timestamp_print(f"🎉 Simulation {sim_id} completed! ({completed_simulations}/{num_simulations})")
+                            
+                            # Progress update
+                            if completed_simulations % 5 == 0:
+                                elapsed = time.time() - start_time
+                                rate = completed_simulations / elapsed
+                                eta = (num_simulations - completed_simulations) / rate if rate > 0 else 0
+                                timestamp_print(f"⏳ Progress: {completed_simulations}/{num_simulations} "
+                                              f"({completed_simulations/num_simulations*100:.1f}%) | "
+                                              f"Rate: {rate:.2f} sim/sec | ETA: {eta:.1f}s")
+                        
+                        elif result_type == 'partial':
+                            # Create next chunk for this simulation
+                            simulation_states[sim_id] = data
+                            
+                            # Create next chunk
+                            current_round = chunk.end_round
+                            chunk_size = scheduler.adaptive_chunk_sizes[sim_id]
+                            max_rounds = simulations[sim_id].max_rounds
+                            
+                            if current_round < max_rounds:
+                                next_chunk = WorkChunk(
+                                    sim_id=sim_id,
+                                    start_round=current_round,
+                                    end_round=min(current_round + chunk_size, max_rounds),
+                                    simulation_state=data,
+                                    complexity_score=chunk.complexity_score,
+                                    estimated_time=exec_time * (chunk_size / rounds_done) if rounds_done > 0 else chunk.estimated_time
+                                )
+                                scheduler.work_queue.put((next_chunk.complexity_score, time.time(), next_chunk))
+                        
+                        elif result_type == 'error':
+                            timestamp_print(f"❌ Error in simulation {sim_id}: {data}")
+                            
+                    except Exception as e:
+                        timestamp_print(f"❌ Exception processing chunk {chunk.chunk_id}: {e}")
                     
-                    if result_type == 'complete':
-                        results[sim_id] = data
-                        completed_simulations += 1
-                        timestamp_print(f"🎉 Simulation {sim_id} completed! ({completed_simulations}/{num_simulations})")
-                        
-                        # Progress update
-                        if completed_simulations % 5 == 0:
-                            elapsed = time.time() - start_time
-                            rate = completed_simulations / elapsed
-                            eta = (num_simulations - completed_simulations) / rate if rate > 0 else 0
-                            timestamp_print(f"⏳ Progress: {completed_simulations}/{num_simulations} "
-                                          f"({completed_simulations/num_simulations*100:.1f}%) | "
-                                          f"Rate: {rate:.2f} sim/sec | ETA: {eta:.1f}s")
-                    
-                    elif result_type == 'partial':
-                        # Create next chunk for this simulation
-                        simulation_states[sim_id] = data
-                        
-                        # Create next chunk
-                        current_round = chunk.end_round
-                        chunk_size = scheduler.adaptive_chunk_sizes[sim_id]
-                        max_rounds = simulations[sim_id].max_rounds
-                        
-                        if current_round < max_rounds:
-                            next_chunk = WorkChunk(
-                                sim_id=sim_id,
-                                start_round=current_round,
-                                end_round=min(current_round + chunk_size, max_rounds),
-                                simulation_state=data,
-                                complexity_score=chunk.complexity_score,
-                                estimated_time=exec_time * (chunk_size / rounds_done) if rounds_done > 0 else chunk.estimated_time
-                            )
-                            scheduler.work_queue.put((next_chunk.complexity_score, time.time(), next_chunk))
-                    
-                    elif result_type == 'error':
-                        timestamp_print(f"❌ Error in simulation {sim_id}: {data}")
-                        
-                except Exception as e:
-                    timestamp_print(f"❌ Exception processing chunk {chunk.chunk_id}: {e}")
-                
-                # Submit new work if available
-                if not scheduler.work_queue.empty():
-                    _, _, new_chunk = scheduler.work_queue.get()
-                    new_future = executor.submit(process_work_chunk, new_chunk)
-                    active_futures[new_future] = new_chunk
+                    # Submit new work if available
+                    if not scheduler.work_queue.empty():
+                        _, _, new_chunk = scheduler.work_queue.get()
+                        new_future = executor.submit(process_work_chunk, new_chunk)
+                        active_futures[new_future] = new_chunk
+            except TimeoutError:
+                timestamp_print(f"⏰ Timeout waiting for futures - continuing to wait...")
+                continue
     
     # Convert results dict to list
     final_results = []
