@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+
+from __future__ import annotations
+
 """
 Enhanced Constraint Cascade Simulation with Weighted Sampling and Inter-Group Dynamics
 Implements Option 1: Weighted Sampling with differentiated interaction types
