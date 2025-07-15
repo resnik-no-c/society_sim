@@ -1284,45 +1284,41 @@ class LoadBalancedScheduler:
                     self.work_queue.empty())
 
 def process_simulation_work(work: SimulationWork) -> tuple:
-    """Process a single work item - FIXED IMPLEMENTATION"""
+    """Process a single work item - STREAMLINED LOGGING"""
     start_time = time.time()
     
     try:
         if work.is_new_simulation:
-            # Start new simulation
             params = generate_random_parameters(work.sim_id)
             sim = EnhancedMassSimulation(params, work.sim_id)
-            sim.round = 0  # Ensure starting from round 0
+            sim.round = 0
         else:
-            # Continue existing simulation
             sim = pickle.loads(work.simulation_state)
-            sim.round = work.start_round  # Ensure correct starting round
+            sim.round = work.start_round
         
         rounds_completed = 0
         target_rounds = work.end_round - work.start_round
         
-        # Progress reporting with timestamps
-        timestamp_print(f"🔄 Processing sim {work.sim_id}: rounds {work.start_round}-{work.end_round} ({target_rounds} rounds)")
+        # STREAMLINED: Only log chunk start for new simulations
+        if work.is_new_simulation:
+            timestamp_print(f"🚀 Starting simulation {work.sim_id} ({work.max_rounds} rounds)")
         
         # Run the specified rounds
         for _ in range(target_rounds):
             if sim.round >= work.max_rounds:
                 break
-                
             if sim.round >= work.end_round:
                 break
             
-            # Check if population is extinct
             alive_people = [p for p in sim.people if not p.is_dead]
             if len(alive_people) == 0:
                 timestamp_print(f"💀 Simulation {sim.run_id} population extinct at round {sim.round}")
                 break
             
-            # Run single round
             sim.round += 1
             rounds_completed += 1
             
-            # Standard round logic
+            # Standard round logic (unchanged)
             if sim._is_mixing_event_round():
                 sim._handle_mixing_event(alive_people)
             
@@ -1336,9 +1332,7 @@ def process_simulation_work(work: SimulationWork) -> tuple:
             
             sim.system_stress = max(0, sim.system_stress - 0.01)
             
-            # Progress reporting every 50 rounds
-            if sim.round % 50 == 0:
-                timestamp_print(f"🔄 Sim {sim.run_id}: Round {sim.round}/{work.max_rounds}")
+            # REMOVED: Frequent round progress logging
         
         execution_time = time.time() - start_time
         
@@ -1347,16 +1341,12 @@ def process_simulation_work(work: SimulationWork) -> tuple:
         is_complete = (sim.round >= work.max_rounds or len(alive_people) == 0)
         
         if is_complete:
-            # Generate final results
             initial_trait_avg = sim._get_average_traits()
             initial_group_populations = sim._get_group_populations()
             result = sim._generate_results(initial_trait_avg, initial_group_populations)
-            timestamp_print(f"✅ Simulation {sim.run_id} completed {sim.round} rounds")
             return ('complete', work.sim_id, result, execution_time, rounds_completed)
         else:
-            # Return updated state for next chunk
             updated_state = pickle.dumps(sim)
-            timestamp_print(f"⏳ Sim {sim.run_id}: Chunk complete, continuing from round {sim.round}")
             return ('partial', work.sim_id, updated_state, execution_time, rounds_completed)
             
     except Exception as e:
@@ -1366,7 +1356,7 @@ def process_simulation_work(work: SimulationWork) -> tuple:
         return ('error', work.sim_id, str(e), 0, 0)
 
 def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: bool = False) -> List[EnhancedSimulationResults]:
-    """Load-balanced mass experiment with proper work stealing"""
+    """Load-balanced mass experiment with streamlined progress reporting"""
     timestamp_print(f"🚀 Starting LOAD-BALANCED mass experiment with {num_simulations} simulations...")
     timestamp_print("✨ Using proper load balancing with work stealing")
     
@@ -1389,8 +1379,7 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
                 elapsed = time.time() - start_time
                 rate = (i + 1) / elapsed
                 eta = (num_simulations - (i + 1)) / rate
-                timestamp_print(f"⏳ Progress: {i + 1}/{num_simulations} ({(i+1)/num_simulations*100:.1f}%) | "
-                              f"Rate: {rate:.1f} sim/sec | ETA: {eta:.1f}s")
+                timestamp_print(f"📊 PROGRESS: {i + 1}/{num_simulations} complete ({(i+1)/num_simulations*100:.1f}%)")
         return results
     
     # Load-balanced multi-processing approach
@@ -1404,7 +1393,7 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
         active_futures = {}
         
         # Submit initial batch of work
-        for _ in range(num_cores * 2):  # Keep queue full
+        for _ in range(num_cores * 2):
             work = scheduler.get_work()
             if work:
                 future = executor.submit(process_simulation_work, work)
@@ -1414,7 +1403,6 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
         
         while not scheduler.is_complete() or active_futures:
             if not active_futures and not scheduler.is_complete():
-                # No active work but not complete - should not happen
                 timestamp_print("⚠️  Warning: No active work but simulations not complete")
                 break
             
@@ -1424,7 +1412,7 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
                     completed_futures = []
                     for future in as_completed(active_futures, timeout=10):
                         completed_futures.append(future)
-                        break  # Process one at a time
+                        break
                     
                     for future in completed_futures:
                         work = active_futures.pop(future)
@@ -1432,6 +1420,11 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
                         try:
                             result_data = future.result()
                             scheduler.submit_result(work, result_data)
+                            
+                            # STREAMLINED: Only log major completion events
+                            if result_data[0] == 'complete':
+                                sim_id = result_data[1]
+                                timestamp_print(f"✅ Simulation {sim_id} completed!")
                             
                             # Submit new work if available
                             new_work = scheduler.get_work()
@@ -1444,21 +1437,12 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
                             continue
                 
                 except TimeoutError:
-                    # Timeout is normal - just continue waiting
                     pass
                 
-                # Progress reporting every 30 seconds
+                # STREAMLINED Progress reporting every 60 seconds (instead of 30)
                 current_time = time.time()
-                if current_time - last_progress_time > 30:
-                    completed, total = scheduler.get_progress()
-                    elapsed = current_time - start_time
-                    if completed > 0:
-                        rate = completed / elapsed
-                        eta = (total - completed) / rate if rate > 0 else 0
-                        timestamp_print(f"⏳ Progress: {completed}/{total} simulations "
-                                      f"({completed/total*100:.1f}%) | "
-                                      f"Rate: {rate:.2f} sim/sec | ETA: {eta:.1f}s | "
-                                      f"Active workers: {len(active_futures)}")
+                if current_time - last_progress_time > 60:
+                    _print_streamlined_progress(scheduler, active_futures, simulations)
                     last_progress_time = current_time
     
     # Collect results
@@ -1470,12 +1454,36 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
             timestamp_print(f"⚠️  Warning: Missing result for simulation {i}")
     
     elapsed = time.time() - start_time
-    timestamp_print(f"✅ Completed {len(final_results)} simulations in {elapsed:.2f} seconds")
-    timestamp_print(f"⚡ Average: {elapsed/len(final_results):.3f} seconds per simulation")
-    timestamp_print(f"🏁 Final rate: {len(final_results)/elapsed:.1f} simulations per second")
+    timestamp_print(f"🎉 ALL COMPLETE: {len(final_results)} simulations in {elapsed:.2f} seconds")
+    timestamp_print(f"⚡ Average: {elapsed/len(final_results):.1f} seconds per simulation")
     
     return final_results
 
+def _print_streamlined_progress(scheduler, active_futures, simulations):
+    """Print clean, consolidated progress update"""
+    completed, total = scheduler.get_progress()
+    
+    # Get active simulation progress
+    active_sims = []
+    for future, work in active_futures.items():
+        if work.sim_id in scheduler.active_simulations:
+            current_round = scheduler.active_simulations[work.sim_id]
+            max_rounds = simulations[work.sim_id].max_rounds
+            progress_pct = int(100 * current_round / max_rounds)
+            active_sims.append(f"Sim {work.sim_id} ({current_round}/{max_rounds} {progress_pct}%)")
+    
+    # Sort for consistent display
+    active_sims.sort(key=lambda x: int(x.split()[1]))
+    
+    # Single clean progress line
+    if active_sims:
+        active_str = " | Active: " + ", ".join(active_sims[:4])  # Show max 4 active sims
+        if len(active_sims) > 4:
+            active_str += f" +{len(active_sims)-4} more"
+    else:
+        active_str = " | No active simulations"
+    
+    timestamp_print(f"📊 PROGRESS: {completed}/{total} complete{active_str}")
 
 def run_mass_experiment(num_simulations: int = 100, use_multiprocessing: bool = False) -> List[EnhancedSimulationResults]:
     """ORIGINAL: Run mass parameter exploration experiment (with inter-group extensions)"""
