@@ -196,108 +196,6 @@ class EnhancedSimulationResults:
     group_extinction_events: int = 0  # How many groups went extinct
     trust_asymmetry: float = 0.0  # In-group trust - out-group trust
 
-@dataclass
-class WorkChunk:
-    """Represents a chunk of simulation work that can be distributed"""
-    sim_id: int
-    start_round: int
-    end_round: int
-    simulation_state: bytes  # Pickled simulation state
-    complexity_score: float
-    estimated_time: float = 0.0
-    chunk_id: str = ""
-    
-    def __post_init__(self):
-        self.chunk_id = f"sim_{self.sim_id}_rounds_{self.start_round}-{self.end_round}"
-
-class SimulationComplexityEstimator:
-    """Estimates computational complexity of simulation parameters"""
-    
-    @staticmethod
-    def estimate_complexity(params: SimulationParameters) -> float:
-        """Estimate computational complexity score for load balancing"""
-        base_complexity = (
-            params.initial_population ** 1.5 *  # Population growth factor
-            (params.max_rounds / 100) ** 1.2 *  # Round scaling
-            params.pressure_multiplier * 2.0    # Cascade likelihood
-        )
-        
-        # Inter-group complexity multiplier
-        if hasattr(params, 'num_groups') and params.num_groups > 1:
-            intergroup_multiplier = (
-                2.5 * params.num_groups +                    # Base group complexity
-                params.homophily_bias * 1.5 +                # Partner selection complexity
-                (2.0 - params.out_group_trust_modifier) * 2  # Trust asymmetry complexity
-            )
-            base_complexity *= intergroup_multiplier
-        
-        return base_complexity
-
-class SmartScheduler:
-    """Intelligent work scheduler with adaptive load balancing"""
-    
-    def __init__(self, simulations: List[SimulationParameters], num_workers: int = 8):
-        self.simulations = simulations
-        self.num_workers = num_workers
-        self.work_queue = queue.PriorityQueue()
-        self.completed_chunks = {}
-        self.chunk_performance = {}  # Track execution times
-        self.adaptive_chunk_sizes = {}  # Per-simulation chunk sizes
-        self.lock = threading.Lock()
-        
-        # Initialize chunk sizes based on complexity
-        for i, params in enumerate(simulations):
-            complexity = SimulationComplexityEstimator.estimate_complexity(params)
-            # Higher complexity = smaller initial chunks
-            initial_chunk_size = max(10, min(50, int(100 / (complexity / 1000))))
-            self.adaptive_chunk_sizes[i] = initial_chunk_size
-    
-    def create_initial_chunks(self) -> List[WorkChunk]:
-        """Create initial work chunks for all simulations"""
-        chunks = []
-        
-        for sim_id, params in enumerate(self.simulations):
-            complexity = SimulationComplexityEstimator.estimate_complexity(params)
-            chunk_size = self.adaptive_chunk_sizes[sim_id]
-            
-            # Create initial simulation state
-            sim = EnhancedMassSimulation(params, sim_id)
-            initial_state = pickle.dumps(sim)
-            
-            # Create chunks for the entire simulation
-            for start_round in range(0, params.max_rounds, chunk_size):
-                end_round = min(start_round + chunk_size, params.max_rounds)
-                
-                chunk = WorkChunk(
-                    sim_id=sim_id,
-                    start_round=start_round,
-                    end_round=end_round,
-                    simulation_state=initial_state,
-                    complexity_score=complexity,
-                    estimated_time=complexity * (end_round - start_round) / 1000
-                )
-                chunks.append(chunk)
-        
-        return chunks
-    
-    def adjust_chunk_size(self, sim_id: int, execution_time: float, rounds_processed: int):
-        """Dynamically adjust chunk sizes based on performance"""
-        with self.lock:
-            time_per_round = execution_time / max(1, rounds_processed)
-            current_size = self.adaptive_chunk_sizes[sim_id]
-            
-            # Target 30-120 seconds per chunk
-            if execution_time > 120:  # Too slow, reduce chunk size
-                new_size = max(5, int(current_size * 0.7))
-            elif execution_time < 30:  # Too fast, increase chunk size
-                new_size = min(100, int(current_size * 1.3))
-            else:
-                new_size = current_size  # Just right
-            
-            self.adaptive_chunk_sizes[sim_id] = new_size
-            
-            if new_size != current_size:
-                timestamp_print(f"🔧 Adjusted sim {sim_id} chunk size: {current_size} → {new_size} rounds")
 
 class OptimizedPerson:
     """Enhanced person with optional group identity (extends original)"""
@@ -1255,29 +1153,176 @@ def run_single_simulation(run_id: int) -> EnhancedSimulationResults:
     timestamp_print(f"✅ Completed simulation {run_id}")
     return result
 
-def process_work_chunk(chunk: WorkChunk) -> tuple:
-    """Process a single work chunk - runs in worker process"""
+
+# ============================================================================
+# NEW LOAD-BALANCED SIMULATION SYSTEM
+# ============================================================================
+
+@dataclass
+class SimulationWork:
+    """Represents work to be done - either a new simulation or continuing an existing one"""
+    sim_id: int
+    start_round: int
+    end_round: int
+    max_rounds: int
+    simulation_state: Optional[bytes] = None  # None for new simulation
+    estimated_time: float = 30.0  # seconds
+    complexity_score: float = 1.0
+    
+    @property
+    def is_new_simulation(self) -> bool:
+        return self.simulation_state is None
+    
+    @property
+    def is_complete(self) -> bool:
+        return self.start_round >= self.max_rounds
+
+class LoadBalancedScheduler:
+    """Proper load balancing with work stealing"""
+    
+    def __init__(self, simulations: List[SimulationParameters], chunk_size: int = 50):
+        self.simulations = simulations
+        self.chunk_size = chunk_size
+        self.work_queue = queue.Queue()
+        self.completed_simulations = {}
+        self.active_simulations = {}  # sim_id -> current_round
+        self.simulation_states = {}   # sim_id -> latest_state
+        self.lock = threading.Lock()
+        
+        # Initialize work queue with all simulations
+        for i, params in enumerate(simulations):
+            complexity = self._estimate_complexity(params)
+            work = SimulationWork(
+                sim_id=i,
+                start_round=0,
+                end_round=min(chunk_size, params.max_rounds),
+                max_rounds=params.max_rounds,
+                simulation_state=None,  # New simulation
+                complexity_score=complexity,
+                estimated_time=complexity * chunk_size / 100
+            )
+            self.work_queue.put(work)
+            self.active_simulations[i] = 0
+    
+    def _estimate_complexity(self, params: SimulationParameters) -> float:
+        """Estimate simulation complexity for load balancing"""
+        base = params.initial_population ** 1.3 * (params.max_rounds / 100)
+        
+        # Inter-group complexity multiplier
+        if hasattr(params, 'num_groups') and params.num_groups > 1:
+            intergroup_factor = (
+                params.num_groups * 1.5 +
+                params.homophily_bias * 1.2 +
+                (2.0 - params.out_group_trust_modifier) * 1.5
+            )
+            base *= intergroup_factor
+        
+        return base
+    
+    def get_work(self) -> Optional[SimulationWork]:
+        """Get next work item"""
+        try:
+            return self.work_queue.get_nowait()
+        except queue.Empty:
+            return None
+    
+    def submit_result(self, work: SimulationWork, result_data: tuple):
+        """Submit completed work and potentially create follow-up work"""
+        result_type, sim_id, data, exec_time, rounds_done = result_data
+        
+        with self.lock:
+            if result_type == 'complete':
+                # Simulation finished
+                self.completed_simulations[sim_id] = data
+                if sim_id in self.active_simulations:
+                    del self.active_simulations[sim_id]
+                if sim_id in self.simulation_states:
+                    del self.simulation_states[sim_id]
+                timestamp_print(f"🎉 Simulation {sim_id} completed!")
+                
+            elif result_type == 'partial':
+                # Simulation continues - create next chunk
+                self.simulation_states[sim_id] = data
+                current_round = work.end_round
+                self.active_simulations[sim_id] = current_round
+                
+                if current_round < work.max_rounds:
+                    # Adaptive chunk sizing based on execution time
+                    if exec_time > 60:  # Too slow
+                        new_chunk_size = max(10, int(self.chunk_size * 0.7))
+                    elif exec_time < 20:  # Too fast  
+                        new_chunk_size = min(100, int(self.chunk_size * 1.3))
+                    else:
+                        new_chunk_size = self.chunk_size
+                    
+                    next_work = SimulationWork(
+                        sim_id=sim_id,
+                        start_round=current_round,
+                        end_round=min(current_round + new_chunk_size, work.max_rounds),
+                        max_rounds=work.max_rounds,
+                        simulation_state=data,
+                        complexity_score=work.complexity_score,
+                        estimated_time=exec_time * (new_chunk_size / rounds_done) if rounds_done > 0 else work.estimated_time
+                    )
+                    self.work_queue.put(next_work)
+                    
+            elif result_type == 'error':
+                timestamp_print(f"❌ Error in simulation {sim_id}: {data}")
+                # Remove from active tracking
+                if sim_id in self.active_simulations:
+                    del self.active_simulations[sim_id]
+    
+    def get_progress(self) -> Tuple[int, int]:
+        """Get (completed, total) simulations"""
+        with self.lock:
+            return len(self.completed_simulations), len(self.simulations)
+    
+    def is_complete(self) -> bool:
+        """Check if all simulations are done"""
+        with self.lock:
+            return (len(self.completed_simulations) == len(self.simulations) and 
+                    self.work_queue.empty())
+
+def process_simulation_work(work: SimulationWork) -> tuple:
+    """Process a single work item - FIXED IMPLEMENTATION"""
     start_time = time.time()
     
     try:
-        # Deserialize simulation state
-        sim = pickle.loads(chunk.simulation_state)
+        if work.is_new_simulation:
+            # Start new simulation
+            params = generate_random_parameters(work.sim_id)
+            sim = EnhancedMassSimulation(params, work.sim_id)
+            sim.round = 0  # Ensure starting from round 0
+        else:
+            # Continue existing simulation
+            sim = pickle.loads(work.simulation_state)
+            sim.round = work.start_round  # Ensure correct starting round
+        
+        rounds_completed = 0
+        target_rounds = work.end_round - work.start_round
+        
+        # Progress reporting with timestamps
+        timestamp_print(f"🔄 Processing sim {work.sim_id}: rounds {work.start_round}-{work.end_round} ({target_rounds} rounds)")
         
         # Run the specified rounds
-        rounds_completed = 0
-        for target_round in range(chunk.start_round, chunk.end_round):
-            if sim.round >= sim.params.max_rounds:
+        for _ in range(target_rounds):
+            if sim.round >= work.max_rounds:
                 break
                 
+            if sim.round >= work.end_round:
+                break
+            
+            # Check if population is extinct
+            alive_people = [p for p in sim.people if not p.is_dead]
+            if len(alive_people) == 0:
+                timestamp_print(f"💀 Simulation {sim.run_id} population extinct at round {sim.round}")
+                break
+            
+            # Run single round
             sim.round += 1
             rounds_completed += 1
             
-            # Run single round logic
-            alive_people = [p for p in sim.people if not p.is_dead]
-            if len(alive_people) == 0:
-                break
-            
-            # Existing round logic from run_simulation
+            # Standard round logic
             if sim._is_mixing_event_round():
                 sim._handle_mixing_event(alive_people)
             
@@ -1291,36 +1336,39 @@ def process_work_chunk(chunk: WorkChunk) -> tuple:
             
             sim.system_stress = max(0, sim.system_stress - 0.01)
             
-            # Progress reporting with timestamps
-            if sim.round % 10 == 0:  # More frequent reporting
-                timestamp_print(f"🔄 Sim {sim.run_id}: Round {sim.round}/{sim.params.max_rounds} (Chunk {chunk.chunk_id})")
+            # Progress reporting every 50 rounds
+            if sim.round % 50 == 0:
+                timestamp_print(f"🔄 Sim {sim.run_id}: Round {sim.round}/{work.max_rounds}")
         
         execution_time = time.time() - start_time
         
         # Check if simulation is complete
-        is_complete = (sim.round >= sim.params.max_rounds or 
-                      len([p for p in sim.people if not p.is_dead]) == 0)
+        alive_people = [p for p in sim.people if not p.is_dead]
+        is_complete = (sim.round >= work.max_rounds or len(alive_people) == 0)
         
         if is_complete:
             # Generate final results
             initial_trait_avg = sim._get_average_traits()
             initial_group_populations = sim._get_group_populations()
             result = sim._generate_results(initial_trait_avg, initial_group_populations)
-            timestamp_print(f"✅ Completed simulation {sim.run_id}")
-            return ('complete', chunk.sim_id, result, execution_time, rounds_completed)
+            timestamp_print(f"✅ Simulation {sim.run_id} completed {sim.round} rounds")
+            return ('complete', work.sim_id, result, execution_time, rounds_completed)
         else:
             # Return updated state for next chunk
             updated_state = pickle.dumps(sim)
-            return ('partial', chunk.sim_id, updated_state, execution_time, rounds_completed)
+            timestamp_print(f"⏳ Sim {sim.run_id}: Chunk complete, continuing from round {sim.round}")
+            return ('partial', work.sim_id, updated_state, execution_time, rounds_completed)
             
     except Exception as e:
-        timestamp_print(f"❌ Error in chunk {chunk.chunk_id}: {e}")
-        return ('error', chunk.sim_id, str(e), 0, 0)
+        timestamp_print(f"❌ Error processing sim {work.sim_id}: {e}")
+        import traceback
+        traceback.print_exc()
+        return ('error', work.sim_id, str(e), 0, 0)
 
 def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: bool = False) -> List[EnhancedSimulationResults]:
-    """Enhanced mass experiment with smart load balancing"""
-    timestamp_print(f"🚀 Starting SMART mass experiment with {num_simulations} simulations...")
-    timestamp_print("✨ Using adaptive load balancing and real-time progress tracking")
+    """Load-balanced mass experiment with proper work stealing"""
+    timestamp_print(f"🚀 Starting LOAD-BALANCED mass experiment with {num_simulations} simulations...")
+    timestamp_print("✨ Using proper load balancing with work stealing")
     
     start_time = time.time()
     
@@ -1345,116 +1393,79 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
                               f"Rate: {rate:.1f} sim/sec | ETA: {eta:.1f}s")
         return results
     
-    # Smart multi-processing approach
+    # Load-balanced multi-processing approach
     num_cores = min(mp.cpu_count(), 8)
-    timestamp_print(f"🔧 Using {num_cores} CPU cores with smart load balancing...")
+    timestamp_print(f"🔧 Using {num_cores} CPU cores with load balancing...")
     
-    scheduler = SmartScheduler(simulations, num_cores)
-    
-    # Create initial work chunks
-    timestamp_print("📦 Creating adaptive work chunks...")
-    chunks = scheduler.create_initial_chunks()
-    
-    # Sort chunks by complexity (high complexity first for better load distribution)
-    chunks.sort(key=lambda x: x.complexity_score, reverse=True)
-    
-    # Populate work queue
-    for i, chunk in enumerate(chunks):
-        scheduler.work_queue.put((chunk.complexity_score, i, chunk))
-    
-    timestamp_print(f"📊 Created {len(chunks)} work chunks across {num_simulations} simulations")
-    
-    results = {}
-    simulation_states = {}  # Track current state of each simulation
-    completed_simulations = 0
+    # Create scheduler
+    scheduler = LoadBalancedScheduler(simulations, chunk_size=50)
     
     with ProcessPoolExecutor(max_workers=num_cores) as executor:
         active_futures = {}
         
         # Submit initial batch of work
-        for _ in range(min(num_cores * 2, scheduler.work_queue.qsize())):
-            if not scheduler.work_queue.empty():
-                _, _, chunk = scheduler.work_queue.get()
-                future = executor.submit(process_work_chunk, chunk)
-                active_futures[future] = chunk
+        for _ in range(num_cores * 2):  # Keep queue full
+            work = scheduler.get_work()
+            if work:
+                future = executor.submit(process_simulation_work, work)
+                active_futures[future] = work
         
-        while active_futures or not scheduler.work_queue.empty():
-            # Wait for any task to complete - FIXED: removed timeout
-            try:
-                completed_futures = as_completed(active_futures)
-                
-                # Process completed futures one by one with a reasonable timeout
-                futures_to_process = []
-                for future in completed_futures:
-                    futures_to_process.append(future)
-                    # Only process one at a time to avoid blocking
-                    break
-                
-                for future in futures_to_process:
-                    chunk = active_futures.pop(future)
+        last_progress_time = time.time()
+        
+        while not scheduler.is_complete() or active_futures:
+            if not active_futures and not scheduler.is_complete():
+                # No active work but not complete - should not happen
+                timestamp_print("⚠️  Warning: No active work but simulations not complete")
+                break
+            
+            # Wait for futures to complete with timeout handling
+            if active_futures:
+                try:
+                    completed_futures = []
+                    for future in as_completed(active_futures, timeout=10):
+                        completed_futures.append(future)
+                        break  # Process one at a time
                     
-                    try:
-                        result_type, sim_id, data, exec_time, rounds_done = future.result()
+                    for future in completed_futures:
+                        work = active_futures.pop(future)
                         
-                        # Update performance tracking
-                        scheduler.adjust_chunk_size(sim_id, exec_time, rounds_done)
-                        
-                        if result_type == 'complete':
-                            results[sim_id] = data
-                            completed_simulations += 1
-                            timestamp_print(f"🎉 Simulation {sim_id} completed! ({completed_simulations}/{num_simulations})")
+                        try:
+                            result_data = future.result()
+                            scheduler.submit_result(work, result_data)
                             
-                            # Progress update
-                            if completed_simulations % 5 == 0:
-                                elapsed = time.time() - start_time
-                                rate = completed_simulations / elapsed
-                                eta = (num_simulations - completed_simulations) / rate if rate > 0 else 0
-                                timestamp_print(f"⏳ Progress: {completed_simulations}/{num_simulations} "
-                                              f"({completed_simulations/num_simulations*100:.1f}%) | "
-                                              f"Rate: {rate:.2f} sim/sec | ETA: {eta:.1f}s")
-                        
-                        elif result_type == 'partial':
-                            # Create next chunk for this simulation
-                            simulation_states[sim_id] = data
+                            # Submit new work if available
+                            new_work = scheduler.get_work()
+                            if new_work:
+                                new_future = executor.submit(process_simulation_work, new_work)
+                                active_futures[new_future] = new_work
                             
-                            # Create next chunk
-                            current_round = chunk.end_round
-                            chunk_size = scheduler.adaptive_chunk_sizes[sim_id]
-                            max_rounds = simulations[sim_id].max_rounds
-                            
-                            if current_round < max_rounds:
-                                next_chunk = WorkChunk(
-                                    sim_id=sim_id,
-                                    start_round=current_round,
-                                    end_round=min(current_round + chunk_size, max_rounds),
-                                    simulation_state=data,
-                                    complexity_score=chunk.complexity_score,
-                                    estimated_time=exec_time * (chunk_size / rounds_done) if rounds_done > 0 else chunk.estimated_time
-                                )
-                                scheduler.work_queue.put((next_chunk.complexity_score, time.time(), next_chunk))
-                        
-                        elif result_type == 'error':
-                            timestamp_print(f"❌ Error in simulation {sim_id}: {data}")
-                            
-                    except Exception as e:
-                        timestamp_print(f"❌ Exception processing chunk {chunk.chunk_id}: {e}")
-                    
-                    # Submit new work if available
-                    if not scheduler.work_queue.empty():
-                        _, _, new_chunk = scheduler.work_queue.get()
-                        new_future = executor.submit(process_work_chunk, new_chunk)
-                        active_futures[new_future] = new_chunk
-                        
-            except Exception as e:
-                timestamp_print(f"❌ Error in main loop: {e}")
-                # Continue with remaining futures
-                continue
+                        except Exception as e:
+                            timestamp_print(f"❌ Exception processing work: {e}")
+                            continue
+                
+                except TimeoutError:
+                    # Timeout is normal - just continue waiting
+                    pass
+                
+                # Progress reporting every 30 seconds
+                current_time = time.time()
+                if current_time - last_progress_time > 30:
+                    completed, total = scheduler.get_progress()
+                    elapsed = current_time - start_time
+                    if completed > 0:
+                        rate = completed / elapsed
+                        eta = (total - completed) / rate if rate > 0 else 0
+                        timestamp_print(f"⏳ Progress: {completed}/{total} simulations "
+                                      f"({completed/total*100:.1f}%) | "
+                                      f"Rate: {rate:.2f} sim/sec | ETA: {eta:.1f}s | "
+                                      f"Active workers: {len(active_futures)}")
+                    last_progress_time = current_time
     
-    # Convert results dict to list
+    # Collect results
     final_results = []
     for i in range(num_simulations):
-        if i in results:
-            final_results.append(results[i])
+        if i in scheduler.completed_simulations:
+            final_results.append(scheduler.completed_simulations[i])
         else:
             timestamp_print(f"⚠️  Warning: Missing result for simulation {i}")
     
@@ -1464,6 +1475,7 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
     timestamp_print(f"🏁 Final rate: {len(final_results)/elapsed:.1f} simulations per second")
     
     return final_results
+
 
 def run_mass_experiment(num_simulations: int = 100, use_multiprocessing: bool = False) -> List[EnhancedSimulationResults]:
     """ORIGINAL: Run mass parameter exploration experiment (with inter-group extensions)"""
