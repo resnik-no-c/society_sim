@@ -4,6 +4,7 @@ Complete Enhanced Constraint Cascade Simulation with Inter-Group Dynamics
 Full fidelity simulation with comprehensive analysis and reporting
 EXTENDS the original with: Group Tags, Homophily, Group-Weighted Trust, 
 Out-group Surcharge, Reputational Spillover, and Inter-group Institutions
+NEW: Smart Load Balancing, Adaptive Chunk Sizing, Real-time Progress Tracking
 """
 
 import random
@@ -13,13 +14,17 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from dataclasses import dataclass, field
-from typing import List, Dict, Optional, Tuple, Set
+from typing import List, Dict, Optional, Tuple, Set, NamedTuple
 from collections import defaultdict, deque
 from datetime import datetime
 import multiprocessing as mp
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, as_completed, Future
 import traceback
 import argparse
+import threading
+import queue
+import pickle
+import heapq
 
 # Try to import seaborn for better visualizations
 try:
@@ -36,6 +41,11 @@ try:
 except ImportError:
     HAS_SCIPY = False
     print("⚠️  SciPy not available - some statistical analysis will be limited")
+
+def timestamp_print(message: str):
+    """Print message with timestamp"""
+    timestamp = datetime.now().strftime('%H:%M:%S')
+    print(f"[{timestamp}] {message}")
 
 @dataclass
 class MaslowNeeds:
@@ -185,6 +195,109 @@ class EnhancedSimulationResults:
     out_group_constraint_amplifications: int = 0
     group_extinction_events: int = 0  # How many groups went extinct
     trust_asymmetry: float = 0.0  # In-group trust - out-group trust
+
+@dataclass
+class WorkChunk:
+    """Represents a chunk of simulation work that can be distributed"""
+    sim_id: int
+    start_round: int
+    end_round: int
+    simulation_state: bytes  # Pickled simulation state
+    complexity_score: float
+    estimated_time: float = 0.0
+    chunk_id: str = ""
+    
+    def __post_init__(self):
+        self.chunk_id = f"sim_{self.sim_id}_rounds_{self.start_round}-{self.end_round}"
+
+class SimulationComplexityEstimator:
+    """Estimates computational complexity of simulation parameters"""
+    
+    @staticmethod
+    def estimate_complexity(params: SimulationParameters) -> float:
+        """Estimate computational complexity score for load balancing"""
+        base_complexity = (
+            params.initial_population ** 1.5 *  # Population growth factor
+            (params.max_rounds / 100) ** 1.2 *  # Round scaling
+            params.pressure_multiplier * 2.0    # Cascade likelihood
+        )
+        
+        # Inter-group complexity multiplier
+        if hasattr(params, 'num_groups') and params.num_groups > 1:
+            intergroup_multiplier = (
+                2.5 * params.num_groups +                    # Base group complexity
+                params.homophily_bias * 1.5 +                # Partner selection complexity
+                (2.0 - params.out_group_trust_modifier) * 2  # Trust asymmetry complexity
+            )
+            base_complexity *= intergroup_multiplier
+        
+        return base_complexity
+
+class SmartScheduler:
+    """Intelligent work scheduler with adaptive load balancing"""
+    
+    def __init__(self, simulations: List[SimulationParameters], num_workers: int = 8):
+        self.simulations = simulations
+        self.num_workers = num_workers
+        self.work_queue = queue.PriorityQueue()
+        self.completed_chunks = {}
+        self.chunk_performance = {}  # Track execution times
+        self.adaptive_chunk_sizes = {}  # Per-simulation chunk sizes
+        self.lock = threading.Lock()
+        
+        # Initialize chunk sizes based on complexity
+        for i, params in enumerate(simulations):
+            complexity = SimulationComplexityEstimator.estimate_complexity(params)
+            # Higher complexity = smaller initial chunks
+            initial_chunk_size = max(10, min(50, int(100 / (complexity / 1000))))
+            self.adaptive_chunk_sizes[i] = initial_chunk_size
+    
+    def create_initial_chunks(self) -> List[WorkChunk]:
+        """Create initial work chunks for all simulations"""
+        chunks = []
+        
+        for sim_id, params in enumerate(self.simulations):
+            complexity = SimulationComplexityEstimator.estimate_complexity(params)
+            chunk_size = self.adaptive_chunk_sizes[sim_id]
+            
+            # Create initial simulation state
+            sim = EnhancedMassSimulation(params, sim_id)
+            initial_state = pickle.dumps(sim)
+            
+            # Create chunks for the entire simulation
+            for start_round in range(0, params.max_rounds, chunk_size):
+                end_round = min(start_round + chunk_size, params.max_rounds)
+                
+                chunk = WorkChunk(
+                    sim_id=sim_id,
+                    start_round=start_round,
+                    end_round=end_round,
+                    simulation_state=initial_state,
+                    complexity_score=complexity,
+                    estimated_time=complexity * (end_round - start_round) / 1000
+                )
+                chunks.append(chunk)
+        
+        return chunks
+    
+    def adjust_chunk_size(self, sim_id: int, execution_time: float, rounds_processed: int):
+        """Dynamically adjust chunk sizes based on performance"""
+        with self.lock:
+            time_per_round = execution_time / max(1, rounds_processed)
+            current_size = self.adaptive_chunk_sizes[sim_id]
+            
+            # Target 30-120 seconds per chunk
+            if execution_time > 120:  # Too slow, reduce chunk size
+                new_size = max(5, int(current_size * 0.7))
+            elif execution_time < 30:  # Too fast, increase chunk size
+                new_size = min(100, int(current_size * 1.3))
+            else:
+                new_size = current_size  # Just right
+            
+            self.adaptive_chunk_sizes[sim_id] = new_size
+            
+            if new_size != current_size:
+                timestamp_print(f"🔧 Adjusted sim {sim_id} chunk size: {current_size} → {new_size} rounds")
 
 class OptimizedPerson:
     """Enhanced person with optional group identity (extends original)"""
@@ -628,22 +741,22 @@ class EnhancedMassSimulation:
             self.successful_mixing_events += 1
     
     def run_simulation(self) -> EnhancedSimulationResults:
-        """ORIGINAL: Run enhanced simulation (with inter-group extensions)"""
-        print(f"🎮 Starting simulation run {self.run_id}")
+        """ORIGINAL: Run enhanced simulation (with inter-group extensions and timestamps)"""
+        timestamp_print(f"🎮 Starting simulation run {self.run_id}")
         initial_trait_avg = self._get_average_traits()
         initial_group_populations = self._get_group_populations()
-        print(f"📊 Initial setup complete for sim {self.run_id}")
+        timestamp_print(f"📊 Initial setup complete for sim {self.run_id}")
         
         while self.round < self.params.max_rounds:
             self.round += 1
             
             # Debug output every 50 rounds
             if self.round % 50 == 0:
-                print(f"🔄 Sim {self.run_id}: Round {self.round}/{self.params.max_rounds}")
+                timestamp_print(f"🔄 Sim {self.run_id}: Round {self.round}/{self.params.max_rounds}")
             
             alive_people = [p for p in self.people if not p.is_dead]
             if len(alive_people) == 0:
-                print(f"💀 Sim {self.run_id}: Population extinct at round {self.round}")
+                timestamp_print(f"💀 Sim {self.run_id}: Population extinct at round {self.round}")
                 break
             
             # NEW: Check for mixing event
@@ -660,7 +773,7 @@ class EnhancedMassSimulation:
             
             self.system_stress = max(0, self.system_stress - 0.01)
         
-        print(f"🏁 Sim {self.run_id}: Completed {self.round} rounds, generating results...")
+        timestamp_print(f"🏁 Sim {self.run_id}: Completed {self.round} rounds, generating results...")
         return self._generate_results(initial_trait_avg, initial_group_populations)
     
     def _trigger_shock(self):
@@ -1053,14 +1166,14 @@ class EnhancedMassSimulation:
 
 def generate_random_parameters(run_id: int) -> SimulationParameters:
     """EXTENDED: Generate randomized simulation parameters (with optional inter-group settings)"""
-    print(f"🎲 Generating parameters for sim {run_id}")
+    timestamp_print(f"🎲 Generating parameters for sim {run_id}")
     initial_pop = random.randint(100, 500)
     max_pop_multiplier = 5 + random.random() * 5
     max_pop = int(initial_pop * max_pop_multiplier)
     
     # Decide whether to include inter-group dynamics (80% chance)
     include_intergroup = random.random() < 0.8
-    print(f"🏷️  Sim {run_id}: include_intergroup = {include_intergroup}")
+    timestamp_print(f"🏷️  Sim {run_id}: include_intergroup = {include_intergroup}")
     
     if include_intergroup:
         # Random group distribution
@@ -1128,36 +1241,233 @@ def generate_random_parameters(run_id: int) -> SimulationParameters:
             inheritance_style="mother"
         )
     
-    print(f"📋 Sim {run_id}: max_rounds={params.max_rounds}, initial_pop={params.initial_population}")
+    timestamp_print(f"📋 Sim {run_id}: max_rounds={params.max_rounds}, initial_pop={params.initial_population}")
     return params
 
 def run_single_simulation(run_id: int) -> EnhancedSimulationResults:
     """ORIGINAL: Run a single simulation with random parameters"""
-    print(f"🔄 Starting simulation {run_id}")
+    timestamp_print(f"🔄 Starting simulation {run_id}")
     params = generate_random_parameters(run_id)
-    print(f"🎛️  Generated parameters for sim {run_id}")
+    timestamp_print(f"🎛️  Generated parameters for sim {run_id}")
     sim = EnhancedMassSimulation(params, run_id)
-    print(f"🏗️  Created simulation object for sim {run_id}")
+    timestamp_print(f"🏗️  Created simulation object for sim {run_id}")
     result = sim.run_simulation()
-    print(f"✅ Completed simulation {run_id}")
+    timestamp_print(f"✅ Completed simulation {run_id}")
     return result
+
+def process_work_chunk(chunk: WorkChunk) -> tuple:
+    """Process a single work chunk - runs in worker process"""
+    start_time = time.time()
+    
+    try:
+        # Deserialize simulation state
+        sim = pickle.loads(chunk.simulation_state)
+        
+        # Run the specified rounds
+        rounds_completed = 0
+        for target_round in range(chunk.start_round, chunk.end_round):
+            if sim.round >= sim.params.max_rounds:
+                break
+                
+            sim.round += 1
+            rounds_completed += 1
+            
+            # Run single round logic
+            alive_people = [p for p in sim.people if not p.is_dead]
+            if len(alive_people) == 0:
+                break
+            
+            # Existing round logic from run_simulation
+            if sim._is_mixing_event_round():
+                sim._handle_mixing_event(alive_people)
+            
+            if random.random() < sim.params.shock_frequency:
+                sim._trigger_shock()
+            
+            sim._handle_interactions()
+            sim._check_recoveries()
+            sim._update_population()
+            sim._collect_round_data()
+            
+            sim.system_stress = max(0, sim.system_stress - 0.01)
+            
+            # Progress reporting with timestamps
+            if sim.round % 10 == 0:  # More frequent reporting
+                timestamp_print(f"🔄 Sim {sim.run_id}: Round {sim.round}/{sim.params.max_rounds} (Chunk {chunk.chunk_id})")
+        
+        execution_time = time.time() - start_time
+        
+        # Check if simulation is complete
+        is_complete = (sim.round >= sim.params.max_rounds or 
+                      len([p for p in sim.people if not p.is_dead]) == 0)
+        
+        if is_complete:
+            # Generate final results
+            initial_trait_avg = sim._get_average_traits()
+            initial_group_populations = sim._get_group_populations()
+            result = sim._generate_results(initial_trait_avg, initial_group_populations)
+            timestamp_print(f"✅ Completed simulation {sim.run_id}")
+            return ('complete', chunk.sim_id, result, execution_time, rounds_completed)
+        else:
+            # Return updated state for next chunk
+            updated_state = pickle.dumps(sim)
+            return ('partial', chunk.sim_id, updated_state, execution_time, rounds_completed)
+            
+    except Exception as e:
+        timestamp_print(f"❌ Error in chunk {chunk.chunk_id}: {e}")
+        return ('error', chunk.sim_id, str(e), 0, 0)
+
+def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: bool = False) -> List[EnhancedSimulationResults]:
+    """Enhanced mass experiment with smart load balancing"""
+    timestamp_print(f"🚀 Starting SMART mass experiment with {num_simulations} simulations...")
+    timestamp_print("✨ Using adaptive load balancing and real-time progress tracking")
+    
+    start_time = time.time()
+    
+    # Generate simulation parameters
+    timestamp_print("🎲 Generating simulation parameters...")
+    simulations = [generate_random_parameters(i) for i in range(num_simulations)]
+    
+    if not use_multiprocessing or num_simulations <= 5:
+        timestamp_print("🔧 Using single-threaded execution")
+        results = []
+        for i, params in enumerate(simulations):
+            timestamp_print(f"🔄 Starting simulation {i}")
+            sim = EnhancedMassSimulation(params, i)
+            result = sim.run_simulation()
+            results.append(result)
+            
+            if (i + 1) % 10 == 0:
+                elapsed = time.time() - start_time
+                rate = (i + 1) / elapsed
+                eta = (num_simulations - (i + 1)) / rate
+                timestamp_print(f"⏳ Progress: {i + 1}/{num_simulations} ({(i+1)/num_simulations*100:.1f}%) | "
+                              f"Rate: {rate:.1f} sim/sec | ETA: {eta:.1f}s")
+        return results
+    
+    # Smart multi-processing approach
+    num_cores = min(mp.cpu_count(), 8)
+    timestamp_print(f"🔧 Using {num_cores} CPU cores with smart load balancing...")
+    
+    scheduler = SmartScheduler(simulations, num_cores)
+    
+    # Create initial work chunks
+    timestamp_print("📦 Creating adaptive work chunks...")
+    chunks = scheduler.create_initial_chunks()
+    
+    # Sort chunks by complexity (high complexity first for better load distribution)
+    chunks.sort(key=lambda x: x.complexity_score, reverse=True)
+    
+    # Populate work queue
+    for i, chunk in enumerate(chunks):
+        scheduler.work_queue.put((chunk.complexity_score, i, chunk))
+    
+    timestamp_print(f"📊 Created {len(chunks)} work chunks across {num_simulations} simulations")
+    
+    results = {}
+    simulation_states = {}  # Track current state of each simulation
+    completed_simulations = 0
+    
+    with ProcessPoolExecutor(max_workers=num_cores) as executor:
+        active_futures = {}
+        
+        # Submit initial batch of work
+        for _ in range(min(num_cores * 2, scheduler.work_queue.qsize())):
+            if not scheduler.work_queue.empty():
+                _, _, chunk = scheduler.work_queue.get()
+                future = executor.submit(process_work_chunk, chunk)
+                active_futures[future] = chunk
+        
+        while active_futures or not scheduler.work_queue.empty():
+            # Wait for any task to complete
+            completed_futures = as_completed(active_futures, timeout=10)
+            
+            for future in completed_futures:
+                chunk = active_futures.pop(future)
+                
+                try:
+                    result_type, sim_id, data, exec_time, rounds_done = future.result()
+                    
+                    # Update performance tracking
+                    scheduler.adjust_chunk_size(sim_id, exec_time, rounds_done)
+                    
+                    if result_type == 'complete':
+                        results[sim_id] = data
+                        completed_simulations += 1
+                        timestamp_print(f"🎉 Simulation {sim_id} completed! ({completed_simulations}/{num_simulations})")
+                        
+                        # Progress update
+                        if completed_simulations % 5 == 0:
+                            elapsed = time.time() - start_time
+                            rate = completed_simulations / elapsed
+                            eta = (num_simulations - completed_simulations) / rate if rate > 0 else 0
+                            timestamp_print(f"⏳ Progress: {completed_simulations}/{num_simulations} "
+                                          f"({completed_simulations/num_simulations*100:.1f}%) | "
+                                          f"Rate: {rate:.2f} sim/sec | ETA: {eta:.1f}s")
+                    
+                    elif result_type == 'partial':
+                        # Create next chunk for this simulation
+                        simulation_states[sim_id] = data
+                        
+                        # Create next chunk
+                        current_round = chunk.end_round
+                        chunk_size = scheduler.adaptive_chunk_sizes[sim_id]
+                        max_rounds = simulations[sim_id].max_rounds
+                        
+                        if current_round < max_rounds:
+                            next_chunk = WorkChunk(
+                                sim_id=sim_id,
+                                start_round=current_round,
+                                end_round=min(current_round + chunk_size, max_rounds),
+                                simulation_state=data,
+                                complexity_score=chunk.complexity_score,
+                                estimated_time=exec_time * (chunk_size / rounds_done) if rounds_done > 0 else chunk.estimated_time
+                            )
+                            scheduler.work_queue.put((next_chunk.complexity_score, time.time(), next_chunk))
+                    
+                    elif result_type == 'error':
+                        timestamp_print(f"❌ Error in simulation {sim_id}: {data}")
+                        
+                except Exception as e:
+                    timestamp_print(f"❌ Exception processing chunk {chunk.chunk_id}: {e}")
+                
+                # Submit new work if available
+                if not scheduler.work_queue.empty():
+                    _, _, new_chunk = scheduler.work_queue.get()
+                    new_future = executor.submit(process_work_chunk, new_chunk)
+                    active_futures[new_future] = new_chunk
+    
+    # Convert results dict to list
+    final_results = []
+    for i in range(num_simulations):
+        if i in results:
+            final_results.append(results[i])
+        else:
+            timestamp_print(f"⚠️  Warning: Missing result for simulation {i}")
+    
+    elapsed = time.time() - start_time
+    timestamp_print(f"✅ Completed {len(final_results)} simulations in {elapsed:.2f} seconds")
+    timestamp_print(f"⚡ Average: {elapsed/len(final_results):.3f} seconds per simulation")
+    timestamp_print(f"🏁 Final rate: {len(final_results)/elapsed:.1f} simulations per second")
+    
+    return final_results
 
 def run_mass_experiment(num_simulations: int = 100, use_multiprocessing: bool = False) -> List[EnhancedSimulationResults]:
     """ORIGINAL: Run mass parameter exploration experiment (with inter-group extensions)"""
-    print(f"🚀 Starting enhanced mass experiment with {num_simulations} simulations...")
-    print("✨ Including: Strategy reversals, trust dynamics, cooperation benefits")
-    print("🆕 NEW: Group Tags, Homophily, Trust Asymmetry, Out-group Surcharge, Spillover, Mixing Events")
+    timestamp_print(f"🚀 Starting enhanced mass experiment with {num_simulations} simulations...")
+    timestamp_print("✨ Including: Strategy reversals, trust dynamics, cooperation benefits")
+    timestamp_print("🆕 NEW: Group Tags, Homophily, Trust Asymmetry, Out-group Surcharge, Spillover, Mixing Events")
     
     # DEBUG: Explicit confirmation of threading mode
-    print(f"🔧 DEBUG: use_multiprocessing = {use_multiprocessing}")
-    print(f"🔧 DEBUG: num_simulations = {num_simulations}")
+    timestamp_print(f"🔧 DEBUG: use_multiprocessing = {use_multiprocessing}")
+    timestamp_print(f"🔧 DEBUG: num_simulations = {num_simulations}")
     
     start_time = time.time()
     
     if use_multiprocessing and num_simulations > 20:
-        print(f"🔧 TAKING MULTIPROCESSING PATH")
+        timestamp_print(f"🔧 TAKING MULTIPROCESSING PATH")
         num_cores = min(mp.cpu_count(), 8)
-        print(f"🔧 Using {num_cores} CPU cores for parallel processing...")
+        timestamp_print(f"🔧 Using {num_cores} CPU cores for parallel processing...")
         
         with ProcessPoolExecutor(max_workers=num_cores) as executor:
             futures = [executor.submit(run_single_simulation, i) for i in range(num_simulations)]
@@ -1171,30 +1481,30 @@ def run_mass_experiment(num_simulations: int = 100, use_multiprocessing: bool = 
                     elapsed = time.time() - start_time
                     rate = len(results) / elapsed
                     eta = (num_simulations - len(results)) / rate
-                    print(f"⏳ Progress: {len(results)}/{num_simulations} ({len(results)/num_simulations*100:.1f}%) | "
+                    timestamp_print(f"⏳ Progress: {len(results)}/{num_simulations} ({len(results)/num_simulations*100:.1f}%) | "
                           f"Rate: {rate:.1f} sim/sec | ETA: {eta:.1f}s")
     else:
-        print(f"🔧 TAKING SINGLE-THREADED PATH")
+        timestamp_print(f"🔧 TAKING SINGLE-THREADED PATH")
         results = []
         for i in range(num_simulations):
             if i % 10 == 0:
                 elapsed = time.time() - start_time if i > 0 else 0.1
                 rate = i / elapsed if i > 0 else 0
                 eta = (num_simulations - i) / rate if rate > 0 else 0
-                print(f"⏳ Progress: {i}/{num_simulations} ({i/num_simulations*100:.1f}%) | "
+                timestamp_print(f"⏳ Progress: {i}/{num_simulations} ({i/num_simulations*100:.1f}%) | "
                       f"Rate: {rate:.1f} sim/sec | ETA: {eta:.1f}s")
             results.append(run_single_simulation(i))
     
     elapsed = time.time() - start_time
-    print(f"✅ Completed {num_simulations} simulations in {elapsed:.2f} seconds")
-    print(f"⚡ Average: {elapsed/num_simulations:.3f} seconds per simulation")
-    print(f"🏁 Final rate: {num_simulations/elapsed:.1f} simulations per second")
+    timestamp_print(f"✅ Completed {num_simulations} simulations in {elapsed:.2f} seconds")
+    timestamp_print(f"⚡ Average: {elapsed/num_simulations:.3f} seconds per simulation")
+    timestamp_print(f"🏁 Final rate: {num_simulations/elapsed:.1f} simulations per second")
     
     return results
 
 def analyze_emergent_patterns(results: List[EnhancedSimulationResults]) -> pd.DataFrame:
     """EXTENDED: Analyze results for emergent patterns (includes inter-group analysis)"""
-    print("🔍 Analyzing emergent patterns...")
+    timestamp_print("🔍 Analyzing emergent patterns...")
     
     # Convert results to DataFrame
     data = []
@@ -1301,7 +1611,7 @@ def analyze_emergent_patterns(results: List[EnhancedSimulationResults]) -> pd.Da
 
 def create_pattern_visualizations(df: pd.DataFrame):
     """EXTENDED: Create comprehensive pattern analysis visualizations (preserves all original + adds inter-group)"""
-    print("📊 Creating comprehensive pattern analysis visualizations...")
+    timestamp_print("📊 Creating comprehensive pattern analysis visualizations...")
     
     # Set up the plotting style
     plt.style.use('default')
@@ -1553,7 +1863,7 @@ def create_pattern_visualizations(df: pd.DataFrame):
 
 def identify_critical_thresholds(df: pd.DataFrame):
     """EXTENDED: Identify critical thresholds and phase transitions (preserves original + adds inter-group)"""
-    print("🎯 Identifying critical thresholds...")
+    timestamp_print("🎯 Identifying critical thresholds...")
     
     # ORIGINAL ANALYSIS - PRESERVED
     
@@ -1709,7 +2019,7 @@ def identify_critical_thresholds(df: pd.DataFrame):
 def save_comprehensive_results(df: pd.DataFrame, thresholds: Dict):
     """EXTENDED: Save all results for further analysis (preserves original files + adds inter-group)"""
     current_dir = os.getcwd()
-    print(f"💾 Saving comprehensive results to: {current_dir}")
+    timestamp_print(f"💾 Saving comprehensive results to: {current_dir}")
     
     saved_files = []
     
@@ -1830,28 +2140,28 @@ def save_comprehensive_results(df: pd.DataFrame, thresholds: Dict):
         if os.path.exists(summary_report):
             saved_files.append(f"📋 {summary_report}")
         
-        print(f"\n✅ Successfully saved {len(saved_files)} files:")
+        timestamp_print(f"\n✅ Successfully saved {len(saved_files)} files:")
         for file_info in saved_files:
-            print(f"   {file_info}")
+            timestamp_print(f"   {file_info}")
         
-        print(f"\n📂 Full path: {current_dir}")
+        timestamp_print(f"\n📂 Full path: {current_dir}")
         
     except Exception as e:
-        print(f"❌ Error saving files: {e}")
+        timestamp_print(f"❌ Error saving files: {e}")
         traceback.print_exc()
         
         # Try to save just the main file as a backup
         try:
             backup_file = 'enhanced_simulation_backup.csv'
             df.to_csv(backup_file, index=False)
-            print(f"💾 Backup saved as: {backup_file}")
+            timestamp_print(f"💾 Backup saved as: {backup_file}")
         except Exception as backup_error:
-            print(f"❌ Backup also failed: {backup_error}")
+            timestamp_print(f"❌ Backup also failed: {backup_error}")
     
     return saved_files
 
 def main():
-    """Run the complete enhanced mass experiment with inter-group dynamics"""
+    """Run the complete enhanced mass experiment with inter-group dynamics and smart load balancing"""
     
     # Parse command line arguments
     parser = argparse.ArgumentParser(
@@ -1862,16 +2172,18 @@ Examples:
   python constraint_simulation_v2.py --num-runs 200 --multiprocessing
   python constraint_simulation_v2.py -n 50 --single-thread
   python constraint_simulation_v2.py -n 1000 -m
-  python constraint_simulation_v2.py (uses defaults: 100 runs, single-thread)
+  python constraint_simulation_v2.py (uses defaults: 100 runs, smart load balancing)
         """
     )
     
     parser.add_argument('-n', '--num-runs', type=int, default=100,
                         help='Number of simulation runs to execute (default: 100)')
     parser.add_argument('-m', '--multiprocessing', action='store_true',
-                        help='Enable multiprocessing for faster execution')
+                        help='Enable multiprocessing with smart load balancing')
     parser.add_argument('--single-thread', action='store_true',
                         help='Force single-threaded execution (overrides --multiprocessing)')
+    parser.add_argument('--legacy-mode', action='store_true',
+                        help='Use legacy load balancing (old behavior)')
     
     args = parser.parse_args()
     
@@ -1884,88 +2196,94 @@ Examples:
     elif args.multiprocessing:
         use_multiprocessing = True
     else:
-        use_multiprocessing = num_simulations >= 20  # Auto-enable for larger runs
+        use_multiprocessing = num_simulations >= 10  # Auto-enable for 10+ runs
     
-    print("🔬 Enhanced Constraint Cascade Simulation - Mass Parameter Exploration")
-    print("="*80)
-    print("🎯 Discovering emergent patterns with enhanced dynamics AND inter-group features")
-    print("✨ Original features: Strategy reversals, trust dynamics, cooperation benefits, Maslow tracking")
-    print("🆕 NEW features: Group Tags, Homophily, Trust Asymmetry, Out-group Surcharge,")
-    print("🆕              Reputational Spillover, Inter-group Institutions (Mixing Events)")
-    print("📊 Full analysis and reporting capabilities (preserves ALL original functionality)")
-    print(f"📂 Working directory: {os.getcwd()}")
+    timestamp_print("🔬 Enhanced Constraint Cascade Simulation - Mass Parameter Exploration")
+    timestamp_print("="*80)
+    timestamp_print("🎯 Discovering emergent patterns with enhanced dynamics AND inter-group features")
+    timestamp_print("✨ Original features: Strategy reversals, trust dynamics, cooperation benefits, Maslow tracking")
+    timestamp_print("🆕 NEW features: Group Tags, Homophily, Trust Asymmetry, Out-group Surcharge,")
+    timestamp_print("🆕              Reputational Spillover, Inter-group Institutions (Mixing Events)")
+    timestamp_print("🚀 SMART FEATURES: Adaptive load balancing, complexity estimation, real-time progress")
+    timestamp_print(f"📂 Working directory: {os.getcwd()}")
     
-    print(f"\n⚙️  Experiment Configuration:")
-    print(f"   🔢 Number of simulations: {num_simulations}")
-    print(f"   👥 Population range: 100-500 (5x-10x max)")
-    print(f"   🎛️  Parameters: Fully randomized with recovery dynamics")
-    print(f"   🆕 Inter-group features: 80% of simulations include group dynamics")
-    print(f"   🏷️  Groups: 2-4 groups with randomized distributions")
-    print(f"   🔗 Homophily: 0-100% same-group preference")
-    print(f"   ⚖️  Trust asymmetry: In-group vs out-group modifiers")
-    print(f"   ⚡ Out-group surcharge: 1.0x-3.0x constraint amplification")
-    print(f"   📢 Reputational spillover: 0-30% collective blame")
-    print(f"   🎭 Mixing events: Periodic cross-group institutions")
-    print(f"   🖥️  Multiprocessing: {'✅ ENABLED' if use_multiprocessing else '❌ DISABLED'}")
+    timestamp_print(f"\n⚙️  Experiment Configuration:")
+    timestamp_print(f"   🔢 Number of simulations: {num_simulations}")
+    timestamp_print(f"   👥 Population range: 100-500 (5x-10x max)")
+    timestamp_print(f"   🎛️  Parameters: Fully randomized with recovery dynamics")
+    timestamp_print(f"   🆕 Inter-group features: 80% of simulations include group dynamics")
+    timestamp_print(f"   🏷️  Groups: 2-4 groups with randomized distributions")
+    timestamp_print(f"   🔗 Homophily: 0-100% same-group preference")
+    timestamp_print(f"   ⚖️  Trust asymmetry: In-group vs out-group modifiers")
+    timestamp_print(f"   ⚡ Out-group surcharge: 1.0x-3.0x constraint amplification")
+    timestamp_print(f"   📢 Reputational spillover: 0-30% collective blame")
+    timestamp_print(f"   🎭 Mixing events: Periodic cross-group institutions")
+    load_balancing_mode = "🧠 SMART LOAD BALANCING" if not args.legacy_mode else "🔧 LEGACY MODE"
+    timestamp_print(f"   🖥️  Multiprocessing: {'✅ ENABLED' if use_multiprocessing else '❌ DISABLED'} ({load_balancing_mode})")
     
     try:
-        # Run mass experiment
-        print(f"\n🚀 PHASE 1: Running {num_simulations} enhanced simulations...")
-        results = run_mass_experiment(num_simulations, use_multiprocessing)
-        print(f"✅ Phase 1 complete: {len(results)} simulations finished")
+        # Run mass experiment with smart load balancing
+        timestamp_print(f"\n🚀 PHASE 1: Running {num_simulations} enhanced simulations...")
+        
+        if args.legacy_mode:
+            results = run_mass_experiment(num_simulations, use_multiprocessing)
+        else:
+            results = run_smart_mass_experiment(num_simulations, use_multiprocessing)
+        
+        timestamp_print(f"✅ Phase 1 complete: {len(results)} simulations finished")
         
         # Analyze patterns
-        print(f"\n📊 PHASE 2: Analyzing emergent patterns...")
+        timestamp_print(f"\n📊 PHASE 2: Analyzing emergent patterns...")
         df = analyze_emergent_patterns(results)
-        print(f"✅ Phase 2 complete: {len(df)} simulation records analyzed")
+        timestamp_print(f"✅ Phase 2 complete: {len(df)} simulation records analyzed")
         
         # Create visualizations
-        print(f"\n📈 PHASE 3: Creating comprehensive visualizations...")
+        timestamp_print(f"\n📈 PHASE 3: Creating comprehensive visualizations...")
         create_pattern_visualizations(df)
-        print(f"✅ Phase 3 complete: Pattern analysis charts generated")
+        timestamp_print(f"✅ Phase 3 complete: Pattern analysis charts generated")
         
         # Identify critical thresholds
-        print(f"\n🎯 PHASE 4: Identifying critical thresholds...")
+        timestamp_print(f"\n🎯 PHASE 4: Identifying critical thresholds...")
         thresholds = identify_critical_thresholds(df)
-        print(f"✅ Phase 4 complete: Critical thresholds identified")
+        timestamp_print(f"✅ Phase 4 complete: Critical thresholds identified")
         
         # Save results
-        print(f"\n💾 PHASE 5: Saving comprehensive results...")
+        timestamp_print(f"\n💾 PHASE 5: Saving comprehensive results...")
         saved_files = save_comprehensive_results(df, thresholds)
-        print(f"✅ Phase 5 complete: {len(saved_files)} files saved")
+        timestamp_print(f"✅ Phase 5 complete: {len(saved_files)} files saved")
         
-        print(f"\n🎉 ENHANCED EXPERIMENT COMPLETE!")
-        print(f"📊 Analyzed {len(results)} simulations with full original + inter-group dynamics")
-        print(f"🔍 Discovered patterns across {len(df.columns)} measured variables")
-        print(f"📈 Generated comprehensive analysis charts (original + inter-group)")
-        print(f"💾 Saved detailed results for further research")
+        timestamp_print(f"\n🎉 ENHANCED EXPERIMENT COMPLETE!")
+        timestamp_print(f"📊 Analyzed {len(results)} simulations with full original + inter-group dynamics")
+        timestamp_print(f"🔍 Discovered patterns across {len(df.columns)} measured variables")
+        timestamp_print(f"📈 Generated comprehensive analysis charts (original + inter-group)")
+        timestamp_print(f"💾 Saved detailed results for further research")
         
         # Summary statistics
         has_intergroup = df['has_intergroup'].any()
         standard_sims = len(df[~df['has_intergroup']]) if has_intergroup else len(df)
         intergroup_sims = len(df[df['has_intergroup']]) if has_intergroup else 0
         
-        print(f"\n📋 Key Findings:")
-        print(f"   🔄 Standard simulations: {standard_sims}")
+        timestamp_print(f"\n📋 Key Findings:")
+        timestamp_print(f"   🔄 Standard simulations: {standard_sims}")
         if has_intergroup:
-            print(f"   🆕 Inter-group simulations: {intergroup_sims}")
-        print(f"   🤝 Average cooperation: {df['final_cooperation_rate'].mean():.3f}")
-        print(f"   ♻️  Average redemption rate: {df['redemption_rate'].mean():.3f}")
-        print(f"   📈 Scenarios with redemptions: {(df['total_redemptions'] > 0).sum()}")
-        print(f"   🤝 Average trust level: {df['avg_trust_level'].mean():.3f}")
+            timestamp_print(f"   🆕 Inter-group simulations: {intergroup_sims}")
+        timestamp_print(f"   🤝 Average cooperation: {df['final_cooperation_rate'].mean():.3f}")
+        timestamp_print(f"   ♻️  Average redemption rate: {df['redemption_rate'].mean():.3f}")
+        timestamp_print(f"   📈 Scenarios with redemptions: {(df['total_redemptions'] > 0).sum()}")
+        timestamp_print(f"   🤝 Average trust level: {df['avg_trust_level'].mean():.3f}")
         
         if has_intergroup:
             intergroup_df = df[df['has_intergroup']]
-            print(f"   🆕 Inter-group specific:")
-            print(f"      🔗 Average trust asymmetry: {intergroup_df['trust_asymmetry'].mean():.3f}")
-            print(f"      🏘️  Average segregation index: {intergroup_df['group_segregation_index'].mean():.3f}")
-            print(f"      🎭 Scenarios with mixing events: {(intergroup_df['total_mixing_events'] > 0).sum()}")
-            print(f"      🤝 High cooperation + low segregation: {len(intergroup_df[(intergroup_df['final_cooperation_rate'] > 0.7) & (intergroup_df['group_segregation_index'] < 0.3)])}")
-            print(f"      💀 Group extinction events: {intergroup_df['group_extinction_events'].sum()}")
+            timestamp_print(f"   🆕 Inter-group specific:")
+            timestamp_print(f"      🔗 Average trust asymmetry: {intergroup_df['trust_asymmetry'].mean():.3f}")
+            timestamp_print(f"      🏘️  Average segregation index: {intergroup_df['group_segregation_index'].mean():.3f}")
+            timestamp_print(f"      🎭 Scenarios with mixing events: {(intergroup_df['total_mixing_events'] > 0).sum()}")
+            timestamp_print(f"      🤝 High cooperation + low segregation: {len(intergroup_df[(intergroup_df['final_cooperation_rate'] > 0.7) & (intergroup_df['group_segregation_index'] < 0.3)])}")
+            timestamp_print(f"      💀 Group extinction events: {intergroup_df['group_extinction_events'].sum()}")
         
     except Exception as e:
-        print(f"\n❌ ERROR in main experiment: {e}")
-        print(f"🔧 Please check the error message above for debugging")
+        timestamp_print(f"\n❌ ERROR in main experiment: {e}")
+        timestamp_print(f"🔧 Please check the error message above for debugging")
         traceback.print_exc()
 
 if __name__ == "__main__":
