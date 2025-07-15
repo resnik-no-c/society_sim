@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
 """
 Enhanced Constraint Cascade Simulation with Weighted Sampling and Inter-Group Dynamics
 Implements Option 1: Weighted Sampling with differentiated interaction types
@@ -29,12 +26,6 @@ import queue
 import pickle
 import heapq
 
-def timestamp_print(message: str):
-    """Print message with timestamp"""
-    timestamp = datetime.now().strftime('%H:%M:%S')
-    print(f"[{timestamp}] {message}")
-
-
 # Try to import seaborn for better visualizations
 try:
     import seaborn as sns
@@ -50,6 +41,11 @@ try:
 except ImportError:
     HAS_SCIPY = False
     timestamp_print("⚠️  SciPy not available - some statistical analysis will be limited")
+
+def timestamp_print(message: str):
+    """Print message with timestamp"""
+    timestamp = datetime.now().strftime('%H:%M:%S')
+    print(f"[{timestamp}] {message}")
 
 def save_simulation_result(result: EnhancedSimulationResults, results_dir: str = "simulation_results"):
     """Save individual simulation result immediately upon completion"""
@@ -1832,23 +1828,30 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
     return final_results
 
 def _print_streamlined_progress(scheduler, active_futures, simulations):
-    """Print clean, consolidated progress update"""
+    """Print comprehensive progress update showing all active simulations sorted by progress"""
     completed, total = scheduler.get_progress()
     
+    # Collect all active simulations with progress info
     active_sims = []
     for future, work in active_futures.items():
         if work.sim_id in scheduler.active_simulations:
             current_round = scheduler.active_simulations[work.sim_id]
             max_rounds = simulations[work.sim_id].max_rounds
             progress_pct = int(100 * current_round / max_rounds)
-            active_sims.append(f"Sim {work.sim_id} ({current_round}/{max_rounds} {progress_pct}%)")
-    
-    active_sims.sort(key=lambda x: int(x.split()[1]))
+            
+            # Store tuple for sorting: (progress_pct, sim_id, display_string)
+            display_str = f"Sim {work.sim_id} ({current_round}/{max_rounds} {progress_pct}%)"
+            active_sims.append((progress_pct, work.sim_id, display_str))
     
     if active_sims:
-        active_str = " | Active: " + ", ".join(active_sims[:4])
-        if len(active_sims) > 4:
-            active_str += f" +{len(active_sims)-4} more"
+        # Sort by progress percentage (descending), then by sim_id (ascending) for ties
+        active_sims.sort(key=lambda x: (-x[0], x[1]))
+        
+        # Extract just the display strings after sorting
+        sorted_display_strings = [sim[2] for sim in active_sims]
+        
+        # Show ALL active simulations (no truncation)
+        active_str = " | Active: " + ", ".join(sorted_display_strings)
     else:
         active_str = " | No active simulations"
     
