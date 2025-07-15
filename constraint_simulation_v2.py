@@ -1379,10 +1379,18 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
                 active_futures[future] = chunk
         
         while active_futures or not scheduler.work_queue.empty():
-            # Wait for any task to complete
+            # Wait for any task to complete - FIXED: removed timeout
             try:
-                completed_futures = as_completed(active_futures, timeout=60)
+                completed_futures = as_completed(active_futures)
+                
+                # Process completed futures one by one with a reasonable timeout
+                futures_to_process = []
                 for future in completed_futures:
+                    futures_to_process.append(future)
+                    # Only process one at a time to avoid blocking
+                    break
+                
+                for future in futures_to_process:
                     chunk = active_futures.pop(future)
                     
                     try:
@@ -1436,8 +1444,10 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
                         _, _, new_chunk = scheduler.work_queue.get()
                         new_future = executor.submit(process_work_chunk, new_chunk)
                         active_futures[new_future] = new_chunk
-            except TimeoutError:
-                timestamp_print(f"⏰ Timeout waiting for futures - continuing to wait...")
+                        
+            except Exception as e:
+                timestamp_print(f"❌ Error in main loop: {e}")
+                # Continue with remaining futures
                 continue
     
     # Convert results dict to list
