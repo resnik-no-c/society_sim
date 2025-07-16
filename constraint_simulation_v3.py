@@ -59,7 +59,7 @@ except ImportError:
 # Crisis settings - realistic frequencies
 SHOCK_INTERVAL_YEARS = (5, 25)  # Major shocks every 5-25 years (was multiple per year)
 PARETO_ALPHA_RANGE = (1.8, 2.5)  # Fat-tailed distribution
-PARETO_XM = 0.15  # Minimum severity
+PARETO_XM = 0.3  # Minimum severity
 
 # Trust mechanics - slower, more realistic
 TRUST_DELTA_HELP = +0.04  # Slower trust building (was +0.1)
@@ -72,7 +72,7 @@ COMMUNITY_BUFFER_MIN = 0.02
 COMMUNITY_BUFFER_MAX = 0.08
 
 # Stress model parameters
-ACUTE_DECAY_QUARTERLY = 0.84  # Acute stress decays 50% per year (λ=0.84 per quarter)
+ACUTE_DECAY_QUARTERLY = 0.92  # Acute stress decays 50% per year (λ=0.84 per quarter)
 CHRONIC_WINDOW_QUARTERS = 16  # 4-year rolling window
 
 # Population dynamics
@@ -227,14 +227,14 @@ class SimulationParameters:
     serendipity_rate: float = SERENDIPITY_RATE
     
     # Community buffer parameters
-    community_buffer_factor: float = 0.1
+    community_buffer_factor: float = random.uniform(0.01, 0.05)
     
     # Stress model parameters
     acute_decay: float = ACUTE_DECAY_QUARTERLY
     chronic_window: int = CHRONIC_WINDOW_QUARTERS
     
     # Original parameters preserved
-    base_birth_rate: float = 0.05
+    base_birth_rate: float = random.uniform(0.06, 0.10)
     maslow_variation: float = 0.5
     constraint_threshold_range: Tuple[float, float] = (0.15, 0.5)
     recovery_threshold: float = 0.3
