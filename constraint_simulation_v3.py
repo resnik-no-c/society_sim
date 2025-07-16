@@ -1177,7 +1177,7 @@ class EnhancedMassSimulation:
                     self._trigger_shock()
                 
                 # Process interactions with realistic mechanics
-                schedule_interactions(self.people, self.params, self, self.round)
+                schedule_interactions(sim.people, sim.params, sim, sim.round)
                 
                 self._check_recoveries()
                 self._update_population()
