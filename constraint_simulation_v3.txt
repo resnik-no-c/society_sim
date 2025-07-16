@@ -33,6 +33,7 @@ import matplotlib.pyplot as plt
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional, Tuple, Set, NamedTuple
 from collections import defaultdict, deque
+from itertools import product
 from datetime import datetime
 import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor, as_completed, Future
@@ -59,8 +60,11 @@ except ImportError:
 # Sweepable shock & buffer knobs  ───────────────────────────────────────
 SHOCK_MEAN_YEARS_SET   = (5, 10, 20)    # exponential λ choices
 PARETO_ALPHA_SET       = (1.5, 2.0, 2.7)
+PARETO_ALPHA_RANGE     = PARETO_ALPHA_SET
 COMMUNITY_BUFFER_SET   = (0.00, 0.04, 0.08)
-PARETO_XM              = 0.3            
+COMMUNITY_BUFFER_MINMAX  = (min(COMMUNITY_BUFFER_SET), max(COMMUNITY_BUFFER_SET))
+PARETO_XM              = 0.3
+SHOCK_INTERVAL_YEARS   = (5,25) #back-compat shim            
 
 # Trust mechanics - slower, more realistic
 TRUST_DELTA_HELP = +0.04  # Slower trust building (was +0.1)
@@ -235,10 +239,10 @@ class SimulationParameters:
     chronic_window: int = CHRONIC_WINDOW_QUARTERS
     
     # Original parameters preserved
-    base_birth_rate: float
-    shock_mean_years: float
-    pareto_alpha: float
-    community_buffer_factor: float
+    base_birth_rate: float = 0.008
+    shock_mean_years: float = 10
+    pareto_alpha: float = 2.0
+    community_buffer_factor: float = 0.04
     maslow_variation: float = 0.5
     constraint_threshold_range: Tuple[float, float] = (0.05, 0.25)
     recovery_threshold: float = 0.3
@@ -771,9 +775,16 @@ def schedule_interactions(
 # ===== 4. SHOCK ENGINE =====
 
 def next_shock_timer(params: SimulationParameters) -> int:
-    """Calculate rounds until next shock using realistic frequency"""
-    years = np.random.exponential(self.params.shock_mean_years)
-    return int(years * 4)  # Convert to quarters
+    """Rounds until next crisis – exponential spacing."""
+    wait_years = np.random.exponential(params.shock_mean_years)
+    return int(wait_years * 4)          # 4 quarters = 1 year
+
+
+def draw_shock_magnitude(params: SimulationParameters) -> float:
+    """Pareto-tail shock severity using per-run α."""
+    α = params.pareto_alpha
+    u = 1.0 - random.random()           # uniform (0,1]
+    return PARETO_XM * u ** (-1 / α)
 
 def draw_shock_severity(params: SimulationParameters) -> float:
     """Draw shock severity from Pareto distribution"""
@@ -854,7 +865,7 @@ class EnhancedMassSimulation:
     
     def _trigger_shock(self):
         """Apply realistic system shock"""
-        shock_severity = draw_shock_severity(self.params)
+        shock_severity = draw_shock_magnitude(self.params)
         self.system_stress += shock_severity
         self.shock_events += 1
         
@@ -1194,6 +1205,12 @@ class EnhancedMassSimulation:
                 self._collect_round_data()
                 
                 self.system_stress = max(0, self.system_stress - 0.01)
+
+                if self.round == 1 or self.round % 20 == 0:
+                    timestamp_print(f"✅ Sim {self.run_id}: completed round {self.round:3d} "
+                        f"(pop={len(alive_people):4d}, defections={self.total_defections})")
+
+
             
             return self._generate_results(initial_trait_avg, initial_group_populations)
             
@@ -1478,16 +1495,12 @@ def generate_random_parameters(run_id: int) -> SimulationParameters:
             
             # Realistic shock parameters
             shock_interval_years=(shock_min, shock_max),
-            pareto_alpha=1.8 + random.random() * 0.7,
             
             # Realistic community buffer
             community_buffer_factor=COMMUNITY_BUFFER_MIN + random.random() * (COMMUNITY_BUFFER_MAX - COMMUNITY_BUFFER_MIN),
             
             # Other realistic parameters
             base_birth_rate=0.006 + random.random() * 0.006,
-            shock_mean_years = random.choice(SHOCK_MEAN_YEARS_SET),
-            pareto_alpha     = random.choice(PARETO_ALPHA_SET),
-            community_buffer_factor = random.choice(COMPUNITY_BUFFER_SET),
             maslow_variation=0.3 + random.random() * 0.4,
             recovery_threshold=0.2 + random.random() * 0.3,
             cooperation_bonus=0.1 + random.random() * 0.3,
@@ -1950,10 +1963,34 @@ def run_basic_experiment(args, use_multiprocessing: bool):
     timestamp_print(f"Running {args.runs} simulations with {args.design} design...")
     
     # Generate parameters
-    if args.design == 'lhc':
-        params_list = latin_hypercube_sampler(args.runs, args.repeats)
-    else:
-        params_list = [generate_random_parameters(i) for i in range(args.runs)]
+    #--design ignored; grid sweep is always used
+    # ------------------------------------------------------------------
+    #  3-factor grid:  λ  ×  α  ×  buffer   (3 × 3 = 9 combos)  
+    #  replicate each combo ≈ --runs / 9  times
+    # ------------------------------------------------------------------
+    grid    = list(product(SHOCK_MEAN_YEARS_SET,
+                           PARETO_ALPHA_SET,
+                           COMMUNITY_BUFFER_SET))
+
+    replicates   = max(1, args.runs // len(grid))
+    params_list  = []
+
+    run_id = 0
+    for (lam, alp, buf) in grid:
+        for _ in range(replicates):
+            p                 = generate_random_parameters(run_id)
+            p.shock_mean_years          = lam
+            p.pareto_alpha              = alp
+            p.community_buffer_factor   = buf
+            params_list.append(p)
+            run_id += 1
+
+    # If --runs isn’t an exact multiple of 9, pad or trim:
+    while len(params_list) < args.runs:
+        params_list.append(generate_random_parameters(run_id)); run_id += 1
+    params_list = params_list[:args.runs]
+    # ------------------------------------------------------------------
+
     
     # Run simulations
     results = run_smart_mass_experiment(len(params_list), use_multiprocessing)

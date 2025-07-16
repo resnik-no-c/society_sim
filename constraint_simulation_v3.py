@@ -1787,6 +1787,7 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
     
     with ProcessPoolExecutor(max_workers=num_cores) as executor:
         active_futures = {}
+        last_log = time.time() 
         
         # Submit initial batch
         for _ in range(num_cores * 2):
@@ -1818,6 +1819,27 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
                         
                 except TimeoutError:
                     pass
+            # ---------- 60-second progress heartbeat -------------------------
+            now = time.time()
+            if now - last_log >= 60:
+                done, total, _ = scheduler.get_progress()
+                pct_done = 100.0 * done / total
+
+                # Build per-sim round percentages
+                with scheduler.lock:
+                    active_strings = [
+                        f"{sid}:{sim.round / sim.params.max_rounds * 100:4.1f}%"
+                        for sid, sim in scheduler.active_simulations.items()
+                    ]
+                active_report = ", ".join(active_strings) or "none"
+
+                timestamp_print(
+                    f"📊 PROGRESS: {done}/{total} complete "
+                    f"({pct_done:5.1f} %) • active [{active_report}]"
+                )
+                last_log = now
+            # -----------------------------------------------------------------
+
     
     # Load all results
     timestamp_print("📂 Loading all completed results...")
