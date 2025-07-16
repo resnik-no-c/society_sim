@@ -1963,35 +1963,33 @@ def run_basic_experiment(args, use_multiprocessing: bool):
     timestamp_print(f"Running {args.runs} simulations with {args.design} design...")
     
     # Generate parameters
-    if args.design == 'lhc':
-        params_list = latin_hypercube_sampler(args.runs, args.repeats)
-    else:
-        # ------------------------------------------------------------------
-        #  3-factor grid:  λ  ×  α  ×  buffer   (3 × 3 = 9 combos)  
-        #  replicate each combo ≈ --runs / 9  times
-        # ------------------------------------------------------------------
-        grid    = list(product(SHOCK_MEAN_YEARS_SET,
-                               PARETO_ALPHA_SET,
-                               COMMUNITY_BUFFER_SET))
+    #--design ignored; grid sweep is always used
+    # ------------------------------------------------------------------
+    #  3-factor grid:  λ  ×  α  ×  buffer   (3 × 3 = 9 combos)  
+    #  replicate each combo ≈ --runs / 9  times
+    # ------------------------------------------------------------------
+    grid    = list(product(SHOCK_MEAN_YEARS_SET,
+                           PARETO_ALPHA_SET,
+                           COMMUNITY_BUFFER_SET))
 
-        replicates   = max(1, args.runs // len(grid))
-        params_list  = []
+    replicates   = max(1, args.runs // len(grid))
+    params_list  = []
 
-        run_id = 0
-        for (lam, alp, buf) in grid:
-            for _ in range(replicates):
-                p                 = generate_random_parameters(run_id)
-                p.shock_mean_years          = lam
-                p.pareto_alpha              = alp
-                p.community_buffer_factor   = buf
-                params_list.append(p)
-                run_id += 1
+    run_id = 0
+    for (lam, alp, buf) in grid:
+        for _ in range(replicates):
+            p                 = generate_random_parameters(run_id)
+            p.shock_mean_years          = lam
+            p.pareto_alpha              = alp
+            p.community_buffer_factor   = buf
+            params_list.append(p)
+            run_id += 1
 
-        # If --runs isn’t an exact multiple of 9, pad or trim:
-        while len(params_list) < args.runs:
-            params_list.append(generate_random_parameters(run_id)); run_id += 1
-        params_list = params_list[:args.runs]
-        # ------------------------------------------------------------------
+    # If --runs isn’t an exact multiple of 9, pad or trim:
+    while len(params_list) < args.runs:
+        params_list.append(generate_random_parameters(run_id)); run_id += 1
+    params_list = params_list[:args.runs]
+    # ------------------------------------------------------------------
 
     
     # Run simulations
