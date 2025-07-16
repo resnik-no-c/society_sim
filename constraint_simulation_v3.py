@@ -659,104 +659,108 @@ def apply_community_buffer(person: OptimizedPerson, params: SimulationParameters
     pass
 
 # ===== 3. CORE MECHANICS =========================================
-def schedule_interactions(population: List[OptimizedPerson],
-                          params: SimulationParameters,
-                          sim_ref: 'Simulation',
-                          round_num: int) -> None:
+def schedule_interactions(
+    population: List[OptimizedPerson],
+    params: SimulationParameters,
+    sim_ref: "Simulation",
+    round_num: int,
+) -> None:
     """
-    Drive one quarterly interaction cycle.
-    • Scales encounters with population size
-    • Keeps serendipity & homophily logic intact
-    • Handles love-need boosts
-    • Adds birth mechanics for ALL mutual-cooperation pairs
-    • Applies trust-noise drift at the end
+    Run one quarterly interaction cycle.
+
+    • Tier 1  (deep ties): up to 12 explicit partner picks – births, betrayals, trust objects.
+    • Tier 2  (weak ties): 40-80 encounters summarised via one binomial draw.
+    • Tier 3  (stranger noise): hundreds of micro-contacts as a small stress jitter.
     """
-    # ------------------------------------------------------------------
+
     alive_people = [p for p in population if not p.is_dead]
     if len(alive_people) < 2:
         return
 
-    # Number of interactions per person grows with N (0.6 × population)
-    interactions_per_person: int = max(1, int(0.6 * len(alive_people)))
+    # ---------- Tier 1 · deep-tie budget ---------------------------
+    deep_per_person: int = max(1, min(12, int(0.05 * len(alive_people))))  # ≤12
 
     for person in alive_people:
-        for _ in range(interactions_per_person):
+        # Pre-filter partner pools once per person
+        same_group_all  = [
+            p for p in alive_people
+            if p.id != person.id and getattr(p, "group_id", None) == getattr(person, "group_id", None)
+        ]
+        other_group_all = [
+            p for p in alive_people
+            if p.id != person.id and getattr(p, "group_id", None) != getattr(person, "group_id", None)
+        ]
 
-            # -------- partner selection (serendipity vs homophily) -----
-            if random.random() < params.serendipity_rate:
-                partner = random.choice([p for p in alive_people if p.id != person.id])
+        # -------- Tier 1 explicit interactions ----------------------
+        for _ in range(deep_per_person):
+            # Serendipity vs homophily partner pick
+            if random.random() < params.serendipity_rate and other_group_all:
+                partner = random.choice(other_group_all + same_group_all)
             else:
-                same_group = [
-                    p for p in alive_people
-                    if p.id != person.id and getattr(p, "group_id", None) == getattr(person, "group_id", None)
-                ]
-                other_group = [
-                    p for p in alive_people
-                    if p.id != person.id and getattr(p, "group_id", None) != getattr(person, "group_id", None)
-                ]
-
-                if same_group and (not other_group or random.random() < params.homophily_bias):
-                    if person.relationships and random.random() < 0.3:
-                        known_same = [p for p in same_group if p.id in person.relationships]
-                        partner = random.choice(known_same or same_group)
-                    else:
-                        partner = random.choice(same_group)
-                elif other_group:
-                    if person.relationships and random.random() < 0.2:
-                        known_other = [p for p in other_group if p.id in person.relationships]
-                        partner = random.choice(known_other or other_group)
-                    else:
-                        partner = random.choice(other_group)
+                pool = same_group_all if (
+                    same_group_all and (not other_group_all or random.random() < params.homophily_bias)
+                ) else other_group_all
+                if not pool:
+                    continue
+                # 30 % chance to favour known ties
+                if person.relationships and random.random() < 0.3:
+                    known = [p for p in pool if p.id in person.relationships]
+                    partner = random.choice(known or pool)
                 else:
-                    continue  # no partner available
-            # -----------------------------------------------------------
+                    partner = random.choice(pool)
 
-            # -------- cooperation decisions & relationship update -----
-            person_coop   = person.calculate_cooperation_decision(partner, round_num, params)
-            partner_coop  = partner.calculate_cooperation_decision(person, round_num, params)
+            # Cooperation decisions
+            person_coop  = person.calculate_cooperation_decision(partner, round_num, params)
+            partner_coop = partner.calculate_cooperation_decision(person,  round_num, params)
 
-            # ---------- defect counter --------------------------------
+            # Update relationship objects
+            update_relationship(person,  partner,  partner_coop, round_num, params)
+            update_relationship(partner, person,   person_coop,  round_num, params)
+
+            # Count a defection if either side refused
             if not (person_coop and partner_coop):
                 sim_ref.total_defections += 1
 
-            update_relationship(person,  partner,  partner_coop, round_num, params)
-            update_relationship(partner, person,   person_coop,  round_num, params)
-            # -----------------------------------------------------------
-
-            # -------- bookkeeping for in-group / out-group counts -----
+            # In-group / out-group counters
             if hasattr(person, "group_id") and hasattr(partner, "group_id"):
                 if person.group_id == partner.group_id:
-                    person.in_group_interactions   += 1
-                    partner.in_group_interactions  += 1
+                    person.in_group_interactions  += 1
+                    partner.in_group_interactions += 1
                 else:
                     person.out_group_interactions  += 1
                     partner.out_group_interactions += 1
-            # -----------------------------------------------------------
 
-            # -------- love-need bump on mutual cooperation ------------
+            # Mutual-cooperation benefits & possible birth
             if person_coop and partner_coop:
                 person.maslow_needs.love  = min(10, person.maslow_needs.love  + 0.1)
                 partner.maslow_needs.love = min(10, partner.maslow_needs.love + 0.1)
-            # -----------------------------------------------------------
 
-            # -------- birth mechanics ---------------------------------
-            if person_coop and partner_coop:
                 pop_ratio  = len(alive_people) / params.max_population
                 birth_rate = params.base_birth_rate * (1 - 0.3 * pop_ratio)
-                if pop_ratio < 0.10:            # tiny-society safety bump
-                    birth_rate += 0.005
-                if (len(sim_ref.people) < params.max_population) and random.random() < birth_rate:
+                if pop_ratio < 0.10:
+                    birth_rate += 0.005  # safety bump for tiny societies
+                if len(sim_ref.people) < params.max_population and random.random() < birth_rate:
                     sim_ref._create_birth(person, partner)
-            # -----------------------------------------------------------
 
-    # -------- trust noise drift (entropy tax) ------------------------
+        # -------- Tier 2 · weak ties (aggregated) -------------------
+        weak_cnt  = random.randint(40, 80)
+        coop_prob = max(0.05, min(0.95, person.base_coop_prob))
+        weak_coop = np.random.binomial(weak_cnt, coop_prob)
+        weak_betr = weak_cnt - weak_coop
+        net_delta = weak_coop * TRUST_DELTA_HELP + weak_betr * TRUST_DELTA_BETRAY
+        person.society_trust = max(0.0, min(1.0, getattr(person, "society_trust", 0.5) + net_delta))
+
+        # -------- Tier 3 · stranger noise (stress nudge) ------------
+        person.acute_stress = max(0.0, person.acute_stress + np.random.normal(0, 0.01))
+
+    # -------- Trust noise drift (entropy tax) -----------------------
     for person in alive_people:
         for rel in person.relationships.values():
             rel.trust = max(
                 0.0,
-                min(1.0, rel.trust + np.random.normal(0, 0.005) - 0.001)  # 0.001 entropy tax
+                min(1.0, rel.trust + np.random.normal(0, 0.005) - 0.001)
             )
-    # ------------------------------------------------------------------
+
 
 
 # ===== 4. SHOCK ENGINE =====
