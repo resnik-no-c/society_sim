@@ -1183,9 +1183,7 @@ class EnhancedMassSimulation:
                     self._trigger_shock()
                 
                 # Process interactions with realistic mechanics
-                timestamp_print(f"   → entering interactions, pop={len(self.people)}")
                 schedule_interactions(self.people, self.params, self, self.round)
-                timestamp_print("   ← interactions done")
                 
                 self._check_recoveries()
                 self._update_population()
