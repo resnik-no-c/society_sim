@@ -489,7 +489,7 @@ class OptimizedPerson:
             return
         
         self.age += 1
-        if self.age >= self.max_lifespan:
+        if self.age >= self.max_lifespan and self.age > 240:
             self.is_dead = True
             return
         
@@ -655,79 +655,102 @@ def apply_community_buffer(person: OptimizedPerson, params: SimulationParameters
     """Apply community buffer to reduce chronic stress - handled in stress model"""
     pass
 
-def schedule_interactions(population: List[OptimizedPerson], params: SimulationParameters, round_num: int):
-    """Schedule and process interactions with serendipity and noise drift"""
+# ===== 3. CORE MECHANICS =========================================
+def schedule_interactions(population: List[OptimizedPerson],
+                          params: SimulationParameters,
+                          sim_ref: 'Simulation',
+                          round_num: int) -> None:
+    """
+    Drive one quarterly interaction cycle.
+    • Scales encounters with population size
+    • Keeps serendipity & homophily logic intact
+    • Handles love-need boosts
+    • Adds birth mechanics for ALL mutual-cooperation pairs
+    • Applies trust-noise drift at the end
+    """
+    # ------------------------------------------------------------------
     alive_people = [p for p in population if not p.is_dead]
-    
     if len(alive_people) < 2:
         return
-    
-    # Each person has interactions this round (preserved interaction logic)
-    interactions_per_person = max(1, len(alive_people) // 10)
-    
+
+    # Number of interactions per person grows with N (0.6 × population)
+    interactions_per_person: int = max(1, int(0.6 * len(alive_people)))
+
     for person in alive_people:
         for _ in range(interactions_per_person):
-            # Select interaction partner with serendipity
+
+            # -------- partner selection (serendipity vs homophily) -----
             if random.random() < params.serendipity_rate:
-                # Serendipity - ignore homophily
                 partner = random.choice([p for p in alive_people if p.id != person.id])
             else:
-                # Normal homophily-based selection
-                same_group = [p for p in alive_people 
-                             if p.id != person.id and hasattr(p, 'group_id') and p.group_id == person.group_id]
-                other_group = [p for p in alive_people 
-                              if p.id != person.id and hasattr(p, 'group_id') and p.group_id != person.group_id]
-                
+                same_group = [
+                    p for p in alive_people
+                    if p.id != person.id and getattr(p, "group_id", None) == getattr(person, "group_id", None)
+                ]
+                other_group = [
+                    p for p in alive_people
+                    if p.id != person.id and getattr(p, "group_id", None) != getattr(person, "group_id", None)
+                ]
+
                 if same_group and (not other_group or random.random() < params.homophily_bias):
-                    # Prefer known relationships
                     if person.relationships and random.random() < 0.3:
-                        known_same_group = [p for p in same_group if p.id in person.relationships]
-                        if known_same_group:
-                            partner = random.choice(known_same_group)
-                        else:
-                            partner = random.choice(same_group)
+                        known_same = [p for p in same_group if p.id in person.relationships]
+                        partner = random.choice(known_same or same_group)
                     else:
                         partner = random.choice(same_group)
                 elif other_group:
                     if person.relationships and random.random() < 0.2:
-                        known_other_group = [p for p in other_group if p.id in person.relationships]
-                        if known_other_group:
-                            partner = random.choice(known_other_group)
-                        else:
-                            partner = random.choice(other_group)
+                        known_other = [p for p in other_group if p.id in person.relationships]
+                        partner = random.choice(known_other or other_group)
                     else:
                         partner = random.choice(other_group)
                 else:
-                    continue
-            
-            # Process interaction
-            person_cooperates = person.calculate_cooperation_decision(partner, round_num, params)
-            partner_cooperates = partner.calculate_cooperation_decision(person, round_num, params)
-            
-            # Update relationships
-            update_relationship(person, partner, partner_cooperates, round_num, params)
-            update_relationship(partner, person, person_cooperates, round_num, params)
-            
-            # Track interaction types
-            if hasattr(person, 'group_id') and hasattr(partner, 'group_id'):
-                is_same_group = (person.group_id == partner.group_id)
-                if is_same_group:
-                    person.in_group_interactions += 1
-                    partner.in_group_interactions += 1
+                    continue  # no partner available
+            # -----------------------------------------------------------
+
+            # -------- cooperation decisions & relationship update -----
+            person_coop   = person.calculate_cooperation_decision(partner, round_num, params)
+            partner_coop  = partner.calculate_cooperation_decision(person, round_num, params)
+
+            update_relationship(person,  partner,  partner_coop, round_num, params)
+            update_relationship(partner, person,   person_coop,  round_num, params)
+            # -----------------------------------------------------------
+
+            # -------- bookkeeping for in-group / out-group counts -----
+            if hasattr(person, "group_id") and hasattr(partner, "group_id"):
+                if person.group_id == partner.group_id:
+                    person.in_group_interactions   += 1
+                    partner.in_group_interactions  += 1
                 else:
-                    person.out_group_interactions += 1
+                    person.out_group_interactions  += 1
                     partner.out_group_interactions += 1
-            
-            # Apply cooperation benefits
-            if person_cooperates and partner_cooperates:
-                person.maslow_needs.love = min(10, person.maslow_needs.love + 0.1)
+            # -----------------------------------------------------------
+
+            # -------- love-need bump on mutual cooperation ------------
+            if person_coop and partner_coop:
+                person.maslow_needs.love  = min(10, person.maslow_needs.love  + 0.1)
                 partner.maslow_needs.love = min(10, partner.maslow_needs.love + 0.1)
-    
-    # Apply noise drift to existing relationships
+            # -----------------------------------------------------------
+
+            # -------- birth mechanics ---------------------------------
+            if person_coop and partner_coop:
+                pop_ratio  = len(alive_people) / params.max_population
+                birth_rate = params.base_birth_rate * (1 - 0.3 * pop_ratio)
+                if pop_ratio < 0.10:            # tiny-society safety bump
+                    birth_rate += 0.005
+                if random.random() < birth_rate:
+                    sim_ref._create_birth(parent_a, parent_b)
+            # -----------------------------------------------------------
+
+    # -------- trust noise drift (entropy tax) ------------------------
     for person in alive_people:
         for rel in person.relationships.values():
-            noise = np.random.normal(0, 0.005)
-            rel.trust = max(0.0, min(1.0, rel.trust + noise))
+            rel.trust = max(
+                0.0,
+                min(1.0, rel.trust + np.random.normal(0, 0.005) - 0.001)  # 0.001 entropy tax
+            )
+    # ------------------------------------------------------------------
+
 
 # ===== 4. SHOCK ENGINE =====
 
@@ -1154,7 +1177,7 @@ class EnhancedMassSimulation:
                     self._trigger_shock()
                 
                 # Process interactions with realistic mechanics
-                schedule_interactions(alive_people, self.params, self.round)
+                schedule_interactions(self.people, self.params, self, round_num)
                 
                 self._check_recoveries()
                 self._update_population()
