@@ -773,9 +773,16 @@ def schedule_interactions(
 # ===== 4. SHOCK ENGINE =====
 
 def next_shock_timer(params: SimulationParameters) -> int:
-    """Calculate rounds until next shock using realistic frequency"""
-    years = np.random.exponential(self.params.shock_mean_years)
-    return int(years * 4)  # Convert to quarters
+    """Rounds until next crisis – exponential spacing."""
+    wait_years = np.random.exponential(params.shock_mean_years)
+    return int(wait_years * 4)          # 4 quarters = 1 year
+
+
+def draw_shock_magnitude(params: SimulationParameters) -> float:
+    """Pareto-tail shock severity using per-run α."""
+    α = params.pareto_alpha
+    u = 1.0 - random.random()           # uniform (0,1]
+    return PARETO_XM * u ** (-1 / α)
 
 def draw_shock_severity(params: SimulationParameters) -> float:
     """Draw shock severity from Pareto distribution"""
@@ -856,7 +863,7 @@ class EnhancedMassSimulation:
     
     def _trigger_shock(self):
         """Apply realistic system shock"""
-        shock_severity = draw_shock_severity(self.params)
+        shock_severity = draw_shock_magnitude(self.params)
         self.system_stress += shock_severity
         self.shock_events += 1
         
