@@ -234,7 +234,7 @@ class SimulationParameters:
     chronic_window: int = CHRONIC_WINDOW_QUARTERS
     
     # Original parameters preserved
-    base_birth_rate: float = random.uniform(0.08, 0.12)
+    base_birth_rate: float = random.uniform(0.006, 0.012)
     maslow_variation: float = 0.5
     constraint_threshold_range: Tuple[float, float] = (0.05, 0.25)
     recovery_threshold: float = 0.3
@@ -1003,7 +1003,7 @@ class EnhancedMassSimulation:
         
         # Birth mechanics
         population_ratio = len(self.people) / self.params.max_population
-        adjusted_birth_rate = self.params.base_birth_rate * (1 - population_ratio * 0.8)
+        adjusted_birth_rate = self.params.base_birth_rate * (1 - population_ratio * 0.3)
         
         if random.random() < adjusted_birth_rate and len(self.people) < self.params.max_population:
             self._create_birth(person1, person2)
