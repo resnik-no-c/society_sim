@@ -1204,7 +1204,7 @@ class EnhancedMassSimulation:
                 
                 self.system_stress = max(0, self.system_stress - 0.01)
 
-                if self.round % 50 == 0:
+                if self.round == 1 or self.round % 20 == 0:
                     timestamp_print(f"✅ Sim {self.run_id}: completed round {self.round:3d} "
                         f"(pop={len(alive_people):4d}, defections={self.total_defections})")
 
