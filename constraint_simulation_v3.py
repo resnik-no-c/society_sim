@@ -745,7 +745,7 @@ def schedule_interactions(population: List[OptimizedPerson],
                 birth_rate = params.base_birth_rate * (1 - 0.3 * pop_ratio)
                 if pop_ratio < 0.10:            # tiny-society safety bump
                     birth_rate += 0.005
-                if random.random() < birth_rate:
+                if (len(sim_ref.people) < params.max_population) and random.random() < birth_rate:
                     sim_ref._create_birth(person, partner)
             # -----------------------------------------------------------
 
