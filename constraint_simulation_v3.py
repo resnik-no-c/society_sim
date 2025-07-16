@@ -744,7 +744,7 @@ def schedule_interactions(
 
         # -------- Tier 2 · weak ties (aggregated) -------------------
         weak_cnt  = random.randint(40, 80)
-        coop_prob = max(0.05, min(0.95, person.base_cooperativeness))
+        coop_prob = max(0.05, min(0.95, person.base_coop))
         weak_coop = np.random.binomial(weak_cnt, coop_prob)
         weak_betr = weak_cnt - weak_coop
         net_delta = weak_coop * TRUST_DELTA_HELP + weak_betr * TRUST_DELTA_BETRAY
