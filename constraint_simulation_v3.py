@@ -1203,6 +1203,11 @@ class EnhancedMassSimulation:
                 self._collect_round_data()
                 
                 self.system_stress = max(0, self.system_stress - 0.01)
+
+                timestamp_print(f"✅ Sim {self.run_id}: completed round {self.round:3d} "
+                    f"(pop={len(alive_people):4d}, defections={self.total_defections})")
+
+
             
             return self._generate_results(initial_trait_avg, initial_group_populations)
             
