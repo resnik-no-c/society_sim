@@ -356,7 +356,7 @@ class OptimizedPerson:
         self.base_coop = max(0.1, min(0.9, self.base_coop))
         
         self.relationships: Dict[int, FastRelationship] = {}
-        self.society_trust: float = 0.5   # ← default for Tier-2 aggregate
+        self.society_trust: 0.5   # ← default for Tier-2 aggregate
         
         self.max_lifespan = int((200 + random.random() * 300) * (params.max_rounds / 500))
         self.age = 0
