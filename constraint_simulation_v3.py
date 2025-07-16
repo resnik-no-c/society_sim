@@ -1391,7 +1391,7 @@ def latin_hypercube_sampler(n_samples: int, n_replicates: int = 1) -> List[Simul
         'initial_population': (100, 500),
         'pareto_alpha': PARETO_ALPHA_RANGE,
         'community_buffer_factor': (COMMUNITY_BUFFER_MIN, COMMUNITY_BUFFER_MAX),
-        'base_birth_rate': (0.006, 0.012)
+        'base_birth_rate': (0.006, 0.012),
         'cooperation_bonus': (0.1, 0.4),
         'homophily_bias': (0.0, 0.8),
         'maslow_variation': (0.3, 0.7),
