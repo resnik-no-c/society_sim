@@ -329,7 +329,7 @@ class OptimizedPerson:
                  'max_lifespan', 'age', 'strategy_changes', 'rounds_as_selfish',
                  'rounds_as_cooperative', 'maslow_needs', 'maslow_pressure', 'is_born',
                  'group_id', 'in_group_interactions', 'out_group_interactions', 
-                 'mixing_event_participations', 'acute_stress', 'chronic_queue', 'base_coop', 'society_trust']
+                 'mixing_event_participations', 'acute_stress', 'chronic_queue', 'base_coop']
     
     def __init__(self, person_id: int, params: SimulationParameters, 
                  parent_a: Optional['OptimizedPerson'] = None, 
@@ -356,7 +356,7 @@ class OptimizedPerson:
         self.base_coop = max(0.1, min(0.9, self.base_coop))
         
         self.relationships: Dict[int, FastRelationship] = {}
-        self.society_trust = 0.5   # default aggregate trust
+        self.society_trust: 0.5   # ← default for Tier-2 aggregate
         
         self.max_lifespan = int((200 + random.random() * 300) * (params.max_rounds / 500))
         self.age = 0
