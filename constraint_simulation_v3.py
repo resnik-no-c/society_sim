@@ -61,7 +61,8 @@ except ImportError:
 SHOCK_MEAN_YEARS_SET   = (5, 10, 20)    # exponential λ choices
 PARETO_ALPHA_SET       = (1.5, 2.0, 2.7)
 COMMUNITY_BUFFER_SET   = (0.00, 0.04, 0.08)
-PARETO_XM              = 0.3            
+PARETO_XM              = 0.3
+SHOCK_INTERVAL_YEARS   = (5,25) #back-compat shim            
 
 # Trust mechanics - slower, more realistic
 TRUST_DELTA_HELP = +0.04  # Slower trust building (was +0.1)
