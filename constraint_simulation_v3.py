@@ -238,9 +238,9 @@ class SimulationParameters:
     
     # Original parameters preserved
     base_birth_rate: float = 0.008
-    shock_mean_years: float
-    pareto_alpha: float
-    community_buffer_factor: float
+    shock_mean_years: float = 10
+    pareto_alpha: float = 2.0
+    community_buffer_factor: float = 0.04
     maslow_variation: float = 0.5
     constraint_threshold_range: Tuple[float, float] = (0.05, 0.25)
     recovery_threshold: float = 0.3
