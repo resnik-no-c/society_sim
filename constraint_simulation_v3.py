@@ -237,7 +237,7 @@ class SimulationParameters:
     chronic_window: int = CHRONIC_WINDOW_QUARTERS
     
     # Original parameters preserved
-    base_birth_rate: float
+    base_birth_rate: float = 0.008
     shock_mean_years: float
     pareto_alpha: float
     community_buffer_factor: float
