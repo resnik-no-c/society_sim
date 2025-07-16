@@ -739,7 +739,7 @@ def schedule_interactions(population: List[OptimizedPerson],
                 if pop_ratio < 0.10:            # tiny-society safety bump
                     birth_rate += 0.005
                 if random.random() < birth_rate:
-                    sim_ref._create_birth(parent_a, parent_b)
+                    sim_ref._create_birth(person, partner)
             # -----------------------------------------------------------
 
     # -------- trust noise drift (entropy tax) ------------------------
