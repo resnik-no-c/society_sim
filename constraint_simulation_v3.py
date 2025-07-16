@@ -60,7 +60,9 @@ except ImportError:
 # Sweepable shock & buffer knobs  ───────────────────────────────────────
 SHOCK_MEAN_YEARS_SET   = (5, 10, 20)    # exponential λ choices
 PARETO_ALPHA_SET       = (1.5, 2.0, 2.7)
+PARETO_ALPHA_RANGE     = PARETO_ALPHA_SET
 COMMUNITY_BUFFER_SET   = (0.00, 0.04, 0.08)
+COMMUNITY_BUFFER_MINMAX  = (min(COMMUNITY_BUFFER_SET), max(COMMUNITY_BUFFER_SET))
 PARETO_XM              = 0.3
 SHOCK_INTERVAL_YEARS   = (5,25) #back-compat shim            
 
