@@ -33,6 +33,7 @@ import matplotlib.pyplot as plt
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional, Tuple, Set, NamedTuple
 from collections import defaultdict, deque
+from itertools import product
 from datetime import datetime
 import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor, as_completed, Future
@@ -56,10 +57,11 @@ except ImportError:
 
 # ===== 1. CONFIG & CONSTANTS =====
 
-# Crisis settings - realistic frequencies
-SHOCK_INTERVAL_YEARS = (3, 12)  # Major shocks every 3-12
-PARETO_ALPHA_RANGE = (1.8, 2.5)  # Fat-tailed distribution
-PARETO_XM = 0.3  # Minimum severity
+# Sweepable shock & buffer knobs  ───────────────────────────────────────
+SHOCK_MEAN_YEARS_SET   = (5, 10, 20)    # exponential λ choices
+PARETO_ALPHA_SET       = (1.5, 2.0, 2.7)
+COMMUNITY_BUFFER_SET   = (0.00, 0.04, 0.08)
+PARETO_XM              = 0.3            
 
 # Trust mechanics - slower, more realistic
 TRUST_DELTA_HELP = +0.04  # Slower trust building (was +0.1)
@@ -234,7 +236,10 @@ class SimulationParameters:
     chronic_window: int = CHRONIC_WINDOW_QUARTERS
     
     # Original parameters preserved
-    base_birth_rate: float = random.uniform(0.006, 0.012) # 2.4–4.8 % per yr
+    base_birth_rate: float
+    shock_mean_years: float
+    pareto_alpha: float
+    community_buffer_factor: float
     maslow_variation: float = 0.5
     constraint_threshold_range: Tuple[float, float] = (0.05, 0.25)
     recovery_threshold: float = 0.3
@@ -768,13 +773,13 @@ def schedule_interactions(
 
 def next_shock_timer(params: SimulationParameters) -> int:
     """Calculate rounds until next shock using realistic frequency"""
-    years = random.uniform(*params.shock_interval_years)
+    years = np.random.exponential(self.params.shock_mean_years)
     return int(years * 4)  # Convert to quarters
 
 def draw_shock_severity(params: SimulationParameters) -> float:
     """Draw shock severity from Pareto distribution"""
-    u = random.random()
-    return params.pareto_xm * (1 - u) ** (-1/params.pareto_alpha)
+    α = self.params.pareto_alpha
+    return PARETO_XM * (1 - random.random()) ** (-1 / α)
 
 class EnhancedMassSimulation:
     """Enhanced simulation with realistic parameters and preserved functionality"""
@@ -1481,6 +1486,9 @@ def generate_random_parameters(run_id: int) -> SimulationParameters:
             
             # Other realistic parameters
             base_birth_rate=0.006 + random.random() * 0.006,
+            shock_mean_years = random.choice(SHOCK_MEAN_YEARS_SET),
+            pareto_alpha     = random.choice(PARETO_ALPHA_SET),
+            community_buffer_factor = random.choice(COMPUNITY_BUFFER_SET),
             maslow_variation=0.3 + random.random() * 0.4,
             recovery_threshold=0.2 + random.random() * 0.3,
             cooperation_bonus=0.1 + random.random() * 0.3,
@@ -1946,7 +1954,33 @@ def run_basic_experiment(args, use_multiprocessing: bool):
     if args.design == 'lhc':
         params_list = latin_hypercube_sampler(args.runs, args.repeats)
     else:
-        params_list = [generate_random_parameters(i) for i in range(args.runs)]
+        # ------------------------------------------------------------------
+        #  3-factor grid:  λ  ×  α  ×  buffer   (3 × 3 = 9 combos)  
+        #  replicate each combo ≈ --runs / 9  times
+        # ------------------------------------------------------------------
+        grid    = list(product(SHOCK_MEAN_YEARS_SET,
+                               PARETO_ALPHA_SET,
+                               COMMUNITY_BUFFER_SET))
+
+        replicates   = max(1, args.runs // len(grid))
+        params_list  = []
+
+        run_id = 0
+        for (lam, alp, buf) in grid:
+            for _ in range(replicates):
+                p                 = generate_random_parameters(run_id)
+                p.shock_mean_years          = lam
+                p.pareto_alpha              = alp
+                p.community_buffer_factor   = buf
+                params_list.append(p)
+                run_id += 1
+
+        # If --runs isn’t an exact multiple of 9, pad or trim:
+        while len(params_list) < args.runs:
+            params_list.append(generate_random_parameters(run_id)); run_id += 1
+        params_list = params_list[:args.runs]
+        # ------------------------------------------------------------------
+
     
     # Run simulations
     results = run_smart_mass_experiment(len(params_list), use_multiprocessing)
