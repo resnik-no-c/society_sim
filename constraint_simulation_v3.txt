@@ -234,7 +234,7 @@ class SimulationParameters:
     chronic_window: int = CHRONIC_WINDOW_QUARTERS
     
     # Original parameters preserved
-    base_birth_rate: float = random.uniform(0.006, 0.012) # 2.4–4.8 % per yr
+    base_birth_rate: float = random.uniform(0.006, 0.012)
     maslow_variation: float = 0.5
     constraint_threshold_range: Tuple[float, float] = (0.05, 0.25)
     recovery_threshold: float = 0.3
@@ -578,9 +578,6 @@ class OptimizedPerson:
         self.strategy_changes += 1
         self.maslow_needs.love *= 0.8
         self.maslow_needs.esteem *= 0.7
-
-        if hasattr(self, "sim_ref"):
-            self.sim_ref.total_defections += 1
     
     def switch_to_cooperative(self):
         """Recover to cooperative strategy"""
@@ -714,10 +711,6 @@ def schedule_interactions(population: List[OptimizedPerson],
             # -------- cooperation decisions & relationship update -----
             person_coop   = person.calculate_cooperation_decision(partner, round_num, params)
             partner_coop  = partner.calculate_cooperation_decision(person, round_num, params)
-
-            # ---------- defect counter --------------------------------
-            if not (person_coop and partner_coop):
-                sim_ref.total_defections += 1
 
             update_relationship(person,  partner,  partner_coop, round_num, params)
             update_relationship(partner, person,   person_coop,  round_num, params)
@@ -1030,6 +1023,13 @@ class EnhancedMassSimulation:
                 person2.add_constraint_pressure(constraint_amount)
             
             person2.maslow_needs.esteem = max(0, person2.maslow_needs.esteem - 0.1)
+        
+        # Birth mechanics
+        population_ratio = len(self.people) / self.params.max_population
+        adjusted_birth_rate = self.params.base_birth_rate * (1 - population_ratio * 0.3)
+        
+        if random.random() < adjusted_birth_rate and len(self.people) < self.params.max_population:
+            self._create_birth(person1, person2)
         
         # Person updates
         person1.update(self.system_stress, self.params, cooperation_bonus1)
@@ -1391,7 +1391,7 @@ def latin_hypercube_sampler(n_samples: int, n_replicates: int = 1) -> List[Simul
         'initial_population': (100, 500),
         'pareto_alpha': PARETO_ALPHA_RANGE,
         'community_buffer_factor': (COMMUNITY_BUFFER_MIN, COMMUNITY_BUFFER_MAX),
-        'base_birth_rate': (0.006, 0.012)
+        'base_birth_rate': (0.01, 0.05),
         'cooperation_bonus': (0.1, 0.4),
         'homophily_bias': (0.0, 0.8),
         'maslow_variation': (0.3, 0.7),
@@ -1474,7 +1474,7 @@ def generate_random_parameters(run_id: int) -> SimulationParameters:
             community_buffer_factor=COMMUNITY_BUFFER_MIN + random.random() * (COMMUNITY_BUFFER_MAX - COMMUNITY_BUFFER_MIN),
             
             # Other realistic parameters
-            base_birth_rate=0.006 + random.random() * 0.006,
+            base_birth_rate=0.01 + random.random() * 0.04,
             maslow_variation=0.3 + random.random() * 0.4,
             recovery_threshold=0.2 + random.random() * 0.3,
             cooperation_bonus=0.1 + random.random() * 0.3,
@@ -1509,7 +1509,7 @@ def generate_random_parameters(run_id: int) -> SimulationParameters:
             community_buffer_factor=COMMUNITY_BUFFER_MIN + random.random() * (COMMUNITY_BUFFER_MAX - COMMUNITY_BUFFER_MIN),
             
             # Other realistic parameters
-            base_birth_rate=0.006 + random.random() * 0.006,
+            base_birth_rate=0.01 + random.random() * 0.04,
             maslow_variation=0.3 + random.random() * 0.4,
             recovery_threshold=0.2 + random.random() * 0.3,
             cooperation_bonus=0.1 + random.random() * 0.3,
@@ -1692,7 +1692,7 @@ def process_simulation_work(work: SimulationWork) -> tuple:
                 sim._trigger_shock()
             
             # Process interactions
-            schedule_interactions(sim.people, sim.params, sim, sim.round)
+            schedule_interactions(alive_people, sim.params, sim.round)
             
             sim._check_recoveries()
             sim._update_population()
