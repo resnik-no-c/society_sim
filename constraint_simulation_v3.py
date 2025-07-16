@@ -57,7 +57,7 @@ except ImportError:
 # ===== 1. CONFIG & CONSTANTS =====
 
 # Crisis settings - realistic frequencies
-SHOCK_INTERVAL_YEARS = (5, 25)  # Major shocks every 5-25 years (was multiple per year)
+SHOCK_INTERVAL_YEARS = (3, 12)  # Major shocks every 3-12
 PARETO_ALPHA_RANGE = (1.8, 2.5)  # Fat-tailed distribution
 PARETO_XM = 0.3  # Minimum severity
 
@@ -72,7 +72,7 @@ COMMUNITY_BUFFER_MIN = 0.02
 COMMUNITY_BUFFER_MAX = 0.08
 
 # Stress model parameters
-ACUTE_DECAY_QUARTERLY = 0.92  # Acute stress decays 50% per year (λ=0.84 per quarter)
+ACUTE_DECAY_QUARTERLY = 0.97  # Acute stress decays 50% per 5 years
 CHRONIC_WINDOW_QUARTERS = 16  # 4-year rolling window
 
 # Population dynamics
@@ -227,16 +227,16 @@ class SimulationParameters:
     serendipity_rate: float = SERENDIPITY_RATE
     
     # Community buffer parameters
-    community_buffer_factor: float = random.uniform(0.01, 0.05)
+    community_buffer_factor: float = random.uniform(0.005, 0.03)
     
     # Stress model parameters
     acute_decay: float = ACUTE_DECAY_QUARTERLY
     chronic_window: int = CHRONIC_WINDOW_QUARTERS
     
     # Original parameters preserved
-    base_birth_rate: float = random.uniform(0.06, 0.10)
+    base_birth_rate: float = random.uniform(0.08, 0.12)
     maslow_variation: float = 0.5
-    constraint_threshold_range: Tuple[float, float] = (0.15, 0.5)
+    constraint_threshold_range: Tuple[float, float] = (0.05, 0.25)
     recovery_threshold: float = 0.3
     cooperation_bonus: float = 0.2
     trust_threshold: float = 0.6
@@ -605,6 +605,9 @@ class OptimizedPerson:
         """Decide whether to cooperate based on realistic stress model"""
         if self.strategy == 'selfish':
             return False
+
+        if random.random()<0.02: 
+            return False
         
         # Use realistic cooperation probability
         base_prob = self.calculate_cooperation_probability(params)
@@ -621,8 +624,6 @@ class OptimizedPerson:
         else:
             recent_coop = sum(list(relationship.cooperation_history)[-3:]) / min(3, len(relationship.cooperation_history))
             cooperation_prob = relationship.trust * 0.7 + recent_coop * 0.3
-            if random.random()<0.02: 
-                return False
             return random.random() < cooperation_prob
     
     def _get_basic_needs_pressure(self) -> float:
