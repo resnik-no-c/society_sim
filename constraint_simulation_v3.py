@@ -1052,6 +1052,7 @@ class EnhancedMassSimulation:
     def _create_birth(self, parent_a: OptimizedPerson, parent_b: OptimizedPerson):
         """Create new person with group inheritance"""
         new_person = OptimizedPerson(self.next_person_id, self.params, parent_a, parent_b)
+        new_person.society_trust = 0.5
         self.people.append(new_person)
         self.total_births += 1
         self.next_person_id += 1
