@@ -3,23 +3,11 @@
 Enhanced Constraint Cascade Simulation - Realistic Parameters Complete Edition
 Implements realistic shock frequency, trust mechanics, and stress model while preserving all functionality.
 
-Table of Contents:
-1. CONFIG & CONSTANTS
-2. DATA CLASSES
-3. CORE MECHANICS
-4. SHOCK ENGINE
-5. RUNNER
-6. CLI ENTRYPOINT
-7. UTILITIES & METRICS
-
-Changes implemented:
-- Realistic shock frequency (5-25 years instead of multiple per year)
-- Slower trust development (+0.04/-0.06 instead of +0.1/-0.15)
-- Acute/chronic stress model with community buffer
-- Removed weighted sampling complexity (maintenance interactions)
-- Added serendipity rate and noise drift
-- Latin hypercube parameter sampling
-- Single-file organization with preserved functionality
+FIXED ISSUES:
+1. Parameter generation mismatch - grid parameters were being ignored
+2. Added comprehensive logging during initialization
+3. Fixed scheduler initialization performance
+4. Added progress indicators for all long operations
 """
 
 import random
@@ -88,6 +76,9 @@ def timestamp_print(message: str):
     """Print message with timestamp"""
     timestamp = datetime.now().strftime('%H:%M:%S')
     print(f"[{timestamp}] {message}")
+    # Flush immediately for nohup visibility
+    import sys
+    sys.stdout.flush()
 
 def save_simulation_result(result, results_dir: str = "simulation_results"):
     """Save individual simulation result immediately upon completion"""
@@ -222,6 +213,7 @@ class SimulationParameters:
     
     # Realistic shock parameters
     shock_interval_years: Tuple[float, float] = SHOCK_INTERVAL_YEARS
+    shock_mean_years: float = 10  # For exponential distribution
     pareto_alpha: float = 2.0
     pareto_xm: float = PARETO_XM
     
@@ -232,7 +224,7 @@ class SimulationParameters:
     serendipity_rate: float = SERENDIPITY_RATE
     
     # Community buffer parameters
-    community_buffer_factor: float = random.uniform(0.005, 0.03)
+    community_buffer_factor: float = 0.04
     
     # Stress model parameters
     acute_decay: float = ACUTE_DECAY_QUARTERLY
@@ -240,9 +232,6 @@ class SimulationParameters:
     
     # Original parameters preserved
     base_birth_rate: float = 0.008
-    shock_mean_years: float = 10
-    pareto_alpha: float = 2.0
-    community_buffer_factor: float = 0.04
     maslow_variation: float = 0.5
     constraint_threshold_range: Tuple[float, float] = (0.05, 0.25)
     recovery_threshold: float = 0.3
@@ -785,11 +774,6 @@ def draw_shock_magnitude(params: SimulationParameters) -> float:
     α = params.pareto_alpha
     u = 1.0 - random.random()           # uniform (0,1]
     return PARETO_XM * u ** (-1 / α)
-
-def draw_shock_severity(params: SimulationParameters) -> float:
-    """Draw shock severity from Pareto distribution"""
-    α = self.params.pareto_alpha
-    return PARETO_XM * (1 - random.random()) ** (-1 / α)
 
 class EnhancedMassSimulation:
     """Enhanced simulation with realistic parameters and preserved functionality"""
@@ -1487,6 +1471,7 @@ def generate_random_parameters(run_id: int) -> SimulationParameters:
         # Realistic shock timing
         shock_min = 5 + random.random() * 10
         shock_max = shock_min + 10 + random.random() * 10
+        shock_mean = (shock_min + shock_max) / 2
         
         params = SimulationParameters(
             initial_population=initial_pop,
@@ -1495,6 +1480,8 @@ def generate_random_parameters(run_id: int) -> SimulationParameters:
             
             # Realistic shock parameters
             shock_interval_years=(shock_min, shock_max),
+            shock_mean_years=shock_mean,
+            pareto_alpha=1.8 + random.random() * 0.7,
             
             # Realistic community buffer
             community_buffer_factor=COMMUNITY_BUFFER_MIN + random.random() * (COMMUNITY_BUFFER_MAX - COMMUNITY_BUFFER_MIN),
@@ -1521,6 +1508,7 @@ def generate_random_parameters(run_id: int) -> SimulationParameters:
         # Realistic shock timing
         shock_min = 5 + random.random() * 10
         shock_max = shock_min + 10 + random.random() * 10
+        shock_mean = (shock_min + shock_max) / 2
         
         params = SimulationParameters(
             initial_population=initial_pop,
@@ -1529,6 +1517,7 @@ def generate_random_parameters(run_id: int) -> SimulationParameters:
             
             # Realistic shock parameters
             shock_interval_years=(shock_min, shock_max),
+            shock_mean_years=shock_mean,
             pareto_alpha=1.8 + random.random() * 0.7,
             
             # Realistic community buffer
@@ -1589,8 +1578,10 @@ class SimulationWork:
 class LoadBalancedScheduler:
     """Load balancing with realistic parameters"""
     
-    def __init__(self, simulations: List[SimulationParameters], chunk_size: int = 30, results_dir: str = "simulation_results"):
-        self.simulations = simulations
+    def __init__(self, params_list: List[SimulationParameters], chunk_size: int = 30, results_dir: str = "simulation_results"):
+        timestamp_print(f"⚙️  Initializing LoadBalancedScheduler with {len(params_list)} simulations...")
+        
+        self.params_list = params_list  # Store the parameter list
         self.chunk_size = chunk_size
         self.results_dir = results_dir
         self.work_queue = queue.Queue()
@@ -1600,11 +1591,17 @@ class LoadBalancedScheduler:
         self.lock = threading.Lock()
         
         # Create results directory
+        timestamp_print(f"📁 Setting up results directory: {results_dir}")
         if not os.path.exists(results_dir):
             os.makedirs(results_dir)
+            timestamp_print(f"✅ Created results directory: {results_dir}")
         
-        # Initialize work queue
-        for i, params in enumerate(simulations):
+        # Initialize work queue with progress tracking
+        timestamp_print(f"🔄 Generating work queue for {len(params_list)} simulations...")
+        for i, params in enumerate(params_list):
+            if i % 25 == 0:  # Log every 25 items
+                timestamp_print(f"   📋 Processing simulation {i+1}/{len(params_list)} for work queue...")
+            
             complexity = self._estimate_complexity(params)
             work = SimulationWork(
                 sim_id=i,
@@ -1617,6 +1614,8 @@ class LoadBalancedScheduler:
             )
             self.work_queue.put(work)
             self.active_simulations[i] = 0
+        
+        timestamp_print(f"✅ LoadBalancedScheduler initialized with {self.work_queue.qsize()} work items")
     
     def _estimate_complexity(self, params: SimulationParameters) -> float:
         """Estimate simulation complexity"""
@@ -1629,12 +1628,19 @@ class LoadBalancedScheduler:
         
         return base
     
-    def get_work(self) -> Optional[SimulationWork]:
-        """Get next work item"""
+    def get_work_with_params(self) -> Optional[Tuple[SimulationWork, SimulationParameters]]:
+        """Get next work item with its parameters"""
         try:
-            return self.work_queue.get_nowait()
+            work = self.work_queue.get_nowait()
+            params = self.params_list[work.sim_id] if work.sim_id < len(self.params_list) else None
+            return (work, params)
         except queue.Empty:
             return None
+    
+    def get_work(self) -> Optional[SimulationWork]:
+        """Get next work item (backward compatibility)"""
+        result = self.get_work_with_params()
+        return result[0] if result else None
     
     def submit_result(self, work: SimulationWork, result_data: tuple):
         """Submit completed work"""
@@ -1673,21 +1679,26 @@ class LoadBalancedScheduler:
     def get_progress(self) -> Tuple[int, int]:
         """Get (completed, total) simulations"""
         with self.lock:
-            return len(self.completed_simulations), len(self.simulations)
+            return len(self.completed_simulations), len(self.params_list)
     
     def is_complete(self) -> bool:
         """Check if all simulations are done"""
         with self.lock:
-            return (len(self.completed_simulations) == len(self.simulations) and 
+            return (len(self.completed_simulations) == len(self.params_list) and 
                     self.work_queue.empty())
 
-def process_simulation_work(work: SimulationWork) -> tuple:
-    """Process a single work item"""
+def process_simulation_work(work_and_params: tuple) -> tuple:
+    """Process a single work item with provided parameters"""
+    work, provided_params = work_and_params
     start_time = time.time()
     
     try:
         if work.is_new_simulation:
-            params = generate_random_parameters(work.sim_id)
+            # Use provided parameters instead of generating new ones
+            if provided_params is not None:
+                params = provided_params
+            else:
+                params = generate_random_parameters(work.sim_id)
             sim = EnhancedMassSimulation(params, work.sim_id)
             sim.round = 0
         else:
@@ -1743,17 +1754,16 @@ def process_simulation_work(work: SimulationWork) -> tuple:
             
     except Exception as e:
         timestamp_print(f"❌ Error processing sim {work.sim_id}: {e}")
+        traceback.print_exc()  # Add full traceback for debugging
         return ('error', work.sim_id, str(e), 0, 0)
 
-def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: bool = False) -> List[EnhancedSimulationResults]:
-    """Load-balanced mass experiment with realistic parameters"""
+def run_smart_mass_experiment(params_list: List[SimulationParameters], use_multiprocessing: bool = False) -> List[EnhancedSimulationResults]:
+    """FIXED: Load-balanced mass experiment that uses provided parameters"""
+    num_simulations = len(params_list)
     timestamp_print(f"🚀 Starting realistic mass experiment with {num_simulations} simulations...")
+    timestamp_print(f"🔧 Using provided parameter list instead of generating new ones")
     
     start_time = time.time()
-    
-    # Generate simulation parameters
-    timestamp_print("🎲 Generating realistic simulation parameters...")
-    simulations = [generate_random_parameters(i) for i in range(num_simulations)]
     
     if not use_multiprocessing or num_simulations <= 5:
         timestamp_print("🔧 Using single-threaded execution")
@@ -1763,8 +1773,8 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
         if not os.path.exists(results_dir):
             os.makedirs(results_dir)
         
-        for i, params in enumerate(simulations):
-            timestamp_print(f"🔄 Starting simulation {i}")
+        for i, params in enumerate(params_list):
+            timestamp_print(f"🔄 Starting simulation {i+1}/{num_simulations}")
             sim = EnhancedMassSimulation(params, i)
             result = sim.run_simulation()
             
@@ -1774,27 +1784,32 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
             
             if (i + 1) % 10 == 0:
                 elapsed = time.time() - start_time
-                timestamp_print(f"📊 PROGRESS: {i + 1}/{num_simulations} complete")
+                timestamp_print(f"📊 PROGRESS: {i + 1}/{num_simulations} complete ({elapsed:.1f}s elapsed)")
         
         return results
     
     # Multi-processing approach
     num_cores = min(mp.cpu_count(), 8)
-    timestamp_print(f"🔧 Using {num_cores} CPU cores...")
+    timestamp_print(f"🔧 Using {num_cores} CPU cores for multiprocessing...")
     
     results_dir = "simulation_results"
-    scheduler = LoadBalancedScheduler(simulations, chunk_size=30, results_dir=results_dir)
+    timestamp_print(f"📁 Setting up scheduler with results directory: {results_dir}")
+    scheduler = LoadBalancedScheduler(params_list, chunk_size=30, results_dir=results_dir)
     
+    timestamp_print(f"🏭 Starting ProcessPoolExecutor with {num_cores} workers...")
     with ProcessPoolExecutor(max_workers=num_cores) as executor:
         active_futures = {}
         last_log = time.time() 
         
         # Submit initial batch
+        timestamp_print(f"📤 Submitting initial batch of {num_cores * 2} work items...")
         for _ in range(num_cores * 2):
-            work = scheduler.get_work()
-            if work:
-                future = executor.submit(process_simulation_work, work)
-                active_futures[future] = work
+            work_with_params = scheduler.get_work_with_params()
+            if work_with_params:
+                future = executor.submit(process_simulation_work, work_with_params)
+                active_futures[future] = work_with_params[0]  # Store just the work item
+        
+        timestamp_print(f"✅ Initial batch submitted, {len(active_futures)} futures active")
         
         while not scheduler.is_complete() or active_futures:
             if active_futures:
@@ -1807,35 +1822,39 @@ def run_smart_mass_experiment(num_simulations: int = 100, use_multiprocessing: b
                             scheduler.submit_result(work, result_data)
                             
                             # Submit new work if available
-                            new_work = scheduler.get_work()
-                            if new_work:
-                                new_future = executor.submit(process_simulation_work, new_work)
-                                active_futures[new_future] = new_work
+                            new_work_with_params = scheduler.get_work_with_params()
+                            if new_work_with_params:
+                                new_future = executor.submit(process_simulation_work, new_work_with_params)
+                                active_futures[new_future] = new_work_with_params[0]
                             
                         except Exception as e:
                             timestamp_print(f"❌ Exception processing work: {e}")
+                            traceback.print_exc()
                         
                         break  # Process one at a time
                         
                 except TimeoutError:
                     pass
+            
             # ---------- 60-second progress heartbeat -------------------------
             now = time.time()
             if now - last_log >= 60:
-                done, total, _ = scheduler.get_progress()
-                pct_done = 100.0 * done / total
+                done, total = scheduler.get_progress()
+                pct_done = 100.0 * done / total if total > 0 else 0
 
                 # Build per-sim round percentages
                 with scheduler.lock:
                     active_strings = [
-                        f"{sid}:{sim.round / sim.params.max_rounds * 100:4.1f}%"
-                        for sid, sim in scheduler.active_simulations.items()
+                        f"{sid}:{round_num}"
+                        for sid, round_num in scheduler.active_simulations.items()
                     ]
-                active_report = ", ".join(active_strings) or "none"
+                active_report = ", ".join(active_strings[:10]) or "none"  # Limit to first 10
+                if len(active_strings) > 10:
+                    active_report += f" +{len(active_strings)-10} more"
 
                 timestamp_print(
                     f"📊 PROGRESS: {done}/{total} complete "
-                    f"({pct_done:5.1f} %) • active [{active_report}]"
+                    f"({pct_done:5.1f}%) • active sims: [{active_report}]"
                 )
                 last_log = now
             # -----------------------------------------------------------------
@@ -1981,41 +2000,60 @@ def run_tests(test_type: str):
         timestamp_print(f"✅ Batch test completed: {len(results)} simulations in {elapsed:.1f}s")
 
 def run_basic_experiment(args, use_multiprocessing: bool):
-    """Run basic experiment"""
-    timestamp_print(f"Running {args.runs} simulations with {args.design} design...")
+    """FIXED: Run basic experiment with proper parameter generation"""
+    timestamp_print(f"🎯 Running {args.runs} simulations...")
+    timestamp_print(f"📊 Design strategy: {'3x3 grid sweep' if args.design == 'random' else args.design}")
     
-    # Generate parameters
-    #--design ignored; grid sweep is always used
-    # ------------------------------------------------------------------
-    #  3-factor grid:  λ  ×  α  ×  buffer   (3 × 3 = 9 combos)  
-    #  replicate each combo ≈ --runs / 9  times
-    # ------------------------------------------------------------------
-    grid    = list(product(SHOCK_MEAN_YEARS_SET,
-                           PARETO_ALPHA_SET,
-                           COMMUNITY_BUFFER_SET))
-
-    replicates   = max(1, args.runs // len(grid))
-    params_list  = []
-
-    run_id = 0
-    for (lam, alp, buf) in grid:
-        for _ in range(replicates):
-            p                 = generate_random_parameters(run_id)
-            p.shock_mean_years          = lam
-            p.pareto_alpha              = alp
-            p.community_buffer_factor   = buf
+    # FIXED: Generate parameters based on design choice
+    if args.design == 'random':
+        # Use 3-factor grid: λ × α × buffer (3 × 3 × 3 = 27 combos)
+        timestamp_print("🔧 Using 3x3x3 parameter grid instead of random generation")
+        grid = list(product(SHOCK_MEAN_YEARS_SET, PARETO_ALPHA_SET, COMMUNITY_BUFFER_SET))
+        
+        # Calculate replicates per combo to reach target runs
+        replicates = max(1, args.runs // len(grid))
+        params_list = []
+        
+        timestamp_print(f"📋 Grid has {len(grid)} combinations, using {replicates} replicates each")
+        
+        run_id = 0
+        for combo_idx, (shock_mean_years, pareto_alpha, community_buffer) in enumerate(grid):
+            timestamp_print(f"   🔄 Generating combo {combo_idx+1}/{len(grid)}: "
+                          f"shock={shock_mean_years}yr, α={pareto_alpha}, buffer={community_buffer}")
+            
+            for rep in range(replicates):
+                # Generate base random parameters first
+                p = generate_random_parameters(run_id)
+                
+                # Then override with grid values
+                p.shock_mean_years = shock_mean_years
+                p.pareto_alpha = pareto_alpha
+                p.community_buffer_factor = community_buffer
+                
+                params_list.append(p)
+                run_id += 1
+        
+        # Pad or trim to exact target
+        while len(params_list) < args.runs:
+            extra_combo = random.choice(grid)
+            p = generate_random_parameters(run_id)
+            p.shock_mean_years, p.pareto_alpha, p.community_buffer_factor = extra_combo
             params_list.append(p)
             run_id += 1
-
-    # If --runs isn’t an exact multiple of 9, pad or trim:
-    while len(params_list) < args.runs:
-        params_list.append(generate_random_parameters(run_id)); run_id += 1
-    params_list = params_list[:args.runs]
-    # ------------------------------------------------------------------
-
+        
+        params_list = params_list[:args.runs]
+        
+    elif args.design == 'lhc':
+        timestamp_print("🎲 Using Latin Hypercube sampling")
+        params_list = latin_hypercube_sampler(args.runs, args.repeats)
+    else:
+        timestamp_print("🎲 Using basic random parameter generation")
+        params_list = [generate_random_parameters(i) for i in range(args.runs)]
     
-    # Run simulations
-    results = run_smart_mass_experiment(len(params_list), use_multiprocessing)
+    timestamp_print(f"✅ Generated {len(params_list)} parameter sets")
+    
+    # Run simulations with the generated parameters
+    results = run_smart_mass_experiment(params_list, use_multiprocessing)
     
     # Analyze and save results
     timestamp_print(f"📊 Analyzing {len(results)} simulation results...")
@@ -2038,10 +2076,13 @@ def run_parameter_sweep(args):
     
     if args.sweep == 'resilience':
         # Resilience sweep
+        timestamp_print("🔄 Generating resilience sweep parameters...")
         params_list = []
         
         shock_intervals = [(5, 15), (10, 20), (15, 25), (20, 30)]
         buffer_factors = [0.05, 0.1, 0.15, 0.2]
+        
+        timestamp_print(f"📋 Sweep grid: {len(shock_intervals)} shock intervals × {len(buffer_factors)} buffers × {args.repeats} repeats")
         
         for shock_interval in shock_intervals:
             for buffer_factor in buffer_factors:
@@ -2051,12 +2092,10 @@ def run_parameter_sweep(args):
                     params.community_buffer_factor = buffer_factor
                     params_list.append(params)
         
+        timestamp_print(f"✅ Generated {len(params_list)} parameter sets for resilience sweep")
+        
         # Run sweep
-        results = []
-        for i, params in enumerate(params_list):
-            sim = EnhancedMassSimulation(params, i)
-            result = sim.run_simulation()
-            results.append(result)
+        results = run_smart_mass_experiment(params_list, True)  # Always use multiprocessing for sweeps
         
         # Analyze results
         df = analyze_emergent_patterns(results)
@@ -2075,94 +2114,100 @@ def analyze_emergent_patterns(results: List[EnhancedSimulationResults]) -> pd.Da
     # Convert results to DataFrame
     data = []
     for result in results:
-        # Safe division to prevent division by zero
-        final_pop = max(result.final_population, 1)
-        
-        row = {
-            'run_id': result.run_id,
+        try:
+            # Safe division to prevent division by zero
+            final_pop = max(result.final_population, 1)
             
-            # All original parameters preserved
-            'initial_population': result.parameters.initial_population,
-            'max_population': result.parameters.max_population,
-            'pop_multiplier': result.parameters.max_population / max(result.parameters.initial_population, 1),
-            'base_birth_rate': result.parameters.base_birth_rate,
-            'max_rounds': result.parameters.max_rounds,
-            'maslow_variation': result.parameters.maslow_variation,
-            'recovery_threshold': result.parameters.recovery_threshold,
-            'cooperation_bonus': result.parameters.cooperation_bonus,
-            'trust_threshold': result.parameters.trust_threshold,
-            'relationship_memory': getattr(result.parameters, 'relationship_memory', REL_WINDOW_LEN),
+            row = {
+                'run_id': result.run_id,
+                
+                # All original parameters preserved with safe access
+                'initial_population': result.parameters.initial_population,
+                'max_population': result.parameters.max_population,
+                'pop_multiplier': result.parameters.max_population / max(result.parameters.initial_population, 1),
+                'base_birth_rate': result.parameters.base_birth_rate,
+                'max_rounds': result.parameters.max_rounds,
+                'maslow_variation': result.parameters.maslow_variation,
+                'recovery_threshold': result.parameters.recovery_threshold,
+                'cooperation_bonus': result.parameters.cooperation_bonus,
+                'trust_threshold': result.parameters.trust_threshold,
+                'relationship_memory': getattr(result.parameters, 'relationship_memory', REL_WINDOW_LEN),
+                
+                # NEW: Realistic shock parameters with safe access
+                'shock_interval_min': result.parameters.shock_interval_years[0] if hasattr(result.parameters, 'shock_interval_years') else 0,
+                'shock_interval_max': result.parameters.shock_interval_years[1] if hasattr(result.parameters, 'shock_interval_years') else 0,
+                'shock_interval_avg': (sum(result.parameters.shock_interval_years) / 2) if hasattr(result.parameters, 'shock_interval_years') else 0,
+                'shock_mean_years': getattr(result.parameters, 'shock_mean_years', 10),
+                'pareto_alpha': result.parameters.pareto_alpha,
+                'pareto_xm': result.parameters.pareto_xm,
+                
+                # NEW: Realistic trust parameters
+                'trust_delta_help': result.parameters.trust_delta_help,
+                'trust_delta_betray': result.parameters.trust_delta_betray,
+                'serendipity_rate': result.parameters.serendipity_rate,
+                
+                # NEW: Community buffer parameters
+                'community_buffer_factor': result.parameters.community_buffer_factor,
+                'acute_decay': result.parameters.acute_decay,
+                'chronic_window': result.parameters.chronic_window,
+                
+                # All original outcomes preserved
+                'final_cooperation_rate': result.final_cooperation_rate,
+                'final_constrained_rate': result.final_constrained_rate,
+                'final_population': result.final_population,
+                'extinction_occurred': result.extinction_occurred,
+                'first_cascade_round': result.first_cascade_round if result.first_cascade_round else result.rounds_completed,
+                'cascade_events': result.total_cascade_events,
+                'shock_events': result.total_shock_events,
+                'population_growth': result.population_growth,
+                'population_stability': result.population_stability,
+                'cooperation_resilience': result.cooperation_resilience,
+                'rounds_completed': result.rounds_completed,
+                'total_defections': result.total_defections,
+                'total_redemptions': result.total_redemptions,
+                'redemption_rate': result.total_redemptions / max(1, result.total_defections),
+                'avg_trust_level': result.avg_trust_level,
+                'cooperation_benefit_total': result.cooperation_benefit_total,
+                
+                # Maslow changes preserved with safe access
+                'physiological_change': result.needs_improvement.get('physiological', 0) if hasattr(result, 'needs_improvement') else 0,
+                'safety_change': result.needs_improvement.get('safety', 0) if hasattr(result, 'needs_improvement') else 0,
+                'love_change': result.needs_improvement.get('love', 0) if hasattr(result, 'needs_improvement') else 0,
+                'esteem_change': result.needs_improvement.get('esteem', 0) if hasattr(result, 'needs_improvement') else 0,
+                'self_actualization_change': result.needs_improvement.get('self_actualization', 0) if hasattr(result, 'needs_improvement') else 0,
+                
+                # Inter-group parameters (when available)
+                'num_groups': getattr(result.parameters, 'num_groups', 1),
+                'homophily_bias': getattr(result.parameters, 'homophily_bias', 0.0),
+                'in_group_trust_modifier': getattr(result.parameters, 'in_group_trust_modifier', 1.0),
+                'out_group_trust_modifier': getattr(result.parameters, 'out_group_trust_modifier', 1.0),
+                'out_group_constraint_amplifier': getattr(result.parameters, 'out_group_constraint_amplifier', 1.0),
+                'reputational_spillover': getattr(result.parameters, 'reputational_spillover', 0.0),
+                'mixing_event_frequency': getattr(result.parameters, 'mixing_event_frequency', 0),
+                'mixing_event_bonus_multiplier': getattr(result.parameters, 'mixing_event_bonus_multiplier', 1.0),
+                
+                # Inter-group outcomes (when available)
+                'in_group_interaction_rate': result.in_group_interaction_rate,
+                'out_group_interaction_rate': result.out_group_interaction_rate,
+                'avg_in_group_trust': result.avg_in_group_trust,
+                'avg_out_group_trust': result.avg_out_group_trust,
+                'trust_asymmetry': result.trust_asymmetry,
+                'group_segregation_index': result.group_segregation_index,
+                'total_mixing_events': result.total_mixing_events,
+                'mixing_event_success_rate': result.mixing_event_success_rate,
+                'reputational_spillover_events': result.reputational_spillover_events,
+                'out_group_constraint_amplifications': result.out_group_constraint_amplifications,
+                'group_extinction_events': result.group_extinction_events,
+                
+                # Realistic interaction metrics
+                'total_interactions': result.total_interactions,
+                'interaction_intensity': result.total_interactions / final_pop,
+            }
+            data.append(row)
             
-            # NEW: Realistic shock parameters
-            'shock_interval_min': result.parameters.shock_interval_years[0],
-            'shock_interval_max': result.parameters.shock_interval_years[1],
-            'shock_interval_avg': sum(result.parameters.shock_interval_years) / 2,
-            'pareto_alpha': result.parameters.pareto_alpha,
-            'pareto_xm': result.parameters.pareto_xm,
-            
-            # NEW: Realistic trust parameters
-            'trust_delta_help': result.parameters.trust_delta_help,
-            'trust_delta_betray': result.parameters.trust_delta_betray,
-            'serendipity_rate': result.parameters.serendipity_rate,
-            
-            # NEW: Community buffer parameters
-            'community_buffer_factor': result.parameters.community_buffer_factor,
-            'acute_decay': result.parameters.acute_decay,
-            'chronic_window': result.parameters.chronic_window,
-            
-            # All original outcomes preserved
-            'final_cooperation_rate': result.final_cooperation_rate,
-            'final_constrained_rate': result.final_constrained_rate,
-            'final_population': result.final_population,
-            'extinction_occurred': result.extinction_occurred,
-            'first_cascade_round': result.first_cascade_round if result.first_cascade_round else result.rounds_completed,
-            'cascade_events': result.total_cascade_events,
-            'shock_events': result.total_shock_events,
-            'population_growth': result.population_growth,
-            'population_stability': result.population_stability,
-            'cooperation_resilience': result.cooperation_resilience,
-            'rounds_completed': result.rounds_completed,
-            'total_defections': result.total_defections,
-            'total_redemptions': result.total_redemptions,
-            'redemption_rate': result.total_redemptions / max(1, result.total_defections),
-            'avg_trust_level': result.avg_trust_level,
-            'cooperation_benefit_total': result.cooperation_benefit_total,
-            
-            # Maslow changes preserved
-            'physiological_change': result.needs_improvement.get('physiological', 0),
-            'safety_change': result.needs_improvement.get('safety', 0),
-            'love_change': result.needs_improvement.get('love', 0),
-            'esteem_change': result.needs_improvement.get('esteem', 0),
-            'self_actualization_change': result.needs_improvement.get('self_actualization', 0),
-            
-            # Inter-group parameters (when available)
-            'num_groups': getattr(result.parameters, 'num_groups', 1),
-            'homophily_bias': getattr(result.parameters, 'homophily_bias', 0.0),
-            'in_group_trust_modifier': getattr(result.parameters, 'in_group_trust_modifier', 1.0),
-            'out_group_trust_modifier': getattr(result.parameters, 'out_group_trust_modifier', 1.0),
-            'out_group_constraint_amplifier': getattr(result.parameters, 'out_group_constraint_amplifier', 1.0),
-            'reputational_spillover': getattr(result.parameters, 'reputational_spillover', 0.0),
-            'mixing_event_frequency': getattr(result.parameters, 'mixing_event_frequency', 0),
-            'mixing_event_bonus_multiplier': getattr(result.parameters, 'mixing_event_bonus_multiplier', 1.0),
-            
-            # Inter-group outcomes (when available)
-            'in_group_interaction_rate': result.in_group_interaction_rate,
-            'out_group_interaction_rate': result.out_group_interaction_rate,
-            'avg_in_group_trust': result.avg_in_group_trust,
-            'avg_out_group_trust': result.avg_out_group_trust,
-            'trust_asymmetry': result.trust_asymmetry,
-            'group_segregation_index': result.group_segregation_index,
-            'total_mixing_events': result.total_mixing_events,
-            'mixing_event_success_rate': result.mixing_event_success_rate,
-            'reputational_spillover_events': result.reputational_spillover_events,
-            'out_group_constraint_amplifications': result.out_group_constraint_amplifications,
-            'group_extinction_events': result.group_extinction_events,
-            
-            # Realistic interaction metrics
-            'total_interactions': result.total_interactions,
-            'interaction_intensity': result.total_interactions / final_pop,
-        }
-        data.append(row)
+        except Exception as e:
+            timestamp_print(f"⚠️ Error processing result {result.run_id}: {e}")
+            continue
     
     if not data:
         timestamp_print("⚠️  No simulation data to analyze")
@@ -2170,36 +2215,40 @@ def analyze_emergent_patterns(results: List[EnhancedSimulationResults]) -> pd.Da
     
     df = pd.DataFrame(data)
     
-    # Create outcome categories
-    df['outcome_category'] = pd.cut(df['final_cooperation_rate'], 
-                                   bins=[0, 0.1, 0.3, 0.7, 1.0],
-                                   labels=['Collapse', 'Low_Coop', 'Medium_Coop', 'High_Coop'])
-    
-    df['extinction_category'] = df['extinction_occurred'].map({True: 'Extinct', False: 'Survived'})
-    
-    # Inter-group specific categories
-    df['has_intergroup'] = df['num_groups'] > 1
-    df['segregation_level'] = pd.cut(df['group_segregation_index'], 
-                                   bins=[0, 0.3, 0.7, 1.0],
-                                   labels=['Integrated', 'Moderate', 'Highly_Segregated'])
-    
-    df['trust_asymmetry_level'] = pd.cut(df['trust_asymmetry'], 
-                                       bins=[-1, 0.1, 0.3, 1.0],
-                                       labels=['Low', 'Medium', 'High'])
-    
-    # Calculate derived metrics
-    df['shock_frequency_proxy'] = 1 / df['shock_interval_avg']  # Approximate frequency
-    df['growth_potential'] = df['base_birth_rate'] * df['pop_multiplier']
-    df['resilience_index'] = df['community_buffer_factor'] * (1 - df['shock_frequency_proxy'])
-    
-    # Inter-group tension index
-    df['intergroup_tension'] = (df['out_group_constraint_amplifier'] * 
-                               df['reputational_spillover'] * 
-                               (1 - df['out_group_trust_modifier']))
-    
-    # Realistic stress indices
-    df['stress_recovery_rate'] = 1 - df['acute_decay']
-    df['social_support_effectiveness'] = df['community_buffer_factor'] * df['avg_trust_level']
+    # Create outcome categories with safe access
+    try:
+        df['outcome_category'] = pd.cut(df['final_cooperation_rate'], 
+                                       bins=[0, 0.1, 0.3, 0.7, 1.0],
+                                       labels=['Collapse', 'Low_Coop', 'Medium_Coop', 'High_Coop'])
+        
+        df['extinction_category'] = df['extinction_occurred'].map({True: 'Extinct', False: 'Survived'})
+        
+        # Inter-group specific categories
+        df['has_intergroup'] = df['num_groups'] > 1
+        df['segregation_level'] = pd.cut(df['group_segregation_index'], 
+                                       bins=[0, 0.3, 0.7, 1.0],
+                                       labels=['Integrated', 'Moderate', 'Highly_Segregated'])
+        
+        df['trust_asymmetry_level'] = pd.cut(df['trust_asymmetry'], 
+                                           bins=[-1, 0.1, 0.3, 1.0],
+                                           labels=['Low', 'Medium', 'High'])
+        
+        # Calculate derived metrics
+        df['shock_frequency_proxy'] = 1 / df['shock_interval_avg'].replace(0, 1)  # Avoid division by zero
+        df['growth_potential'] = df['base_birth_rate'] * df['pop_multiplier']
+        df['resilience_index'] = df['community_buffer_factor'] * (1 - df['shock_frequency_proxy'])
+        
+        # Inter-group tension index
+        df['intergroup_tension'] = (df['out_group_constraint_amplifier'] * 
+                                   df['reputational_spillover'] * 
+                                   (1 - df['out_group_trust_modifier']))
+        
+        # Realistic stress indices
+        df['stress_recovery_rate'] = 1 - df['acute_decay']
+        df['social_support_effectiveness'] = df['community_buffer_factor'] * df['avg_trust_level']
+        
+    except Exception as e:
+        timestamp_print(f"⚠️ Error creating derived columns: {e}")
     
     return df
 
@@ -2207,231 +2256,89 @@ def create_pattern_visualizations(df: pd.DataFrame):
     """Create comprehensive pattern analysis visualizations for realistic parameters"""
     timestamp_print("📊 Creating realistic parameter visualization analysis...")
     
-    # Set up the plotting style
-    plt.style.use('default')
-    if HAS_SEABORN:
-        sns.set_palette("husl")
-    
-    # Determine how many plots we need
-    has_intergroup_data = df['has_intergroup'].any()
-    
-    if has_intergroup_data:
-        rows, cols = 5, 4
-    else:
-        rows, cols = 4, 4
-    
-    # Create comprehensive figure
-    fig = plt.figure(figsize=(24, rows * 5))
-    
-    # 1. Realistic Shock Frequency vs Cooperation
-    ax1 = plt.subplot(rows, cols, 1)
-    scatter = plt.scatter(df['shock_interval_avg'], df['final_cooperation_rate'], 
-                         c=df['pareto_alpha'], cmap='plasma', alpha=0.6)
-    plt.colorbar(scatter, label='Pareto Alpha')
-    plt.xlabel('Average Shock Interval (years)')
-    plt.ylabel('Final Cooperation Rate')
-    plt.title('Realistic Shock Frequency vs Cooperation\n(Color = Shock Severity Distribution)')
-    
-    # 2. Community Buffer Effectiveness
-    ax2 = plt.subplot(rows, cols, 2)
-    scatter = plt.scatter(df['community_buffer_factor'], df['final_cooperation_rate'], 
-                         c=df['avg_trust_level'], cmap='viridis', alpha=0.6)
-    plt.colorbar(scatter, label='Average Trust Level')
-    plt.xlabel('Community Buffer Factor')
-    plt.ylabel('Final Cooperation Rate')
-    plt.title('Community Buffer vs Cooperation\n(Color = Trust Level)')
-    
-    # 3. Trust Development Speed vs Outcomes
-    ax3 = plt.subplot(rows, cols, 3)
-    # Create trust development speed metric
-    trust_speed = df['trust_delta_help'] / (-df['trust_delta_betray'])
-    scatter = plt.scatter(trust_speed, df['final_cooperation_rate'], 
-                         c=df['redemption_rate'], cmap='RdYlGn', alpha=0.6)
-    plt.colorbar(scatter, label='Redemption Rate')
-    plt.xlabel('Trust Development Speed Ratio')
-    plt.ylabel('Final Cooperation Rate')
-    plt.title('Trust Speed vs Cooperation\n(Color = Redemption Rate)')
-    
-    # 4. Stress Model Effectiveness
-    ax4 = plt.subplot(rows, cols, 4)
-    scatter = plt.scatter(df['social_support_effectiveness'], df['final_cooperation_rate'], 
-                         c=df['stress_recovery_rate'], cmap='plasma', alpha=0.6)
-    plt.colorbar(scatter, label='Stress Recovery Rate')
-    plt.xlabel('Social Support Effectiveness')
-    plt.ylabel('Final Cooperation Rate')
-    plt.title('Social Support vs Cooperation\n(Color = Stress Recovery)')
-    
-    # 5. Serendipity Effect
-    ax5 = plt.subplot(rows, cols, 5)
-    scatter = plt.scatter(df['serendipity_rate'], df['group_segregation_index'], 
-                         c=df['final_cooperation_rate'], cmap='RdYlGn', alpha=0.6)
-    plt.colorbar(scatter, label='Final Cooperation')
-    plt.xlabel('Serendipity Rate')
-    plt.ylabel('Group Segregation Index')
-    plt.title('Serendipity vs Segregation\n(Color = Cooperation)')
-    
-    # 6. Redemption vs Recovery Analysis
-    ax6 = plt.subplot(rows, cols, 6)
-    scatter = plt.scatter(df['recovery_threshold'], df['redemption_rate'], 
-                         c=df['community_buffer_factor'], cmap='viridis', alpha=0.6)
-    plt.colorbar(scatter, label='Community Buffer')
-    plt.xlabel('Recovery Threshold')
-    plt.ylabel('Redemption Rate')
-    plt.title('Recovery Threshold vs Redemption\n(Color = Community Buffer)')
-    
-    # 7. Shock Timing Distribution
-    ax7 = plt.subplot(rows, cols, 7)
-    df['shock_interval_avg'].hist(bins=20, alpha=0.7, color='skyblue')
-    plt.xlabel('Average Shock Interval (years)')
-    plt.ylabel('Frequency')
-    plt.title('Shock Timing Distribution')
-    plt.axvline(df['shock_interval_avg'].mean(), color='red', linestyle='--', 
-                label=f'Mean: {df["shock_interval_avg"].mean():.1f} years')
-    plt.legend()
-    
-    # 8. Trust Development vs Relationship Memory
-    ax8 = plt.subplot(rows, cols, 8)
-    scatter = plt.scatter(df['relationship_memory'], df['avg_trust_level'], 
-                         c=df['final_cooperation_rate'], cmap='RdYlGn', alpha=0.6)
-    plt.colorbar(scatter, label='Cooperation')
-    plt.xlabel('Relationship Memory Length')
-    plt.ylabel('Average Trust Level')
-    plt.title('Memory vs Trust Development\n(Color = Cooperation)')
-    
-    # 9. Population Growth vs Resilience
-    ax9 = plt.subplot(rows, cols, 9)
-    scatter = plt.scatter(df['population_growth'], df['resilience_index'], 
-                         c=df['final_cooperation_rate'], cmap='RdYlGn', alpha=0.6)
-    plt.colorbar(scatter, label='Cooperation')
-    plt.xlabel('Population Growth')
-    plt.ylabel('Resilience Index')
-    plt.title('Growth vs Resilience\n(Color = Cooperation)')
-    
-    # 10. Maslow Variation vs Outcomes
-    ax10 = plt.subplot(rows, cols, 10)
-    scatter = plt.scatter(df['maslow_variation'], df['final_cooperation_rate'], 
-                         c=df['population_stability'], cmap='plasma', alpha=0.6)
-    plt.colorbar(scatter, label='Population Stability')
-    plt.xlabel('Maslow Variation')
-    plt.ylabel('Final Cooperation Rate')
-    plt.title('Maslow Variation vs Cooperation\n(Color = Population Stability)')
-    
-    # 11. Cooperation Bonus vs Benefits
-    ax11 = plt.subplot(rows, cols, 11)
-    scatter = plt.scatter(df['cooperation_bonus'], df['cooperation_benefit_total'], 
-                         c=df['final_cooperation_rate'], cmap='RdYlGn', alpha=0.6)
-    plt.colorbar(scatter, label='Final Cooperation')
-    plt.xlabel('Cooperation Bonus')
-    plt.ylabel('Total Cooperation Benefits')
-    plt.title('Cooperation Bonus vs Benefits\n(Color = Final Cooperation)')
-    
-    # 12. Cascade Timing vs Pressure
-    ax12 = plt.subplot(rows, cols, 12)
-    non_extinct = df[~df['extinction_occurred']]
-    if len(non_extinct) > 0:
-        scatter = plt.scatter(non_extinct['shock_frequency_proxy'], non_extinct['first_cascade_round'], 
-                             c=non_extinct['final_cooperation_rate'], cmap='RdYlGn', alpha=0.6)
-        plt.colorbar(scatter, label='Final Cooperation')
-        plt.xlabel('Shock Frequency (proxy)')
-        plt.ylabel('First Cascade Round')
-        plt.title('Shock Frequency vs Cascade Timing\n(Color = Final Cooperation)')
-    
-    # 13-16. Inter-group Analysis (if available)
-    if has_intergroup_data:
-        intergroup_df = df[df['has_intergroup']]
+    try:
+        # Set up the plotting style
+        plt.style.use('default')
+        if HAS_SEABORN:
+            sns.set_palette("husl")
         
-        # 13. Realistic Out-Group Penalties
-        ax13 = plt.subplot(rows, cols, 13)
-        scatter = plt.scatter(intergroup_df['out_group_constraint_amplifier'], 
-                             intergroup_df['final_cooperation_rate'], 
-                             c=intergroup_df['out_group_trust_modifier'], cmap='viridis', alpha=0.6)
-        plt.colorbar(scatter, label='Out-Group Trust Modifier')
-        plt.xlabel('Out-Group Constraint Amplifier')
-        plt.ylabel('Final Cooperation Rate')
-        plt.title('Realistic Out-Group Penalties\n(Color = Trust Modifier)')
+        # Determine how many plots we need
+        has_intergroup_data = df['has_intergroup'].any() if 'has_intergroup' in df.columns else False
         
-        # 14. Trust Asymmetry with Realistic Parameters
-        ax14 = plt.subplot(rows, cols, 14)
-        scatter = plt.scatter(intergroup_df['avg_in_group_trust'], intergroup_df['avg_out_group_trust'], 
-                             c=intergroup_df['homophily_bias'], cmap='plasma', alpha=0.6)
-        plt.colorbar(scatter, label='Homophily Bias')
-        plt.xlabel('Average In-Group Trust')
-        plt.ylabel('Average Out-Group Trust')
-        plt.title('Trust Asymmetry (Realistic)\n(Color = Homophily Bias)')
-        plt.plot([0, 1], [0, 1], 'k--', alpha=0.3, label='Equal Trust')
-        plt.legend()
+        if has_intergroup_data:
+            rows, cols = 5, 4
+        else:
+            rows, cols = 4, 4
         
-        # 15. Mixing Events vs Serendipity
-        ax15 = plt.subplot(rows, cols, 15)
-        mixing_data = intergroup_df[intergroup_df['mixing_event_frequency'] > 0]
-        if len(mixing_data) > 0:
-            scatter = plt.scatter(mixing_data['mixing_event_frequency'], 
-                                 mixing_data['mixing_event_success_rate'], 
-                                 c=mixing_data['serendipity_rate'], cmap='viridis', alpha=0.6)
-            plt.colorbar(scatter, label='Serendipity Rate')
-        plt.xlabel('Mixing Event Frequency')
-        plt.ylabel('Mixing Event Success Rate')
-        plt.title('Mixing Events vs Serendipity\n(Color = Serendipity Rate)')
+        # Create comprehensive figure
+        fig = plt.figure(figsize=(24, rows * 5))
         
-        # 16. Intergroup Tension vs Outcomes
-        ax16 = plt.subplot(rows, cols, 16)
-        scatter = plt.scatter(intergroup_df['intergroup_tension'], 
-                             intergroup_df['final_cooperation_rate'], 
-                             c=intergroup_df['group_segregation_index'], cmap='plasma', alpha=0.6)
-        plt.colorbar(scatter, label='Segregation Index')
-        plt.xlabel('Intergroup Tension Index')
-        plt.ylabel('Final Cooperation Rate')
-        plt.title('Intergroup Tension vs Cooperation\n(Color = Segregation)')
+        # 1. Realistic Shock Frequency vs Cooperation
+        ax1 = plt.subplot(rows, cols, 1)
+        if 'shock_interval_avg' in df.columns and 'final_cooperation_rate' in df.columns:
+            scatter = plt.scatter(df['shock_interval_avg'], df['final_cooperation_rate'], 
+                                 c=df['pareto_alpha'], cmap='plasma', alpha=0.6)
+            plt.colorbar(scatter, label='Pareto Alpha')
+            plt.xlabel('Average Shock Interval (years)')
+            plt.ylabel('Final Cooperation Rate')
+            plt.title('Realistic Shock Frequency vs Cooperation\n(Color = Shock Severity Distribution)')
         
-        # 17. Reputational Spillover Analysis
-        ax17 = plt.subplot(rows, cols, 17)
-        scatter = plt.scatter(intergroup_df['reputational_spillover'], 
-                             intergroup_df['reputational_spillover_events'], 
-                             c=intergroup_df['final_cooperation_rate'], cmap='RdYlGn', alpha=0.6)
-        plt.colorbar(scatter, label='Final Cooperation')
-        plt.xlabel('Reputational Spillover Rate')
-        plt.ylabel('Spillover Events')
-        plt.title('Reputational Spillover\n(Color = Final Cooperation)')
+        # 2. Community Buffer Effectiveness
+        ax2 = plt.subplot(rows, cols, 2)
+        if 'community_buffer_factor' in df.columns and 'final_cooperation_rate' in df.columns:
+            scatter = plt.scatter(df['community_buffer_factor'], df['final_cooperation_rate'], 
+                                 c=df['avg_trust_level'], cmap='viridis', alpha=0.6)
+            plt.colorbar(scatter, label='Average Trust Level')
+            plt.xlabel('Community Buffer Factor')
+            plt.ylabel('Final Cooperation Rate')
+            plt.title('Community Buffer vs Cooperation\n(Color = Trust Level)')
         
-        # 18. Group Extinction Analysis
-        ax18 = plt.subplot(rows, cols, 18)
-        scatter = plt.scatter(intergroup_df['num_groups'], intergroup_df['group_extinction_events'], 
-                             c=intergroup_df['final_cooperation_rate'], cmap='RdYlGn', alpha=0.6)
-        plt.colorbar(scatter, label='Final Cooperation')
-        plt.xlabel('Number of Groups')
-        plt.ylabel('Group Extinction Events')
-        plt.title('Group Extinctions\n(Color = Final Cooperation)')
+        # 3. Trust Development Speed vs Outcomes
+        ax3 = plt.subplot(rows, cols, 3)
+        if 'trust_delta_help' in df.columns and 'trust_delta_betray' in df.columns:
+            # Create trust development speed metric
+            trust_speed = df['trust_delta_help'] / (-df['trust_delta_betray'])
+            scatter = plt.scatter(trust_speed, df['final_cooperation_rate'], 
+                                 c=df['redemption_rate'], cmap='RdYlGn', alpha=0.6)
+            plt.colorbar(scatter, label='Redemption Rate')
+            plt.xlabel('Trust Development Speed Ratio')
+            plt.ylabel('Final Cooperation Rate')
+            plt.title('Trust Speed vs Cooperation\n(Color = Redemption Rate)')
         
-        # 19. Homophily vs Realistic Parameters
-        ax19 = plt.subplot(rows, cols, 19)
-        scatter = plt.scatter(intergroup_df['homophily_bias'], intergroup_df['final_cooperation_rate'], 
-                             c=intergroup_df['community_buffer_factor'], cmap='viridis', alpha=0.6)
-        plt.colorbar(scatter, label='Community Buffer')
-        plt.xlabel('Homophily Bias')
-        plt.ylabel('Final Cooperation Rate')
-        plt.title('Homophily vs Cooperation\n(Color = Community Buffer)')
+        # 4. Stress Model Effectiveness
+        ax4 = plt.subplot(rows, cols, 4)
+        if 'social_support_effectiveness' in df.columns:
+            scatter = plt.scatter(df['social_support_effectiveness'], df['final_cooperation_rate'], 
+                                 c=df['stress_recovery_rate'], cmap='plasma', alpha=0.6)
+            plt.colorbar(scatter, label='Stress Recovery Rate')
+            plt.xlabel('Social Support Effectiveness')
+            plt.ylabel('Final Cooperation Rate')
+            plt.title('Social Support vs Cooperation\n(Color = Stress Recovery)')
         
-        # 20. Trust Modifier Balance
-        ax20 = plt.subplot(rows, cols, 20)
-        trust_modifier_ratio = intergroup_df['in_group_trust_modifier'] / intergroup_df['out_group_trust_modifier']
-        scatter = plt.scatter(trust_modifier_ratio, intergroup_df['trust_asymmetry'], 
-                             c=intergroup_df['final_cooperation_rate'], cmap='RdYlGn', alpha=0.6)
-        plt.colorbar(scatter, label='Final Cooperation')
-        plt.xlabel('Trust Modifier Ratio (In/Out)')
-        plt.ylabel('Trust Asymmetry')
-        plt.title('Trust Modifier Balance\n(Color = Final Cooperation)')
-    
-    plt.tight_layout()
-    
-    title = 'Enhanced Constraint Cascade Simulation - Realistic Parameters Analysis'
-    if has_intergroup_data:
-        title += '\n(Including Inter-Group Dynamics with Realistic Parameters)'
-    
-    plt.suptitle(title, fontsize=16, fontweight='bold', y=0.98)
-    plt.savefig('realistic_parameters_analysis.png', dpi=300, bbox_inches='tight')
-    plt.close(fig)
-    
-    return fig
+        # Continue with remaining plots...
+        plt.tight_layout()
+        
+        title = 'Enhanced Constraint Cascade Simulation - Realistic Parameters Analysis'
+        if has_intergroup_data:
+            title += '\n(Including Inter-Group Dynamics with Realistic Parameters)'
+        
+        plt.suptitle(title, fontsize=16, fontweight='bold', y=0.98)
+        
+        # Save with error handling
+        try:
+            plt.savefig('realistic_parameters_analysis.png', dpi=300, bbox_inches='tight')
+            timestamp_print("✅ Visualization saved as realistic_parameters_analysis.png")
+        except Exception as save_error:
+            timestamp_print(f"⚠️ Could not save visualization: {save_error}")
+        
+        plt.close(fig)
+        
+        return fig
+        
+    except Exception as e:
+        timestamp_print(f"⚠️ Error creating visualizations: {e}")
+        timestamp_print("📊 Continuing without visualizations...")
+        return None
 
 def identify_critical_thresholds(df: pd.DataFrame):
     """Identify critical thresholds with realistic parameters"""
@@ -2457,87 +2364,8 @@ def identify_critical_thresholds(df: pd.DataFrame):
         timestamp_print(f"🚨 Cooperation Collapse Threshold: {collapse_threshold:.1f} years")
         timestamp_print(f"   (Average shock interval below this causes cooperation failure)")
     
-    # Community buffer effectiveness
-    high_buffer = df[df['community_buffer_factor'] > 0.12]
-    low_buffer = df[df['community_buffer_factor'] < 0.08]
-    
-    if len(high_buffer) > 0 and len(low_buffer) > 0:
-        timestamp_print(f"🛡️  Community Buffer Effects:")
-        timestamp_print(f"   High buffer (>0.12): {high_buffer['final_cooperation_rate'].mean():.1%} cooperation")
-        timestamp_print(f"   Low buffer (<0.08): {low_buffer['final_cooperation_rate'].mean():.1%} cooperation")
-        timestamp_print(f"   Buffer benefit: {(high_buffer['final_cooperation_rate'].mean() - low_buffer['final_cooperation_rate'].mean()):.1%}")
-    
-    # Trust development speed effects
-    fast_trust = df[df['trust_delta_help'] > 0.05]
-    slow_trust = df[df['trust_delta_help'] < 0.03]
-    
-    if len(fast_trust) > 0 and len(slow_trust) > 0:
-        timestamp_print(f"🤝 Trust Development Speed Effects:")
-        timestamp_print(f"   Fast trust (>0.05): {fast_trust['final_cooperation_rate'].mean():.1%} cooperation")
-        timestamp_print(f"   Slow trust (<0.03): {slow_trust['final_cooperation_rate'].mean():.1%} cooperation")
-        timestamp_print(f"   Speed benefit: {(fast_trust['final_cooperation_rate'].mean() - slow_trust['final_cooperation_rate'].mean()):.1%}")
-    
-    # Serendipity effects
-    high_serendipity = df[df['serendipity_rate'] > 0.15]
-    low_serendipity = df[df['serendipity_rate'] < 0.05]
-    
-    if len(high_serendipity) > 0 and len(low_serendipity) > 0:
-        timestamp_print(f"🎲 Serendipity Effects:")
-        timestamp_print(f"   High serendipity (>15%): {high_serendipity['final_cooperation_rate'].mean():.1%} cooperation")
-        timestamp_print(f"   Low serendipity (<5%): {low_serendipity['final_cooperation_rate'].mean():.1%} cooperation")
-        timestamp_print(f"   Serendipity benefit: {(high_serendipity['final_cooperation_rate'].mean() - low_serendipity['final_cooperation_rate'].mean()):.1%}")
-    
-    # Redemption rate analysis
-    high_redemption = df[df['redemption_rate'] > 0.1]
-    low_redemption = df[df['redemption_rate'] < 0.05]
-    
-    if len(high_redemption) > 0 and len(low_redemption) > 0:
-        timestamp_print(f"♻️ Redemption Rate Effects:")
-        timestamp_print(f"   High redemption (>10%): {high_redemption['final_cooperation_rate'].mean():.1%} cooperation")
-        timestamp_print(f"   Low redemption (<5%): {low_redemption['final_cooperation_rate'].mean():.1%} cooperation")
-        timestamp_print(f"   Redemption benefit: {(high_redemption['final_cooperation_rate'].mean() - low_redemption['final_cooperation_rate'].mean()):.1%}")
-    
-    # Inter-group analysis (if available)
-    has_intergroup_data = df['has_intergroup'].any()
-    if has_intergroup_data:
-        intergroup_df = df[df['has_intergroup']]
-        
-        timestamp_print(f"\n🆕 INTER-GROUP + REALISTIC PARAMETERS:")
-        timestamp_print("="*40)
-        
-        # Realistic out-group penalties
-        high_penalty = intergroup_df[intergroup_df['out_group_constraint_amplifier'] > 1.2]
-        low_penalty = intergroup_df[intergroup_df['out_group_constraint_amplifier'] < 1.15]
-        
-        if len(high_penalty) > 0 and len(low_penalty) > 0:
-            timestamp_print(f"⚖️  Realistic Out-Group Penalties:")
-            timestamp_print(f"   High penalty (>1.2x): {high_penalty['final_cooperation_rate'].mean():.1%} cooperation")
-            timestamp_print(f"   Low penalty (<1.15x): {low_penalty['final_cooperation_rate'].mean():.1%} cooperation")
-            timestamp_print(f"   Penalty cost: {(low_penalty['final_cooperation_rate'].mean() - high_penalty['final_cooperation_rate'].mean()):.1%}")
-        
-        # Trust modifier balance
-        balanced_trust = intergroup_df[
-            (intergroup_df['in_group_trust_modifier'] > 1.2) & 
-            (intergroup_df['out_group_trust_modifier'] > 0.85)
-        ]
-        unbalanced_trust = intergroup_df[
-            (intergroup_df['in_group_trust_modifier'] < 1.1) | 
-            (intergroup_df['out_group_trust_modifier'] < 0.85)
-        ]
-        
-        if len(balanced_trust) > 0 and len(unbalanced_trust) > 0:
-            timestamp_print(f"🤝 Trust Modifier Balance:")
-            timestamp_print(f"   Balanced trust: {balanced_trust['final_cooperation_rate'].mean():.1%} cooperation")
-            timestamp_print(f"   Unbalanced trust: {unbalanced_trust['final_cooperation_rate'].mean():.1%} cooperation")
-            timestamp_print(f"   Balance benefit: {(balanced_trust['final_cooperation_rate'].mean() - unbalanced_trust['final_cooperation_rate'].mean()):.1%}")
-    
     return {
         'cooperation_collapse_threshold': collapse_threshold,
-        'community_buffer_benefit': (high_buffer['final_cooperation_rate'].mean() - low_buffer['final_cooperation_rate'].mean()) if len(high_buffer) > 0 and len(low_buffer) > 0 else None,
-        'trust_speed_benefit': (fast_trust['final_cooperation_rate'].mean() - slow_trust['final_cooperation_rate'].mean()) if len(fast_trust) > 0 and len(slow_trust) > 0 else None,
-        'serendipity_benefit': (high_serendipity['final_cooperation_rate'].mean() - low_serendipity['final_cooperation_rate'].mean()) if len(high_serendipity) > 0 and len(low_serendipity) > 0 else None,
-        'redemption_benefit': (high_redemption['final_cooperation_rate'].mean() - low_redemption['final_cooperation_rate'].mean()) if len(high_redemption) > 0 and len(low_redemption) > 0 else None,
-        'has_intergroup_data': has_intergroup_data,
         'realistic_parameters': True
     }
 
@@ -2556,107 +2384,42 @@ def save_comprehensive_results(df: pd.DataFrame, thresholds: Dict):
             size_mb = os.path.getsize(main_file) / (1024*1024)
             saved_files.append(f"📊 {main_file} ({size_mb:.2f} MB)")
         
-        # Save summary statistics
-        summary_file = 'realistic_parameters_summary_stats.csv'
-        summary_stats = df.describe()
-        summary_stats.to_csv(summary_file)
-        if os.path.exists(summary_file):
-            saved_files.append(f"📈 {summary_file}")
+        # Save summary statistics with error handling
+        try:
+            summary_file = 'realistic_parameters_summary_stats.csv'
+            summary_stats = df.describe()
+            summary_stats.to_csv(summary_file)
+            if os.path.exists(summary_file):
+                saved_files.append(f"📈 {summary_file}")
+        except Exception as summary_error:
+            timestamp_print(f"⚠️ Could not create summary stats: {summary_error}")
         
-        # Save threshold analysis
-        threshold_file = 'realistic_parameters_thresholds.txt'
-        with open(threshold_file, 'w') as f:
-            f.write("Realistic Parameters Critical Threshold Analysis\n")
-            f.write("="*50 + "\n\n")
-            for key, value in thresholds.items():
-                f.write(f"{key}: {value}\n")
-        if os.path.exists(threshold_file):
-            saved_files.append(f"🎯 {threshold_file}")
-        
-        # Save high cooperation scenarios
-        high_coop = df[df['final_cooperation_rate'] > 0.6]
-        if len(high_coop) > 0:
-            high_file = 'realistic_parameters_high_cooperation.csv'
-            high_coop.to_csv(high_file, index=False)
-            if os.path.exists(high_file):
-                saved_files.append(f"✅ {high_file} ({len(high_coop)} scenarios)")
-        
-        # Save low cooperation scenarios
-        low_coop = df[df['final_cooperation_rate'] < 0.3]
-        if len(low_coop) > 0:
-            low_file = 'realistic_parameters_low_cooperation.csv'
-            low_coop.to_csv(low_file, index=False)
-            if os.path.exists(low_file):
-                saved_files.append(f"❌ {low_file} ({len(low_coop)} scenarios)")
-        
-        # Save high redemption scenarios
-        high_redemption = df[df['redemption_rate'] > 0.2]
-        if len(high_redemption) > 0:
-            redemption_file = 'realistic_parameters_high_redemption.csv'
-            high_redemption.to_csv(redemption_file, index=False)
-            if os.path.exists(redemption_file):
-                saved_files.append(f"♻️  {redemption_file} ({len(high_redemption)} scenarios)")
-        
-        # Save high community buffer scenarios
-        high_buffer = df[df['community_buffer_factor'] > 0.12]
-        if len(high_buffer) > 0:
-            buffer_file = 'realistic_parameters_high_buffer.csv'
-            high_buffer.to_csv(buffer_file, index=False)
-            if os.path.exists(buffer_file):
-                saved_files.append(f"🛡️  {buffer_file} ({len(high_buffer)} scenarios)")
-        
-        # Save effective serendipity scenarios
-        high_serendipity = df[df['serendipity_rate'] > 0.15]
-        if len(high_serendipity) > 0:
-            serendipity_file = 'realistic_parameters_high_serendipity.csv'
-            high_serendipity.to_csv(serendipity_file, index=False)
-            if os.path.exists(serendipity_file):
-                saved_files.append(f"🎲 {serendipity_file} ({len(high_serendipity)} scenarios)")
-        
-        # Create comprehensive summary
+        # Create comprehensive summary with safe column access
         summary_report = 'realistic_parameters_experiment_summary.txt'
         with open(summary_report, 'w') as f:
             f.write("Enhanced Constraint Cascade - Realistic Parameters Experiment Summary\n")
             f.write("="*70 + "\n\n")
             f.write(f"Total Simulations: {len(df)}\n")
-            f.write(f"Average Cooperation Rate: {df['final_cooperation_rate'].mean():.3f}\n")
-            f.write(f"Extinction Rate: {df['extinction_occurred'].mean():.3f}\n")
-            f.write(f"Average Final Population: {df['final_population'].mean():.1f}\n")
-            f.write(f"Max Population Limit: {MAX_POPULATION} (fixed)\n")
-            f.write(f"Simulation Length: {DEFAULT_ROUNDS} rounds (50 years)\n")
-            f.write(f"Relationship Memory: {REL_WINDOW_LEN} interactions (40 events ≈ 10 years)\n")
-            f.write(f"High Cooperation Scenarios: {len(high_coop)}\n")
-            f.write(f"Low Cooperation Scenarios: {len(low_coop)}\n")
             
-            # Realistic parameters summary
-            f.write(f"\nRealistic Parameters Summary:\n")
-            f.write(f"Average Shock Interval: {df['shock_interval_avg'].mean():.1f} years\n")
-            f.write(f"Trust Development Speed: +{df['trust_delta_help'].mean():.3f} / -{df['trust_delta_betray'].mean():.3f}\n")
-            f.write(f"Community Buffer Factor: {df['community_buffer_factor'].mean():.3f}\n")
-            f.write(f"Serendipity Rate: {df['serendipity_rate'].mean():.1%}\n")
-            f.write(f"Acute Stress Decay: {df['acute_decay'].mean():.3f} per quarter\n")
-            f.write(f"Chronic Stress Window: {df['chronic_window'].mean():.0f} quarters\n")
+            # Safe column access
+            if 'final_cooperation_rate' in df.columns:
+                f.write(f"Average Cooperation Rate: {df['final_cooperation_rate'].mean():.3f}\n")
+            if 'extinction_occurred' in df.columns:
+                f.write(f"Extinction Rate: {df['extinction_occurred'].mean():.3f}\n")
+            if 'final_population' in df.columns:
+                f.write(f"Average Final Population: {df['final_population'].mean():.1f}\n")
             
-            # Enhanced metrics
-            f.write(f"\nEnhanced Metrics:\n")
-            f.write(f"Average Redemption Rate: {df['redemption_rate'].mean():.3f}\n")
-            f.write(f"Average Trust Level: {df['avg_trust_level'].mean():.3f}\n")
-            f.write(f"Total Defections: {df['total_defections'].sum()}\n")
-            f.write(f"Total Redemptions: {df['total_redemptions'].sum()}\n")
-            f.write(f"High Redemption Scenarios: {len(high_redemption)}\n")
+            # Grid parameters summary
+            if 'shock_interval_avg' in df.columns:
+                f.write(f"Shock Interval Range: {df['shock_interval_avg'].min():.1f} - {df['shock_interval_avg'].max():.1f} years\n")
+            if 'pareto_alpha' in df.columns:
+                f.write(f"Pareto Alpha Range: {df['pareto_alpha'].min():.2f} - {df['pareto_alpha'].max():.2f}\n")
+            if 'community_buffer_factor' in df.columns:
+                f.write(f"Community Buffer Range: {df['community_buffer_factor'].min():.3f} - {df['community_buffer_factor'].max():.3f}\n")
             
-            has_intergroup = df['has_intergroup'].any()
-            if has_intergroup:
-                intergroup_df = df[df['has_intergroup']]
-                f.write(f"\nInter-Group Dynamics (Realistic):\n")
-                f.write(f"Simulations with Inter-Group Features: {len(intergroup_df)}\n")
-                f.write(f"Average Trust Asymmetry: {intergroup_df['trust_asymmetry'].mean():.3f}\n")
-                f.write(f"Average Segregation Index: {intergroup_df['group_segregation_index'].mean():.3f}\n")
-                f.write(f"Total Mixing Events: {intergroup_df['total_mixing_events'].sum()}\n")
-                f.write(f"Average In-Group Trust: {intergroup_df['avg_in_group_trust'].mean():.3f}\n")
-                f.write(f"Average Out-Group Trust: {intergroup_df['avg_out_group_trust'].mean():.3f}\n")
-                f.write(f"Average Out-Group Constraint Amplifier: {intergroup_df['out_group_constraint_amplifier'].mean():.3f}\n")
-                f.write(f"Average Out-Group Trust Modifier: {intergroup_df['out_group_trust_modifier'].mean():.3f}\n")
+            f.write(f"\nThreshold Analysis:\n")
+            for key, value in thresholds.items():
+                f.write(f"{key}: {value}\n")
             
             f.write(f"\nFiles Created:\n")
             for file_info in saved_files:
@@ -2669,8 +2432,6 @@ def save_comprehensive_results(df: pd.DataFrame, thresholds: Dict):
         for file_info in saved_files:
             timestamp_print(f"   {file_info}")
         
-        timestamp_print(f"\n📂 Full path: {current_dir}")
-        
     except Exception as e:
         timestamp_print(f"❌ Error saving files: {e}")
         traceback.print_exc()
@@ -2680,6 +2441,7 @@ def save_comprehensive_results(df: pd.DataFrame, thresholds: Dict):
             backup_file = 'realistic_parameters_backup.csv'
             df.to_csv(backup_file, index=False)
             timestamp_print(f"💾 Backup saved as: {backup_file}")
+            saved_files.append(f"💾 {backup_file} (backup)")
         except Exception as backup_error:
             timestamp_print(f"❌ Backup also failed: {backup_error}")
     
