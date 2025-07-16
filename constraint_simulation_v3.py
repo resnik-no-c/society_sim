@@ -1485,9 +1485,6 @@ def generate_random_parameters(run_id: int) -> SimulationParameters:
             
             # Other realistic parameters
             base_birth_rate=0.006 + random.random() * 0.006,
-            shock_mean_years = lam,
-            pareto_alpha     = alp,
-            community_buffer_factor = buf,
             maslow_variation=0.3 + random.random() * 0.4,
             recovery_threshold=0.2 + random.random() * 0.3,
             cooperation_bonus=0.1 + random.random() * 0.3,
