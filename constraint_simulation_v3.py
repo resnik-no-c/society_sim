@@ -59,17 +59,17 @@ except ImportError:
 # Crisis settings - realistic frequencies
 SHOCK_INTERVAL_YEARS = (5, 25)  # Major shocks every 5-25 years (was multiple per year)
 PARETO_ALPHA_RANGE = (1.8, 2.5)  # Fat-tailed distribution
-PARETO_XM = 0.05  # Minimum severity
+PARETO_XM = 0.15  # Minimum severity
 
 # Trust mechanics - slower, more realistic
 TRUST_DELTA_HELP = +0.04  # Slower trust building (was +0.1)
 TRUST_DELTA_BETRAY = -0.06  # Slower trust decay (was -0.15)
 REL_WINDOW_LEN = 40  # 40 events ≈ 10 years of interaction history
-SERENDIPITY_RATE = 0.10  # 10% interactions ignore homophily
+SERENDIPITY_RATE = 0.05  # 5% interactions ignore homophily
 
 # Community buffer - social support reduces chronic stress
-COMMUNITY_BUFFER_MIN = 0.05
-COMMUNITY_BUFFER_MAX = 0.15
+COMMUNITY_BUFFER_MIN = 0.02
+COMMUNITY_BUFFER_MAX = 0.08
 
 # Stress model parameters
 ACUTE_DECAY_QUARTERLY = 0.84  # Acute stress decays 50% per year (λ=0.84 per quarter)
@@ -198,7 +198,7 @@ class FastRelationship:
                 trust_delta *= in_group_modifier
             else:
                 trust_delta *= out_group_modifier
-            self.trust = min(1.0, self.trust + trust_delta)
+            self.trust = min(0.9, self.trust + trust_delta)
         else:
             self.betrayal_count += 1
             trust_delta = -TRUST_DELTA_BETRAY
@@ -236,7 +236,7 @@ class SimulationParameters:
     # Original parameters preserved
     base_birth_rate: float = 0.05
     maslow_variation: float = 0.5
-    constraint_threshold_range: Tuple[float, float] = (0.3, 0.8)
+    constraint_threshold_range: Tuple[float, float] = (0.15, 0.5)
     recovery_threshold: float = 0.3
     cooperation_bonus: float = 0.2
     trust_threshold: float = 0.6
@@ -349,10 +349,10 @@ class OptimizedPerson:
         self.chronic_queue = deque(maxlen=params.chronic_window)
         # Initialize chronic queue with low stress
         for _ in range(params.chronic_window):
-            self.chronic_queue.append(0.1)
+            self.chronic_queue.append(0.0)
         
         # Base cooperation probability
-        self.base_coop = params.cooperation_bonus + (random.random() - 0.5) * 0.4
+        self.base_coop = 0.4 + (random.random() - 0.5) * 0.4
         self.base_coop = max(0.1, min(0.9, self.base_coop))
         
         self.relationships: Dict[int, FastRelationship] = {}
@@ -621,6 +621,8 @@ class OptimizedPerson:
         else:
             recent_coop = sum(list(relationship.cooperation_history)[-3:]) / min(3, len(relationship.cooperation_history))
             cooperation_prob = relationship.trust * 0.7 + recent_coop * 0.3
+            if random.random()<0.02: 
+                return False
             return random.random() < cooperation_prob
     
     def _get_basic_needs_pressure(self) -> float:
