@@ -64,6 +64,15 @@ SERENDIPITY_RATE = 0.05  # 5% interactions ignore homophily
 COMMUNITY_BUFFER_MIN = 0.02
 COMMUNITY_BUFFER_MAX = 0.08
 
+# === EXTREME SWEEP CONSTANTS ======================================
+EXTREME_SHOCK_GAPS   = (2, 3, 4)        # yrs  (Sweep B)
+PARETO_ALPHA_EXTREME = 1.3              # fat tail (Sweep C)
+SHORT_REL_WINDOW     = 20               # interactions ≈ 5 yrs (Sweep D)
+
+# Optional stronger prejudice / constraint
+OUT_GROUP_PENALTY    = 2.5              # betrayals hurt ×2.5
+CONSTRAINT_SCALE     = 1.6              # constraint = 1.6 × chronic
+
 # Stress model parameters
 ACUTE_DECAY_QUARTERLY = 0.97  # Acute stress decays 50% per 5 years
 CHRONIC_WINDOW_QUARTERS = 16  # 4-year rolling window
@@ -360,6 +369,11 @@ def save_incremental_csv(result, csv_file: str = "simulation_results_incremental
         'intergroup_tension': result.parameters.out_group_constraint_amplifier * result.parameters.reputational_spillover * (1 - result.parameters.out_group_trust_modifier) if result.parameters.num_groups > 1 else 0,
         'stress_recovery_rate': 1 - result.parameters.acute_decay,
         'social_support_effectiveness': result.parameters.community_buffer_factor * result.avg_trust_level,
+        
+        # === FAILURE-MODE SWEEP METRICS ===
+        'relationship_window_len': getattr(result.parameters, 'relationship_window_len', REL_WINDOW_LEN),
+        'behavioural_coop_rate': getattr(result, 'total_mutual_coop', 0) / max(1, result.total_interactions),
+        'total_mutual_coop': getattr(result, 'total_mutual_coop', 0),
     }
     
     # Create DataFrame
@@ -403,7 +417,7 @@ class FastRelationship:
     """Enhanced relationship tracking with realistic trust mechanics"""
     trust: float = 0.5
     interaction_count: int = 0
-    cooperation_history: deque = field(default_factory=lambda: deque(maxlen=REL_WINDOW_LEN))
+    cooperation_history: deque = field(default_factory=lambda: deque(maxlen=40))  # Will be set dynamically
     last_interaction_round: int = 0
     
     # Inter-group extensions
@@ -436,6 +450,11 @@ class FastRelationship:
                 trust_delta *= out_group_modifier
             self.trust = max(0.0, self.trust + trust_delta)
 
+    def set_memory_length(self, length: int):
+        """Update cooperation history memory length"""
+        new_history = deque(list(self.cooperation_history)[-length:], maxlen=length)
+        self.cooperation_history = new_history
+
 @dataclass
 class SimulationParameters:
     """Enhanced simulation parameters with realistic settings"""
@@ -453,6 +472,7 @@ class SimulationParameters:
     trust_delta_help: float = TRUST_DELTA_HELP
     trust_delta_betray: float = TRUST_DELTA_BETRAY
     relationship_memory: int = REL_WINDOW_LEN
+    relationship_window_len: int = REL_WINDOW_LEN  # NEW: for dynamic window sizing
     serendipity_rate: float = SERENDIPITY_RATE
     
     # Community buffer parameters
@@ -548,6 +568,7 @@ class EnhancedSimulationResults:
     
     # NEW: Realistic interaction metrics
     total_interactions: int = 0
+    total_mutual_coop: int = 0  # NEW: for behavioral cooperation rate
     avg_interaction_processing_time: float = 0.0
 
 class OptimizedPerson:
@@ -750,7 +771,7 @@ class OptimizedPerson:
         
         # Update constraint level for compatibility
         chronic_stress = np.mean(self.chronic_queue)
-        self.constraint_level = chronic_stress * 0.5  # Convert to old constraint system
+        self.constraint_level = chronic_stress * CONSTRAINT_SCALE  # Use configurable scale
         
         need_satisfaction = (needs.physiological + needs.safety + needs.love + 
                            needs.esteem + needs.self_actualization) / 50
@@ -831,7 +852,11 @@ class OptimizedPerson:
                 del self.relationships[oldest_id]
             
             is_same_group = (other_group_id is None or self.group_id == other_group_id)
-            self.relationships[other_id] = FastRelationship(is_same_group=is_same_group)
+            relationship = FastRelationship(is_same_group=is_same_group)
+            # Set dynamic memory length if available
+            if hasattr(self, 'params') and hasattr(self.params, 'relationship_window_len'):
+                relationship.set_memory_length(self.params.relationship_window_len)
+            self.relationships[other_id] = relationship
         return self.relationships[other_id]
     
     def calculate_cooperation_decision(self, other: 'OptimizedPerson', round_num: int, params: SimulationParameters) -> bool:
@@ -882,7 +907,20 @@ def cooperation_probability(person: OptimizedPerson, other: OptimizedPerson, par
 def update_relationship(person: OptimizedPerson, other: OptimizedPerson, cooperated: bool, round_num: int, params: SimulationParameters):
     """Update relationship between two people with realistic trust speed"""
     rel = person.get_relationship(other.id, round_num, other.group_id)
-    rel.update_trust(cooperated, round_num, params.in_group_trust_modifier, params.out_group_trust_modifier)
+    
+    # Apply out-group penalty for betrayals
+    if not cooperated and hasattr(person, 'group_id') and hasattr(other, 'group_id'):
+        is_out_group = (person.group_id != other.group_id)
+        if is_out_group:
+            # Apply stronger penalty for out-group betrayals
+            original_betray = params.trust_delta_betray
+            params.trust_delta_betray = params.trust_delta_betray * OUT_GROUP_PENALTY
+            rel.update_trust(cooperated, round_num, params.in_group_trust_modifier, params.out_group_trust_modifier)
+            params.trust_delta_betray = original_betray  # Restore original
+        else:
+            rel.update_trust(cooperated, round_num, params.in_group_trust_modifier, params.out_group_trust_modifier)
+    else:
+        rel.update_trust(cooperated, round_num, params.in_group_trust_modifier, params.out_group_trust_modifier)
 
 def apply_community_buffer(person: OptimizedPerson, params: SimulationParameters):
     """Apply community buffer to reduce chronic stress - handled in stress model"""
@@ -962,6 +1000,7 @@ def schedule_interactions(
 
             # Mutual-cooperation benefits & possible birth
             if person_coop and partner_coop:
+                sim_ref.total_mutual_coop += 1  # NEW: track mutual cooperation
                 person.maslow_needs.love  = min(10, person.maslow_needs.love  + 0.1)
                 partner.maslow_needs.love = min(10, partner.maslow_needs.love + 0.1)
 
@@ -1044,6 +1083,7 @@ class EnhancedMassSimulation:
         
         # Interaction tracking
         self.total_interactions = 0
+        self.total_mutual_coop = 0  # NEW: track mutual cooperation
         
         self._initialize_population()
     
@@ -1544,6 +1584,7 @@ class EnhancedMassSimulation:
             
             # Realistic interaction metrics
             total_interactions=total_interactions,
+            total_mutual_coop=self.total_mutual_coop,  # NEW
             avg_interaction_processing_time=0.0
         )
     
@@ -2140,7 +2181,7 @@ Examples:
     parser.add_argument('--sweep', choices=['resilience'], 
                        help='Run parameter sweep')
     parser.add_argument('--design', choices=['lhc', 'random'], default='lhc',
-                       help='Parameter sampling design')
+                       help='Parameter sampling design (random = failure-mode exploration)')
     parser.add_argument('--repeats', type=int, default=1,
                        help='Replicates per parameter set')
     parser.add_argument('-m', '--multiprocessing', action='store_true',
@@ -2231,6 +2272,30 @@ def run_tests(test_type: str):
         elapsed = time.time() - start_time
         timestamp_print(f"✅ Batch test completed: {len(results)} simulations in {elapsed:.1f}s")
 
+def build_fragility_grid(n_runs: int):
+    """Build parameter grid for failure-mode exploration sweep"""
+    triples = []
+    
+    # Sweep A: Buffer abolition (60 runs)
+    for lam in (5, 10, 20):
+        for alp in (1.5, 2.7):
+            triples.extend([(lam, alp, 0.00)] * 10)
+    
+    # Sweep B: Shock storm (30 runs)
+    for lam in EXTREME_SHOCK_GAPS:
+        triples.extend([(lam, 1.5, 0.00)] * 10)
+    
+    # Sweep C: Black-swan severity (40 runs)
+    for lam in (5, 10):
+        for buf in (0.00, 0.04):
+            triples.extend([(lam, PARETO_ALPHA_EXTREME, buf)] * 10)
+    
+    # Sweep D: Short memory (20 runs)
+    triples.extend([(5, 1.5, 0.00)] * 10)
+    triples.extend([(5, 1.5, 0.04)] * 10)
+    
+    return triples[:n_runs]
+
 def run_basic_experiment(args, use_multiprocessing: bool):
     """FIXED: Run basic experiment with proper parameter generation"""
     timestamp_print(f"🎯 Running {args.runs} simulations...")
@@ -2238,42 +2303,28 @@ def run_basic_experiment(args, use_multiprocessing: bool):
     
     # FIXED: Generate parameters based on design choice
     if args.design == 'random':
-        # Use 3-factor grid: λ × α × buffer (3 × 3 × 3 = 27 combos)
-        timestamp_print("🔧 Using 3x3x3 parameter grid instead of random generation")
-        grid = list(product(SHOCK_MEAN_YEARS_SET, PARETO_ALPHA_SET, COMMUNITY_BUFFER_SET))
-        
-        # Calculate replicates per combo to reach target runs
-        replicates = max(1, args.runs // len(grid))
+        # Use failure-mode exploration grid
+        timestamp_print("🔧 Using failure-mode exploration grid")
+        triples = build_fragility_grid(args.runs)
         params_list = []
         
-        timestamp_print(f"📋 Grid has {len(grid)} combinations, using {replicates} replicates each")
+        timestamp_print(f"📋 Fragility grid has {len(triples)} parameter combinations")
         
-        run_id = 0
-        for combo_idx, (shock_mean_years, pareto_alpha, community_buffer) in enumerate(grid):
-            timestamp_print(f"   🔄 Generating combo {combo_idx+1}/{len(grid)}: "
-                          f"shock={shock_mean_years}yr, α={pareto_alpha}, buffer={community_buffer}")
-            
-            for rep in range(replicates):
-                # Generate base random parameters first
-                p = generate_random_parameters(run_id)
-                
-                # Then override with grid values
-                p.shock_mean_years = shock_mean_years
-                p.pareto_alpha = pareto_alpha
-                p.community_buffer_factor = community_buffer
-                
-                params_list.append(p)
-                run_id += 1
-        
-        # Pad or trim to exact target
-        while len(params_list) < args.runs:
-            extra_combo = random.choice(grid)
+        for run_id, (lam, alp, buf) in enumerate(triples):
+            # Generate base random parameters first
             p = generate_random_parameters(run_id)
-            p.shock_mean_years, p.pareto_alpha, p.community_buffer_factor = extra_combo
+            
+            # Then override with grid values
+            p.shock_mean_years = lam
+            p.pareto_alpha = alp
+            p.community_buffer_factor = buf
+            p.relationship_window_len = SHORT_REL_WINDOW if run_id >= 120 else REL_WINDOW_LEN
+            
             params_list.append(p)
-            run_id += 1
-        
-        params_list = params_list[:args.runs]
+            
+            if run_id % 25 == 0:
+                timestamp_print(f"   🔄 Generated {run_id+1}/{len(triples)}: "
+                              f"shock={lam}yr, α={alp}, buffer={buf}, window={p.relationship_window_len}")
         
     elif args.design == 'lhc':
         timestamp_print("🎲 Using Latin Hypercube sampling")
