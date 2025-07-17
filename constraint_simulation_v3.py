@@ -81,53 +81,285 @@ def timestamp_print(message: str):
     sys.stdout.flush()
 
 def save_simulation_result(result, results_dir: str = "simulation_results"):
-    """Save individual simulation result immediately upon completion"""
+    """Enhanced save function that captures complete simulation state"""
     import os
     import pickle
+    import json
     
     # Create results directory if it doesn't exist
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
         timestamp_print(f"📁 Created results directory: {results_dir}")
     
-    # Save as pickle file
-    filename = f"sim_{result.run_id:04d}_result.pkl"
-    filepath = os.path.join(results_dir, filename)
+    # Save as pickle file (complete object)
+    pkl_filename = f"sim_{result.run_id:04d}_result.pkl"
+    pkl_filepath = os.path.join(results_dir, pkl_filename)
     
     try:
-        with open(filepath, 'wb') as f:
+        with open(pkl_filepath, 'wb') as f:
             pickle.dump(result, f)
-        timestamp_print(f"💾 Saved simulation {result.run_id} result to {filepath}")
-        return filepath
+        timestamp_print(f"💾 Saved complete simulation {result.run_id} to {pkl_filepath}")
     except Exception as e:
-        timestamp_print(f"❌ Error saving simulation {result.run_id}: {e}")
+        timestamp_print(f"❌ Error saving pickle for simulation {result.run_id}: {e}")
         return None
+    
+    # Also save as JSON for easier external access
+    json_filename = f"sim_{result.run_id:04d}_result.json"
+    json_filepath = os.path.join(results_dir, json_filename)
+    
+    try:
+        # Convert result to JSON-serializable format
+        json_data = {
+            'run_id': result.run_id,
+            'parameters': {
+                'initial_population': result.parameters.initial_population,
+                'max_population': result.parameters.max_population,
+                'max_rounds': result.parameters.max_rounds,
+                'base_birth_rate': result.parameters.base_birth_rate,
+                'maslow_variation': result.parameters.maslow_variation,
+                'constraint_threshold_range': result.parameters.constraint_threshold_range,
+                'recovery_threshold': result.parameters.recovery_threshold,
+                'cooperation_bonus': result.parameters.cooperation_bonus,
+                'trust_threshold': result.parameters.trust_threshold,
+                'max_relationships_per_person': result.parameters.max_relationships_per_person,
+                'shock_interval_years': result.parameters.shock_interval_years if hasattr(result.parameters, 'shock_interval_years') else [0, 0],
+                'shock_mean_years': getattr(result.parameters, 'shock_mean_years', 10),
+                'pareto_alpha': result.parameters.pareto_alpha,
+                'pareto_xm': result.parameters.pareto_xm,
+                'trust_delta_help': result.parameters.trust_delta_help,
+                'trust_delta_betray': result.parameters.trust_delta_betray,
+                'relationship_memory': result.parameters.relationship_memory,
+                'serendipity_rate': result.parameters.serendipity_rate,
+                'community_buffer_factor': result.parameters.community_buffer_factor,
+                'acute_decay': result.parameters.acute_decay,
+                'chronic_window': result.parameters.chronic_window,
+                'num_groups': result.parameters.num_groups,
+                'founder_group_distribution': result.parameters.founder_group_distribution,
+                'homophily_bias': result.parameters.homophily_bias,
+                'in_group_trust_modifier': result.parameters.in_group_trust_modifier,
+                'out_group_trust_modifier': result.parameters.out_group_trust_modifier,
+                'out_group_constraint_amplifier': result.parameters.out_group_constraint_amplifier,
+                'reputational_spillover': result.parameters.reputational_spillover,
+                'mixing_event_frequency': result.parameters.mixing_event_frequency,
+                'mixing_event_bonus_multiplier': result.parameters.mixing_event_bonus_multiplier,
+                'inheritance_style': result.parameters.inheritance_style,
+            },
+            'outcomes': {
+                'final_cooperation_rate': result.final_cooperation_rate,
+                'final_constrained_rate': result.final_constrained_rate,
+                'final_population': result.final_population,
+                'extinction_occurred': result.extinction_occurred,
+                'rounds_completed': result.rounds_completed,
+                'first_cascade_round': result.first_cascade_round,
+                'total_cascade_events': result.total_cascade_events,
+                'total_shock_events': result.total_shock_events,
+                'total_defections': result.total_defections,
+                'total_redemptions': result.total_redemptions,
+                'net_strategy_change': result.net_strategy_change,
+                'total_births': result.total_births,
+                'total_deaths': result.total_deaths,
+                'max_population_reached': result.max_population_reached,
+                'population_stability': result.population_stability,
+                'population_growth': result.population_growth,
+                'avg_system_stress': result.avg_system_stress,
+                'max_system_stress': result.max_system_stress,
+                'avg_maslow_pressure': result.avg_maslow_pressure,
+                'avg_basic_needs_crisis_rate': result.avg_basic_needs_crisis_rate,
+                'avg_trust_level': result.avg_trust_level,
+                'cooperation_benefit_total': result.cooperation_benefit_total,
+                'cooperation_resilience': result.cooperation_resilience,
+            },
+            'maslow_hierarchy': {
+                'initial_needs_avg': result.initial_needs_avg,
+                'final_needs_avg': result.final_needs_avg,
+                'needs_improvement': result.needs_improvement,
+            },
+            'inter_group_metrics': {
+                'final_group_populations': result.final_group_populations,
+                'final_group_cooperation_rates': result.final_group_cooperation_rates,
+                'in_group_interaction_rate': result.in_group_interaction_rate,
+                'out_group_interaction_rate': result.out_group_interaction_rate,
+                'avg_in_group_trust': result.avg_in_group_trust,
+                'avg_out_group_trust': result.avg_out_group_trust,
+                'trust_asymmetry': result.trust_asymmetry,
+                'group_segregation_index': result.group_segregation_index,
+                'total_mixing_events': result.total_mixing_events,
+                'mixing_event_success_rate': result.mixing_event_success_rate,
+                'reputational_spillover_events': result.reputational_spillover_events,
+                'out_group_constraint_amplifications': result.out_group_constraint_amplifications,
+                'group_extinction_events': result.group_extinction_events,
+            },
+            'interaction_metrics': {
+                'total_interactions': result.total_interactions,
+                'avg_interaction_processing_time': result.avg_interaction_processing_time,
+            }
+        }
+        
+        with open(json_filepath, 'w') as f:
+            json.dump(json_data, f, indent=2)
+        timestamp_print(f"📄 Saved JSON version for simulation {result.run_id} to {json_filepath}")
+        
+    except Exception as e:
+        timestamp_print(f"⚠️ Error saving JSON for simulation {result.run_id}: {e}")
+    
+    return pkl_filepath
 
 def save_incremental_csv(result, csv_file: str = "simulation_results_incremental.csv"):
-    """Save simulation result to incremental CSV file"""
+    """Save simulation result to incremental CSV file - COMPLETE VERSION"""
     import os
     import pandas as pd
     
-    # Convert result to row format
+    # Convert result to comprehensive row format
     row_data = {
+        # Basic identifiers
         'run_id': result.run_id,
         'timestamp': datetime.now().isoformat(),
+        
+        # === SIMULATION PARAMETERS ===
+        # Core parameters
+        'initial_population': result.parameters.initial_population,
+        'max_population': result.parameters.max_population,
+        'max_rounds': result.parameters.max_rounds,
+        'base_birth_rate': result.parameters.base_birth_rate,
+        'maslow_variation': result.parameters.maslow_variation,
+        'recovery_threshold': result.parameters.recovery_threshold,
+        'cooperation_bonus': result.parameters.cooperation_bonus,
+        'trust_threshold': result.parameters.trust_threshold,
+        'max_relationships_per_person': result.parameters.max_relationships_per_person,
+        
+        # Constraint threshold range
+        'constraint_threshold_min': result.parameters.constraint_threshold_range[0],
+        'constraint_threshold_max': result.parameters.constraint_threshold_range[1],
+        
+        # Realistic shock parameters
+        'shock_interval_min': result.parameters.shock_interval_years[0] if hasattr(result.parameters, 'shock_interval_years') else 0,
+        'shock_interval_max': result.parameters.shock_interval_years[1] if hasattr(result.parameters, 'shock_interval_years') else 0,
+        'shock_interval_avg': (sum(result.parameters.shock_interval_years) / 2) if hasattr(result.parameters, 'shock_interval_years') else 0,
+        'shock_mean_years': getattr(result.parameters, 'shock_mean_years', 10),
+        'pareto_alpha': result.parameters.pareto_alpha,
+        'pareto_xm': result.parameters.pareto_xm,
+        
+        # Realistic trust mechanics
+        'trust_delta_help': result.parameters.trust_delta_help,
+        'trust_delta_betray': result.parameters.trust_delta_betray,
+        'relationship_memory': result.parameters.relationship_memory,
+        'serendipity_rate': result.parameters.serendipity_rate,
+        
+        # Community buffer and stress model parameters
+        'community_buffer_factor': result.parameters.community_buffer_factor,
+        'acute_decay': result.parameters.acute_decay,
+        'chronic_window': result.parameters.chronic_window,
+        
+        # Inter-group parameters
+        'num_groups': result.parameters.num_groups,
+        'homophily_bias': result.parameters.homophily_bias,
+        'in_group_trust_modifier': result.parameters.in_group_trust_modifier,
+        'out_group_trust_modifier': result.parameters.out_group_trust_modifier,
+        'out_group_constraint_amplifier': result.parameters.out_group_constraint_amplifier,
+        'reputational_spillover': result.parameters.reputational_spillover,
+        'mixing_event_frequency': result.parameters.mixing_event_frequency,
+        'mixing_event_bonus_multiplier': result.parameters.mixing_event_bonus_multiplier,
+        'inheritance_style': result.parameters.inheritance_style,
+        
+        # Group distribution (expand list into separate columns)
+        'founder_group_a_proportion': result.parameters.founder_group_distribution[0] if len(result.parameters.founder_group_distribution) > 0 else 0,
+        'founder_group_b_proportion': result.parameters.founder_group_distribution[1] if len(result.parameters.founder_group_distribution) > 1 else 0,
+        'founder_group_c_proportion': result.parameters.founder_group_distribution[2] if len(result.parameters.founder_group_distribution) > 2 else 0,
+        
+        # === FINAL OUTCOMES ===
         'final_cooperation_rate': result.final_cooperation_rate,
+        'final_constrained_rate': result.final_constrained_rate,
         'final_population': result.final_population,
         'extinction_occurred': result.extinction_occurred,
         'rounds_completed': result.rounds_completed,
+        
+        # === SYSTEM DYNAMICS ===
+        'first_cascade_round': result.first_cascade_round,
+        'total_cascade_events': result.total_cascade_events,
+        'total_shock_events': result.total_shock_events,
+        
+        # === STRATEGY CHANGES ===
         'total_defections': result.total_defections,
         'total_redemptions': result.total_redemptions,
+        'net_strategy_change': result.net_strategy_change,
+        'redemption_rate': result.total_redemptions / max(1, result.total_defections),
+        
+        # === POPULATION METRICS ===
+        'total_births': result.total_births,
+        'total_deaths': result.total_deaths,
+        'max_population_reached': result.max_population_reached,
+        'population_stability': result.population_stability,
+        'population_growth': result.population_growth,
+        
+        # === PRESSURE METRICS ===
+        'avg_system_stress': result.avg_system_stress,
+        'max_system_stress': result.max_system_stress,
+        'avg_maslow_pressure': result.avg_maslow_pressure,
+        'avg_basic_needs_crisis_rate': result.avg_basic_needs_crisis_rate,
+        
+        # === MASLOW HIERARCHY METRICS ===
+        # Initial needs
+        'initial_physiological': result.initial_needs_avg.get('physiological', 0),
+        'initial_safety': result.initial_needs_avg.get('safety', 0),
+        'initial_love': result.initial_needs_avg.get('love', 0),
+        'initial_esteem': result.initial_needs_avg.get('esteem', 0),
+        'initial_self_actualization': result.initial_needs_avg.get('self_actualization', 0),
+        
+        # Final needs
+        'final_physiological': result.final_needs_avg.get('physiological', 0),
+        'final_safety': result.final_needs_avg.get('safety', 0),
+        'final_love': result.final_needs_avg.get('love', 0),
+        'final_esteem': result.final_needs_avg.get('esteem', 0),
+        'final_self_actualization': result.final_needs_avg.get('self_actualization', 0),
+        
+        # Needs improvement (change)
+        'physiological_change': result.needs_improvement.get('physiological', 0),
+        'safety_change': result.needs_improvement.get('safety', 0),
+        'love_change': result.needs_improvement.get('love', 0),
+        'esteem_change': result.needs_improvement.get('esteem', 0),
+        'self_actualization_change': result.needs_improvement.get('self_actualization', 0),
+        
+        # === COOPERATION METRICS ===
         'avg_trust_level': result.avg_trust_level,
-        'initial_population': result.parameters.initial_population,
-        'max_population': result.parameters.max_population,
-        'shock_frequency': getattr(result.parameters, 'shock_frequency', 0.0),
-        'pressure_multiplier': getattr(result.parameters, 'pressure_multiplier', 0.0),
-        'homophily_bias': getattr(result.parameters, 'homophily_bias', 0.0),
-        'num_groups': getattr(result.parameters, 'num_groups', 1),
-        'relationship_memory': getattr(result.parameters, 'relationship_memory', REL_WINDOW_LEN),
+        'cooperation_benefit_total': result.cooperation_benefit_total,
+        'cooperation_resilience': result.cooperation_resilience,
+        
+        # === INTER-GROUP METRICS ===
+        'in_group_interaction_rate': result.in_group_interaction_rate,
+        'out_group_interaction_rate': result.out_group_interaction_rate,
+        'avg_in_group_trust': result.avg_in_group_trust,
+        'avg_out_group_trust': result.avg_out_group_trust,
         'trust_asymmetry': result.trust_asymmetry,
         'group_segregation_index': result.group_segregation_index,
+        'total_mixing_events': result.total_mixing_events,
+        'mixing_event_success_rate': result.mixing_event_success_rate,
+        'reputational_spillover_events': result.reputational_spillover_events,
+        'out_group_constraint_amplifications': result.out_group_constraint_amplifications,
+        'group_extinction_events': result.group_extinction_events,
+        
+        # Final group populations (expand dict into separate columns)
+        'final_group_a_population': result.final_group_populations.get('A', 0),
+        'final_group_b_population': result.final_group_populations.get('B', 0),
+        'final_group_c_population': result.final_group_populations.get('C', 0),
+        
+        # Final group cooperation rates (expand dict into separate columns)
+        'final_group_a_cooperation_rate': result.final_group_cooperation_rates.get('A', 0),
+        'final_group_b_cooperation_rate': result.final_group_cooperation_rates.get('B', 0),
+        'final_group_c_cooperation_rate': result.final_group_cooperation_rates.get('C', 0),
+        
+        # === INTERACTION METRICS ===
+        'total_interactions': result.total_interactions,
+        'avg_interaction_processing_time': result.avg_interaction_processing_time,
+        'interaction_intensity': result.total_interactions / max(1, result.final_population),
+        
+        # === DERIVED METRICS ===
+        'pop_multiplier': result.parameters.max_population / max(1, result.parameters.initial_population),
+        'shock_frequency_proxy': 1 / max(1, (sum(result.parameters.shock_interval_years) / 2) if hasattr(result.parameters, 'shock_interval_years') else 10),
+        'growth_potential': result.parameters.base_birth_rate * (result.parameters.max_population / max(1, result.parameters.initial_population)),
+        'resilience_index': result.parameters.community_buffer_factor * (1 - (1 / max(1, (sum(result.parameters.shock_interval_years) / 2) if hasattr(result.parameters, 'shock_interval_years') else 10))),
+        'intergroup_tension': result.parameters.out_group_constraint_amplifier * result.parameters.reputational_spillover * (1 - result.parameters.out_group_trust_modifier) if result.parameters.num_groups > 1 else 0,
+        'stress_recovery_rate': 1 - result.parameters.acute_decay,
+        'social_support_effectiveness': result.parameters.community_buffer_factor * result.avg_trust_level,
     }
     
     # Create DataFrame
@@ -139,11 +371,11 @@ def save_incremental_csv(result, csv_file: str = "simulation_results_incremental
             df_row.to_csv(csv_file, mode='a', header=False, index=False)
         else:
             df_row.to_csv(csv_file, mode='w', header=True, index=False)
-            timestamp_print(f"📊 Created incremental CSV: {csv_file}")
+            timestamp_print(f"📊 Created comprehensive incremental CSV: {csv_file}")
         
         return True
     except Exception as e:
-        timestamp_print(f"❌ Error saving to incremental CSV: {e}")
+        timestamp_print(f"❌ Error saving to comprehensive incremental CSV: {e}")
         return False
 
 # ===== 2. DATA CLASSES =====
