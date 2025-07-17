@@ -22,7 +22,7 @@ tail -f simulation.log | ts '[%H:%M:%S]'
 bashpkill -f python3
 cd society_sim
 git pull origin main
-nohup python3 -u constraint_simulation_v2.py -n 500 -m > simulation.log 2>&1 &
+nohup python3 -u constraint_simulation_v3.py -n 100 --design random -m > simulation.log 2>&1 &
 tail -f simulation.log | ts '[%H:%M:%S]'
 📊 What You'll See:
 [18:52:15] 🔬 Enhanced Constraint Cascade Simulation - Mass Parameter Exploration
