@@ -1,0 +1,629 @@
+nohup: ignoring input
+[23:50:53] 🔬 Enhanced Constraint Cascade Simulation - REALISTIC PARAMETERS
+[23:50:53] ================================================================================
+[23:50:53] 🎯 Realistic shock frequency: 5-25 years (instead of multiple per year)
+[23:50:53] 🤝 Realistic trust development: ±0.04/±0.06 (instead of ±0.1/±0.15)
+[23:50:53] 🧠 Acute/chronic stress model with community buffer
+[23:50:53] 🎲 Serendipity rate: 10% interactions ignore homophily
+[23:50:53] ♻️ Improved recovery rates with social support
+[23:50:53] 📊 Latin hypercube parameter sampling
+[23:50:53] ✅ All original functionality preserved
+[23:50:53] 🎯 Running 100 simulations...
+[23:50:53] 📊 Design strategy: 3x3 grid sweep
+[23:50:53] 🔧 Using 3x3x3 parameter grid instead of random generation
+[23:50:53] 📋 Grid has 27 combinations, using 3 replicates each
+[23:50:53]    🔄 Generating combo 1/27: shock=5yr, α=1.5, buffer=0.0
+[23:50:53] 🎲 Generating realistic parameters for sim 0
+[23:50:53] 🎲 Generating realistic parameters for sim 1
+[23:50:53] 🎲 Generating realistic parameters for sim 2
+[23:50:53]    🔄 Generating combo 2/27: shock=5yr, α=1.5, buffer=0.04
+[23:50:53] 🎲 Generating realistic parameters for sim 3
+[23:50:53] 🎲 Generating realistic parameters for sim 4
+[23:50:53] 🎲 Generating realistic parameters for sim 5
+[23:50:53]    🔄 Generating combo 3/27: shock=5yr, α=1.5, buffer=0.08
+[23:50:53] 🎲 Generating realistic parameters for sim 6
+[23:50:53] 🎲 Generating realistic parameters for sim 7
+[23:50:53] 🎲 Generating realistic parameters for sim 8
+[23:50:53]    🔄 Generating combo 4/27: shock=5yr, α=2.0, buffer=0.0
+[23:50:53] 🎲 Generating realistic parameters for sim 9
+[23:50:53] 🎲 Generating realistic parameters for sim 10
+[23:50:53] 🎲 Generating realistic parameters for sim 11
+[23:50:53]    🔄 Generating combo 5/27: shock=5yr, α=2.0, buffer=0.04
+[23:50:53] 🎲 Generating realistic parameters for sim 12
+[23:50:53] 🎲 Generating realistic parameters for sim 13
+[23:50:53] 🎲 Generating realistic parameters for sim 14
+[23:50:53]    🔄 Generating combo 6/27: shock=5yr, α=2.0, buffer=0.08
+[23:50:53] 🎲 Generating realistic parameters for sim 15
+[23:50:53] 🎲 Generating realistic parameters for sim 16
+[23:50:53] 🎲 Generating realistic parameters for sim 17
+[23:50:53]    🔄 Generating combo 7/27: shock=5yr, α=2.7, buffer=0.0
+[23:50:53] 🎲 Generating realistic parameters for sim 18
+[23:50:53] 🎲 Generating realistic parameters for sim 19
+[23:50:53] 🎲 Generating realistic parameters for sim 20
+[23:50:53]    🔄 Generating combo 8/27: shock=5yr, α=2.7, buffer=0.04
+[23:50:53] 🎲 Generating realistic parameters for sim 21
+[23:50:53] 🎲 Generating realistic parameters for sim 22
+[23:50:53] 🎲 Generating realistic parameters for sim 23
+[23:50:53]    🔄 Generating combo 9/27: shock=5yr, α=2.7, buffer=0.08
+[23:50:53] 🎲 Generating realistic parameters for sim 24
+[23:50:53] 🎲 Generating realistic parameters for sim 25
+[23:50:53] 🎲 Generating realistic parameters for sim 26
+[23:50:53]    🔄 Generating combo 10/27: shock=10yr, α=1.5, buffer=0.0
+[23:50:53] 🎲 Generating realistic parameters for sim 27
+[23:50:53] 🎲 Generating realistic parameters for sim 28
+[23:50:53] 🎲 Generating realistic parameters for sim 29
+[23:50:53]    🔄 Generating combo 11/27: shock=10yr, α=1.5, buffer=0.04
+[23:50:53] 🎲 Generating realistic parameters for sim 30
+[23:50:53] 🎲 Generating realistic parameters for sim 31
+[23:50:53] 🎲 Generating realistic parameters for sim 32
+[23:50:53]    🔄 Generating combo 12/27: shock=10yr, α=1.5, buffer=0.08
+[23:50:53] 🎲 Generating realistic parameters for sim 33
+[23:50:53] 🎲 Generating realistic parameters for sim 34
+[23:50:53] 🎲 Generating realistic parameters for sim 35
+[23:50:53]    🔄 Generating combo 13/27: shock=10yr, α=2.0, buffer=0.0
+[23:50:53] 🎲 Generating realistic parameters for sim 36
+[23:50:53] 🎲 Generating realistic parameters for sim 37
+[23:50:53] 🎲 Generating realistic parameters for sim 38
+[23:50:53]    🔄 Generating combo 14/27: shock=10yr, α=2.0, buffer=0.04
+[23:50:53] 🎲 Generating realistic parameters for sim 39
+[23:50:53] 🎲 Generating realistic parameters for sim 40
+[23:50:53] 🎲 Generating realistic parameters for sim 41
+[23:50:53]    🔄 Generating combo 15/27: shock=10yr, α=2.0, buffer=0.08
+[23:50:53] 🎲 Generating realistic parameters for sim 42
+[23:50:53] 🎲 Generating realistic parameters for sim 43
+[23:50:53] 🎲 Generating realistic parameters for sim 44
+[23:50:53]    🔄 Generating combo 16/27: shock=10yr, α=2.7, buffer=0.0
+[23:50:53] 🎲 Generating realistic parameters for sim 45
+[23:50:53] 🎲 Generating realistic parameters for sim 46
+[23:50:53] 🎲 Generating realistic parameters for sim 47
+[23:50:53]    🔄 Generating combo 17/27: shock=10yr, α=2.7, buffer=0.04
+[23:50:53] 🎲 Generating realistic parameters for sim 48
+[23:50:53] 🎲 Generating realistic parameters for sim 49
+[23:50:53] 🎲 Generating realistic parameters for sim 50
+[23:50:53]    🔄 Generating combo 18/27: shock=10yr, α=2.7, buffer=0.08
+[23:50:53] 🎲 Generating realistic parameters for sim 51
+[23:50:53] 🎲 Generating realistic parameters for sim 52
+[23:50:53] 🎲 Generating realistic parameters for sim 53
+[23:50:53]    🔄 Generating combo 19/27: shock=20yr, α=1.5, buffer=0.0
+[23:50:53] 🎲 Generating realistic parameters for sim 54
+[23:50:53] 🎲 Generating realistic parameters for sim 55
+[23:50:53] 🎲 Generating realistic parameters for sim 56
+[23:50:53]    🔄 Generating combo 20/27: shock=20yr, α=1.5, buffer=0.04
+[23:50:53] 🎲 Generating realistic parameters for sim 57
+[23:50:53] 🎲 Generating realistic parameters for sim 58
+[23:50:53] 🎲 Generating realistic parameters for sim 59
+[23:50:53]    🔄 Generating combo 21/27: shock=20yr, α=1.5, buffer=0.08
+[23:50:53] 🎲 Generating realistic parameters for sim 60
+[23:50:53] 🎲 Generating realistic parameters for sim 61
+[23:50:53] 🎲 Generating realistic parameters for sim 62
+[23:50:53]    🔄 Generating combo 22/27: shock=20yr, α=2.0, buffer=0.0
+[23:50:53] 🎲 Generating realistic parameters for sim 63
+[23:50:53] 🎲 Generating realistic parameters for sim 64
+[23:50:53] 🎲 Generating realistic parameters for sim 65
+[23:50:53]    🔄 Generating combo 23/27: shock=20yr, α=2.0, buffer=0.04
+[23:50:53] 🎲 Generating realistic parameters for sim 66
+[23:50:53] 🎲 Generating realistic parameters for sim 67
+[23:50:53] 🎲 Generating realistic parameters for sim 68
+[23:50:53]    🔄 Generating combo 24/27: shock=20yr, α=2.0, buffer=0.08
+[23:50:53] 🎲 Generating realistic parameters for sim 69
+[23:50:53] 🎲 Generating realistic parameters for sim 70
+[23:50:53] 🎲 Generating realistic parameters for sim 71
+[23:50:53]    🔄 Generating combo 25/27: shock=20yr, α=2.7, buffer=0.0
+[23:50:53] 🎲 Generating realistic parameters for sim 72
+[23:50:53] 🎲 Generating realistic parameters for sim 73
+[23:50:53] 🎲 Generating realistic parameters for sim 74
+[23:50:53]    🔄 Generating combo 26/27: shock=20yr, α=2.7, buffer=0.04
+[23:50:53] 🎲 Generating realistic parameters for sim 75
+[23:50:53] 🎲 Generating realistic parameters for sim 76
+[23:50:53] 🎲 Generating realistic parameters for sim 77
+[23:50:53]    🔄 Generating combo 27/27: shock=20yr, α=2.7, buffer=0.08
+[23:50:53] 🎲 Generating realistic parameters for sim 78
+[23:50:53] 🎲 Generating realistic parameters for sim 79
+[23:50:53] 🎲 Generating realistic parameters for sim 80
+[23:50:53] 🎲 Generating realistic parameters for sim 81
+[23:50:53] 🎲 Generating realistic parameters for sim 82
+[23:50:53] 🎲 Generating realistic parameters for sim 83
+[23:50:53] 🎲 Generating realistic parameters for sim 84
+[23:50:53] 🎲 Generating realistic parameters for sim 85
+[23:50:53] 🎲 Generating realistic parameters for sim 86
+[23:50:53] 🎲 Generating realistic parameters for sim 87
+[23:50:53] 🎲 Generating realistic parameters for sim 88
+[23:50:53] 🎲 Generating realistic parameters for sim 89
+[23:50:53] 🎲 Generating realistic parameters for sim 90
+[23:50:53] 🎲 Generating realistic parameters for sim 91
+[23:50:53] 🎲 Generating realistic parameters for sim 92
+[23:50:53] 🎲 Generating realistic parameters for sim 93
+[23:50:53] 🎲 Generating realistic parameters for sim 94
+[23:50:53] 🎲 Generating realistic parameters for sim 95
+[23:50:53] 🎲 Generating realistic parameters for sim 96
+[23:50:53] 🎲 Generating realistic parameters for sim 97
+[23:50:53] 🎲 Generating realistic parameters for sim 98
+[23:50:53] 🎲 Generating realistic parameters for sim 99
+[23:50:53] ✅ Generated 100 parameter sets
+[23:50:53] 🚀 Starting realistic mass experiment with 100 simulations...
+[23:50:53] 🔧 Using provided parameter list instead of generating new ones
+[23:50:53] 🔧 Using 8 CPU cores for multiprocessing...
+[23:50:53] 📁 Setting up scheduler with results directory: simulation_results
+[23:50:53] ⚙️  Initializing LoadBalancedScheduler with 100 simulations...
+[23:50:53] 📁 Setting up results directory: simulation_results
+[23:50:53] 🔄 Generating work queue for 100 simulations...
+[23:50:53]    📋 Processing simulation 1/100 for work queue...
+[23:50:53]    📋 Processing simulation 26/100 for work queue...
+[23:50:53]    📋 Processing simulation 51/100 for work queue...
+[23:50:53]    📋 Processing simulation 76/100 for work queue...
+[23:50:53] ✅ LoadBalancedScheduler initialized with 100 work items
+[23:50:53] 🏭 Starting ProcessPoolExecutor with 8 workers...
+[23:50:53] 📤 Submitting initial batch of 16 work items...
+[23:50:53] ✅ Initial batch submitted, 16 futures active
+[23:51:53] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:0, 4:0, 5:30, 6:30, 7:0, 8:0, 9:0 +90 more]
+[23:52:53] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:0, 4:0, 5:30, 6:30, 7:0, 8:0, 9:0 +90 more]
+[23:53:58] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:0, 4:30, 5:30, 6:30, 7:0, 8:0, 9:0 +90 more]
+[23:54:58] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:0, 4:30, 5:30, 6:30, 7:0, 8:30, 9:0 +90 more]
+[23:56:01] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:30, 4:30, 5:30, 6:30, 7:30, 8:30, 9:30 +90 more]
+[23:57:06] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:30, 4:30, 5:30, 6:30, 7:30, 8:30, 9:30 +90 more]
+[23:58:13] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:30, 4:30, 5:30, 6:30, 7:30, 8:30, 9:30 +90 more]
+[23:59:16] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:30, 4:30, 5:30, 6:30, 7:30, 8:30, 9:30 +90 more]
+[00:00:19] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:30, 4:30, 5:30, 6:30, 7:30, 8:30, 9:30 +90 more]
+[00:01:20] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:30, 4:30, 5:30, 6:30, 7:30, 8:30, 9:30 +90 more]
+[00:02:30] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:30, 4:30, 5:30, 6:30, 7:30, 8:30, 9:30 +90 more]
+[00:03:34] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:30, 4:30, 5:30, 6:30, 7:30, 8:30, 9:30 +90 more]
+[00:04:34] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:30, 4:30, 5:30, 6:30, 7:30, 8:30, 9:30 +90 more]
+[00:05:35] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:30, 4:30, 5:30, 6:30, 7:30, 8:30, 9:30 +90 more]
+[00:06:38] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:30, 2:30, 3:30, 4:30, 5:30, 6:30, 7:30, 8:30, 9:30 +90 more]
+[00:07:42] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:30, 1:60, 2:30, 3:30, 4:30, 5:60, 6:60, 7:30, 8:30, 9:30 +90 more]
+[00:08:45] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:30, 4:30, 5:60, 6:60, 7:30, 8:30, 9:30 +90 more]
+[00:09:50] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:30, 4:30, 5:60, 6:60, 7:30, 8:30, 9:30 +90 more]
+[00:10:50] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:30, 4:30, 5:60, 6:60, 7:30, 8:30, 9:30 +90 more]
+[00:11:56] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:30, 4:30, 5:60, 6:60, 7:30, 8:30, 9:30 +90 more]
+[00:13:05] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:30, 4:30, 5:60, 6:60, 7:30, 8:30, 9:30 +90 more]
+[00:14:13] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:30, 4:30, 5:60, 6:60, 7:30, 8:30, 9:30 +90 more]
+[00:15:22] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:30, 4:30, 5:60, 6:60, 7:30, 8:30, 9:30 +90 more]
+[00:16:30] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:30, 4:60, 5:60, 6:60, 7:30, 8:30, 9:30 +90 more]
+[00:17:36] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:30, 4:60, 5:60, 6:60, 7:60, 8:30, 9:30 +90 more]
+[00:18:36] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:30, 4:60, 5:60, 6:60, 7:60, 8:30, 9:30 +90 more]
+[00:19:42] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:30, 4:60, 5:60, 6:60, 7:60, 8:60, 9:30 +90 more]
+[00:20:46] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:30, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:21:48] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:30, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:22:57] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:24:04] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:25:07] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:26:12] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:27:12] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:28:20] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:29:26] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:30:36] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:31:44] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:32:50] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:33:56] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:35:01] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:36:03] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:37:04] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:38:10] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:39:13] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:40:19] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:41:19] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:42:26] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:43:31] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:44:36] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:45:41] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:60, 2:60, 3:60, 4:60, 5:60, 6:60, 7:60, 8:60, 9:60 +90 more]
+[00:46:44] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:60, 1:90, 2:60, 3:60, 4:60, 5:60, 6:90, 7:60, 8:60, 9:60 +90 more]
+[00:47:54] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:60, 3:60, 4:60, 5:60, 6:90, 7:60, 8:60, 9:60 +90 more]
+[00:49:02] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:60, 5:60, 6:90, 7:60, 8:60, 9:60 +90 more]
+[00:50:06] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:60, 5:90, 6:90, 7:60, 8:60, 9:60 +90 more]
+[00:51:15] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:60, 5:90, 6:90, 7:60, 8:60, 9:60 +90 more]
+[00:52:18] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:60, 5:90, 6:90, 7:60, 8:60, 9:60 +90 more]
+[00:53:26] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:60, 5:90, 6:90, 7:60, 8:60, 9:60 +90 more]
+[00:54:26] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:60, 5:90, 6:90, 7:60, 8:60, 9:60 +90 more]
+[00:55:34] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:60, 5:90, 6:90, 7:60, 8:60, 9:60 +90 more]
+[00:56:42] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:60, 5:90, 6:90, 7:60, 8:60, 9:60 +90 more]
+[00:57:45] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:60, 5:90, 6:90, 7:60, 8:60, 9:60 +90 more]
+[00:58:54] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:60, 5:90, 6:90, 7:60, 8:60, 9:60 +90 more]
+[01:00:01] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:60, 5:90, 6:90, 7:60, 8:60, 9:60 +90 more]
+[01:01:05] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:90, 5:90, 6:90, 7:60, 8:60, 9:60 +90 more]
+[01:02:10] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:90, 5:90, 6:90, 7:90, 8:60, 9:60 +90 more]
+[01:03:10] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:90, 5:90, 6:90, 7:90, 8:60, 9:60 +90 more]
+[01:04:10] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:90, 5:90, 6:90, 7:90, 8:60, 9:60 +90 more]
+[01:05:10] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:90, 5:90, 6:90, 7:90, 8:60, 9:60 +90 more]
+[01:06:17] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:90, 5:90, 6:90, 7:90, 8:90, 9:60 +90 more]
+[01:07:19] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:90, 5:90, 6:90, 7:90, 8:90, 9:60 +90 more]
+[01:08:20] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:90, 5:90, 6:90, 7:90, 8:90, 9:60 +90 more]
+[01:09:20] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:90, 5:90, 6:90, 7:90, 8:90, 9:60 +90 more]
+[01:10:21] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:90, 5:90, 6:90, 7:90, 8:90, 9:60 +90 more]
+[01:11:29] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:60, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:12:37] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:13:38] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:14:45] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:15:49] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:16:51] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:17:56] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:18:56] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:20:04] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:21:04] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:22:10] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:23:11] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:24:20] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:25:26] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:26:34] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:27:38] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:28:40] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:29:40] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:30:43] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:31:44] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:32:47] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:90, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:33:52] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:120, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:34:59] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:90, 1:120, 2:90, 3:90, 4:90, 5:90, 6:90, 7:90, 8:90, 9:90 +90 more]
+[01:36:06] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:90, 3:90, 4:90, 5:90, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:37:10] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:90, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:38:13] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:90, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:39:19] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:90, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:40:21] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:90, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:41:25] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:90, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:42:34] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:90, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:43:39] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:90, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:44:42] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:120, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:45:42] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:120, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:46:42] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:120, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:47:44] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:120, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:48:44] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:120, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:49:50] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:120, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:50:59] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:120, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:52:06] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:120, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:53:15] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:120, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:54:15] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:120, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:55:15] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:120, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:56:15] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:90, 5:120, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:57:15] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:58:19] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:90, 8:90, 9:90 +90 more]
+[01:59:26] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:90, 9:90 +90 more]
+[02:00:26] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:90, 9:90 +90 more]
+[02:01:26] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:90, 9:90 +90 more]
+[02:02:29] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:90, 9:90 +90 more]
+[02:03:29] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:90, 9:90 +90 more]
+[02:04:29] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:90, 9:90 +90 more]
+[02:05:33] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:90, 9:90 +90 more]
+[02:06:33] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:90, 9:90 +90 more]
+[02:07:38] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:120, 9:90 +90 more]
+[02:08:40] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:120, 9:90 +90 more]
+[02:09:43] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:10:50] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:11:50] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:12:50] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:13:53] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:14:56] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:90, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:15:57] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:17:07] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:18:10] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:19:10] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:20:10] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:21:15] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:22:19] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:23:24] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:24:27] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:25:37] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:26:37] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:27:39] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:28:47] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:29:51] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:30:51] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:31:59] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:33:04] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:34:04] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:35:09] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:120, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:36:14] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:120, 1:150, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:37:22] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:120, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:38:23] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:39:23] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:40:30] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:41:40] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:42:45] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:43:54] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:120, 7:120, 8:120, 9:120 +90 more]
+[02:44:56] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:150, 7:120, 8:120, 9:120 +90 more]
+[02:46:00] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:150, 7:120, 8:120, 9:120 +90 more]
+[02:47:02] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:150, 7:120, 8:120, 9:120 +90 more]
+[02:48:03] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:150, 7:120, 8:120, 9:120 +90 more]
+[02:49:11] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:150, 7:120, 8:120, 9:120 +90 more]
+[02:50:18] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:150, 7:120, 8:120, 9:120 +90 more]
+[02:51:21] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:150, 7:120, 8:120, 9:120 +90 more]
+[02:52:28] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:150, 7:120, 8:120, 9:120 +90 more]
+[02:53:32] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:150, 7:120, 8:120, 9:120 +90 more]
+[02:54:32] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:150, 7:120, 8:120, 9:120 +90 more]
+[02:55:32] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:120, 6:150, 7:120, 8:120, 9:120 +90 more]
+[02:56:32] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[02:57:40] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[02:58:40] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[02:59:46] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[03:00:53] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[03:01:54] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[03:02:54] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[03:03:55] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[03:04:55] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[03:05:55] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:120, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[03:06:58] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[03:08:01] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[03:09:01] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[03:10:05] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[03:11:13] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[03:12:15] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:120, 8:120, 9:120 +90 more]
+[03:13:25] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:150, 8:120, 9:120 +90 more]
+[03:14:34] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:150, 8:120, 9:120 +90 more]
+[03:15:40] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:150, 8:120, 9:120 +90 more]
+[03:16:44] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:150, 8:120, 9:120 +90 more]
+[03:17:44] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:150, 8:120, 9:120 +90 more]
+[03:18:48] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:150, 8:120, 9:120 +90 more]
+[03:19:49] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:150, 8:150, 9:120 +90 more]
+[03:20:49] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:150, 8:150, 9:120 +90 more]
+[03:21:49] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:150, 8:150, 9:120 +90 more]
+[03:22:50] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:150, 8:150, 9:120 +90 more]
+[03:23:55] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:150, 8:150, 9:120 +90 more]
+[03:24:57] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:26:04] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:120, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:27:05] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:28:11] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:29:12] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:30:18] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:31:18] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:32:22] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:33:30] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:34:30] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:35:30] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:36:37] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:37:40] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:150, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:38:44] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:180, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:39:50] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:180, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:40:51] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:150, 1:180, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:41:53] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:150, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:43:00] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:44:00] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:45:01] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:46:01] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:47:07] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:48:10] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:49:15] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:50:17] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:51:17] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:52:24] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:53:34] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:150, 7:150, 8:150, 9:150 +90 more]
+[03:54:41] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:180, 7:150, 8:150, 9:150 +90 more]
+[03:55:41] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:180, 7:150, 8:150, 9:150 +90 more]
+[03:56:50] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:180, 7:150, 8:150, 9:150 +90 more]
+[03:57:50] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:180, 7:150, 8:150, 9:150 +90 more]
+[03:58:51] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:180, 7:150, 8:150, 9:150 +90 more]
+[03:59:54] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:01:04] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:02:04] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:03:11] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:04:11] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:05:11] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:06:11] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:07:21] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:150, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:08:29] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:09:29] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:10:29] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:11:34] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:12:42] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:13:42] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:14:42] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:15:45] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:16:50] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:17:53] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:150, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:18:54] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:20:02] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:21:07] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:22:07] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:23:13] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:24:22] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:150, 8:150, 9:150 +90 more]
+[04:25:23] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:150, 9:150 +90 more]
+[04:26:23] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:150, 9:150 +90 more]
+[04:27:24] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:150, 9:150 +90 more]
+[04:28:27] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:150, 9:150 +90 more]
+[04:29:27] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:150, 9:150 +90 more]
+[04:30:27] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:150, 9:150 +90 more]
+[04:31:27] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:150, 9:150 +90 more]
+[04:32:30] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:150, 9:150 +90 more]
+[04:33:30] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:150, 9:150 +90 more]
+[04:34:38] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:150, 9:150 +90 more]
+[04:35:43] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:180, 9:150 +90 more]
+[04:36:48] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:180, 9:150 +90 more]
+[04:37:48] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:180, 9:150 +90 more]
+[04:38:52] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180 +90 more]
+[04:39:52] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180 +90 more]
+[04:40:57] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180 +90 more]
+[04:41:58] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:150, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180 +90 more]
+[04:43:03] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180 +90 more]
+[04:44:03] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180 +90 more]
+[04:45:03] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180 +90 more]
+[04:46:03] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180 +90 more]
+[04:47:13] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180 +90 more]
+[04:48:13] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180 +90 more]
+[04:49:13] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180 +90 more]
+[04:50:14] 📊 PROGRESS: 0/100 complete (  0.0%) • active sims: [0:180, 1:180, 2:180, 3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180 +90 more]
+[04:50:15] 💾 Saved simulation 1 result to simulation_results/sim_0001_result.pkl
+[04:50:52] 💾 Saved simulation 0 result to simulation_results/sim_0000_result.pkl
+[04:51:18] 📊 PROGRESS: 2/100 complete (  2.0%) • active sims: [2:180, 3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180, 10:180, 11:180 +88 more]
+[04:51:26] 💾 Saved simulation 11 result to simulation_results/sim_0011_result.pkl
+[04:51:52] 💾 Saved simulation 2 result to simulation_results/sim_0002_result.pkl
+[04:52:25] 📊 PROGRESS: 4/100 complete (  4.0%) • active sims: [3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180 +86 more]
+[04:53:25] 📊 PROGRESS: 4/100 complete (  4.0%) • active sims: [3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180 +86 more]
+[04:54:26] 📊 PROGRESS: 4/100 complete (  4.0%) • active sims: [3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180 +86 more]
+[04:55:26] 📊 PROGRESS: 4/100 complete (  4.0%) • active sims: [3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180 +86 more]
+[04:56:15] 💾 Saved simulation 15 result to simulation_results/sim_0015_result.pkl
+[04:56:35] 📊 PROGRESS: 5/100 complete (  5.0%) • active sims: [3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180 +85 more]
+[04:56:49] 💾 Saved simulation 21 result to simulation_results/sim_0021_result.pkl
+[04:57:37] 📊 PROGRESS: 6/100 complete (  6.0%) • active sims: [3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180 +84 more]
+[04:58:22] 💾 Saved simulation 23 result to simulation_results/sim_0023_result.pkl
+[04:58:41] 📊 PROGRESS: 7/100 complete (  7.0%) • active sims: [3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180 +83 more]
+[04:58:56] 💾 Saved simulation 29 result to simulation_results/sim_0029_result.pkl
+[04:59:36] 💾 Saved simulation 33 result to simulation_results/sim_0033_result.pkl
+[04:59:46] 📊 PROGRESS: 9/100 complete (  9.0%) • active sims: [3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180 +81 more]
+[05:00:50] 📊 PROGRESS: 9/100 complete (  9.0%) • active sims: [3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180 +81 more]
+[05:01:50] 📊 PROGRESS: 9/100 complete (  9.0%) • active sims: [3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180 +81 more]
+[05:02:50] 📊 PROGRESS: 9/100 complete (  9.0%) • active sims: [3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180 +81 more]
+[05:03:50] 📊 PROGRESS: 9/100 complete (  9.0%) • active sims: [3:180, 4:180, 5:180, 6:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180 +81 more]
+[05:04:17] 💾 Saved simulation 6 result to simulation_results/sim_0006_result.pkl
+[05:04:57] 📊 PROGRESS: 10/100 complete ( 10.0%) • active sims: [3:180, 4:180, 5:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180, 14:180 +80 more]
+[05:05:03] 💾 Saved simulation 22 result to simulation_results/sim_0022_result.pkl
+[05:05:38] 💾 Saved simulation 32 result to simulation_results/sim_0032_result.pkl
+[05:05:58] 📊 PROGRESS: 12/100 complete ( 12.0%) • active sims: [3:180, 4:180, 5:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180, 14:180 +78 more]
+[05:06:58] 📊 PROGRESS: 12/100 complete ( 12.0%) • active sims: [3:180, 4:180, 5:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180, 14:180 +78 more]
+[05:08:00] 📊 PROGRESS: 12/100 complete ( 12.0%) • active sims: [3:180, 4:180, 5:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180, 14:180 +78 more]
+[05:08:16] 💾 Saved simulation 27 result to simulation_results/sim_0027_result.pkl
+[05:09:06] 📊 PROGRESS: 13/100 complete ( 13.0%) • active sims: [3:180, 4:180, 5:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180, 14:180 +77 more]
+[05:10:07] 📊 PROGRESS: 13/100 complete ( 13.0%) • active sims: [3:180, 4:180, 5:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180, 14:180 +77 more]
+[05:11:07] 📊 PROGRESS: 13/100 complete ( 13.0%) • active sims: [3:180, 4:180, 5:180, 7:180, 8:180, 9:180, 10:180, 12:180, 13:180, 14:180 +77 more]
+[05:11:35] 💾 Saved simulation 10 result to simulation_results/sim_0010_result.pkl
+[05:12:15] 📊 PROGRESS: 14/100 complete ( 14.0%) • active sims: [3:180, 4:180, 5:180, 7:180, 8:180, 9:180, 12:180, 13:180, 14:180, 16:180 +76 more]
+[05:12:24] 💾 Saved simulation 20 result to simulation_results/sim_0020_result.pkl
+[05:13:24] 📊 PROGRESS: 15/100 complete ( 15.0%) • active sims: [3:180, 4:180, 5:180, 7:180, 8:180, 9:180, 12:180, 13:180, 14:180, 16:180 +75 more]
+[05:13:40] 💾 Saved simulation 5 result to simulation_results/sim_0005_result.pkl
+[05:14:30] 📊 PROGRESS: 16/100 complete ( 16.0%) • active sims: [3:180, 4:180, 7:180, 8:180, 9:180, 12:180, 13:180, 14:180, 16:180, 17:180 +74 more]
+[05:15:23] 💾 Saved simulation 16 result to simulation_results/sim_0016_result.pkl
+[05:15:33] 📊 PROGRESS: 17/100 complete ( 17.0%) • active sims: [3:180, 4:180, 7:180, 8:180, 9:180, 12:180, 13:180, 14:180, 17:180, 18:180 +73 more]
+[05:16:33] 📊 PROGRESS: 17/100 complete ( 17.0%) • active sims: [3:180, 4:180, 7:180, 8:180, 9:180, 12:180, 13:180, 14:180, 17:180, 18:180 +73 more]
+[05:17:33] 📊 PROGRESS: 17/100 complete ( 17.0%) • active sims: [3:180, 4:180, 7:180, 8:180, 9:180, 12:180, 13:180, 14:180, 17:180, 18:180 +73 more]
+[05:18:19] 💾 Saved simulation 52 result to simulation_results/sim_0052_result.pkl
+[05:18:39] 📊 PROGRESS: 18/100 complete ( 18.0%) • active sims: [3:180, 4:180, 7:180, 8:180, 9:180, 12:180, 13:180, 14:180, 17:180, 18:180 +72 more]
+[05:19:03] 💾 Saved simulation 54 result to simulation_results/sim_0054_result.pkl
+[05:19:08] 💾 Saved simulation 62 result to simulation_results/sim_0062_result.pkl
+[05:19:23] 💾 Saved simulation 18 result to simulation_results/sim_0018_result.pkl
+[05:19:33] 💾 Saved simulation 56 result to simulation_results/sim_0056_result.pkl
+[05:19:41] 📊 PROGRESS: 22/100 complete ( 22.0%) • active sims: [3:180, 4:180, 7:180, 8:180, 9:180, 12:180, 13:180, 14:180, 17:180, 19:180 +68 more]
+[05:20:48] 📊 PROGRESS: 22/100 complete ( 22.0%) • active sims: [3:180, 4:180, 7:180, 8:180, 9:180, 12:180, 13:180, 14:180, 17:180, 19:180 +68 more]
+[05:21:40] 💾 Saved simulation 40 result to simulation_results/sim_0040_result.pkl
+[05:21:50] 📊 PROGRESS: 23/100 complete ( 23.0%) • active sims: [3:180, 4:180, 7:180, 8:180, 9:180, 12:180, 13:180, 14:180, 17:180, 19:180 +67 more]
+[05:22:25] 💾 Saved simulation 67 result to simulation_results/sim_0067_result.pkl
+[05:22:55] 📊 PROGRESS: 24/100 complete ( 24.0%) • active sims: [3:180, 4:180, 7:180, 8:180, 9:180, 12:180, 13:180, 14:180, 17:180, 19:180 +66 more]
+[05:23:01] 💾 Saved simulation 61 result to simulation_results/sim_0061_result.pkl
+[05:23:05] 💾 Saved simulation 14 result to simulation_results/sim_0014_result.pkl
+[05:23:08] 💾 Saved simulation 35 result to simulation_results/sim_0035_result.pkl
+[05:23:19] 💾 Saved simulation 26 result to simulation_results/sim_0026_result.pkl
+[05:23:36] 💾 Saved simulation 59 result to simulation_results/sim_0059_result.pkl
+[05:23:39] 💾 Saved simulation 47 result to simulation_results/sim_0047_result.pkl
+[05:23:59] 📊 PROGRESS: 30/100 complete ( 30.0%) • active sims: [3:180, 4:180, 7:180, 8:180, 9:180, 12:180, 13:180, 17:180, 19:180, 24:180 +60 more]
+[05:24:00] 💾 Saved simulation 42 result to simulation_results/sim_0042_result.pkl
+[05:25:00] 📊 PROGRESS: 31/100 complete ( 31.0%) • active sims: [3:180, 4:180, 7:180, 8:180, 9:180, 12:180, 13:180, 17:180, 19:180, 24:180 +59 more]
+[05:25:42] 💾 Saved simulation 30 result to simulation_results/sim_0030_result.pkl
+[05:26:02] 📊 PROGRESS: 32/100 complete ( 32.0%) • active sims: [3:180, 4:180, 7:180, 8:180, 9:180, 12:180, 13:180, 17:180, 19:180, 24:180 +58 more]
+[05:26:57] 💾 Saved simulation 4 result to simulation_results/sim_0004_result.pkl
+[05:27:05] 💾 Saved simulation 46 result to simulation_results/sim_0046_result.pkl
+[05:27:05] 📊 PROGRESS: 34/100 complete ( 34.0%) • active sims: [3:180, 7:180, 8:180, 9:180, 12:180, 13:180, 17:180, 19:180, 24:180, 25:180 +56 more]
+[05:27:12] 💾 Saved simulation 17 result to simulation_results/sim_0017_result.pkl
+[05:27:43] 💾 Saved simulation 12 result to simulation_results/sim_0012_result.pkl
+[05:27:50] 💾 Saved simulation 31 result to simulation_results/sim_0031_result.pkl
+[05:28:01] 💾 Saved simulation 7 result to simulation_results/sim_0007_result.pkl
+[05:28:11] 📊 PROGRESS: 38/100 complete ( 38.0%) • active sims: [3:180, 8:180, 9:180, 13:180, 19:180, 24:180, 25:180, 28:180, 34:180, 36:180 +52 more]
+[05:29:11] 📊 PROGRESS: 38/100 complete ( 38.0%) • active sims: [3:180, 8:180, 9:180, 13:180, 19:180, 24:180, 25:180, 28:180, 34:180, 36:180 +52 more]
+[05:30:11] 📊 PROGRESS: 38/100 complete ( 38.0%) • active sims: [3:180, 8:180, 9:180, 13:180, 19:180, 24:180, 25:180, 28:180, 34:180, 36:180 +52 more]
+[05:31:00] 💾 Saved simulation 19 result to simulation_results/sim_0019_result.pkl
+[05:31:15] 💾 Saved simulation 25 result to simulation_results/sim_0025_result.pkl
+[05:31:15] 📊 PROGRESS: 40/100 complete ( 40.0%) • active sims: [3:180, 8:180, 9:180, 13:180, 24:180, 28:180, 34:180, 36:180, 37:180, 38:180 +50 more]
+[05:31:17] 💾 Saved simulation 24 result to simulation_results/sim_0024_result.pkl
+[05:31:49] 💾 Saved simulation 80 result to simulation_results/sim_0080_result.pkl
+[05:31:52] 💾 Saved simulation 79 result to simulation_results/sim_0079_result.pkl
+[05:32:00] 💾 Saved simulation 39 result to simulation_results/sim_0039_result.pkl
+[05:32:18] 💾 Saved simulation 36 result to simulation_results/sim_0036_result.pkl
+[05:32:18] 📊 PROGRESS: 45/100 complete ( 45.0%) • active sims: [3:180, 8:180, 9:180, 13:180, 28:180, 34:180, 37:180, 38:180, 41:180, 43:180 +45 more]
+[05:32:54] 💾 Saved simulation 81 result to simulation_results/sim_0081_result.pkl
+[05:33:24] 📊 PROGRESS: 46/100 complete ( 46.0%) • active sims: [3:180, 8:180, 9:180, 13:180, 28:180, 34:180, 37:180, 38:180, 41:180, 43:180 +44 more]
+[05:34:27] 📊 PROGRESS: 46/100 complete ( 46.0%) • active sims: [3:180, 8:180, 9:180, 13:180, 28:180, 34:180, 37:180, 38:180, 41:180, 43:180 +44 more]
+[05:35:00] 💾 Saved simulation 34 result to simulation_results/sim_0034_result.pkl
+[05:35:30] 📊 PROGRESS: 47/100 complete ( 47.0%) • active sims: [3:180, 8:180, 9:180, 13:180, 28:180, 37:180, 38:180, 41:180, 43:180, 44:180 +43 more]
+[05:35:55] 💾 Saved simulation 13 result to simulation_results/sim_0013_result.pkl
+[05:36:11] 💾 Saved simulation 49 result to simulation_results/sim_0049_result.pkl
+[05:36:31] 📊 PROGRESS: 49/100 complete ( 49.0%) • active sims: [3:180, 8:180, 9:180, 28:180, 37:180, 38:180, 41:180, 43:180, 44:180, 45:180 +41 more]
+[05:37:23] 💾 Saved simulation 28 result to simulation_results/sim_0028_result.pkl
+[05:37:31] 💾 Saved simulation 58 result to simulation_results/sim_0058_result.pkl
+[05:37:31] 📊 PROGRESS: 51/100 complete ( 51.0%) • active sims: [3:180, 8:180, 9:180, 37:180, 38:180, 41:180, 43:180, 44:180, 45:180, 48:180 +39 more]
+[05:37:59] 💾 Saved simulation 8 result to simulation_results/sim_0008_result.pkl
+[05:38:08] 💾 Saved simulation 66 result to simulation_results/sim_0066_result.pkl
+[05:38:15] 💾 Saved simulation 99 result to simulation_results/sim_0099_result.pkl
+[05:38:35] 📊 PROGRESS: 54/100 complete ( 54.0%) • active sims: [3:180, 9:180, 37:180, 38:180, 41:180, 43:180, 44:180, 45:180, 48:180, 50:180 +36 more]
+[05:38:55] 💾 Saved simulation 89 result to simulation_results/sim_0089_result.pkl
+[05:39:35] 📊 PROGRESS: 55/100 complete ( 55.0%) • active sims: [3:180, 9:180, 37:180, 38:180, 41:180, 43:180, 44:180, 45:180, 48:180, 50:180 +35 more]
+[05:40:03] 💾 Saved simulation 51 result to simulation_results/sim_0051_result.pkl
+[05:40:43] 📊 PROGRESS: 56/100 complete ( 56.0%) • active sims: [3:180, 9:180, 37:180, 38:180, 41:180, 43:180, 44:180, 45:180, 48:180, 50:180 +34 more]
+[05:41:43] 📊 PROGRESS: 56/100 complete ( 56.0%) • active sims: [3:180, 9:180, 37:180, 38:180, 41:180, 43:180, 44:180, 45:180, 48:180, 50:180 +34 more]
+[05:41:46] 💾 Saved simulation 69 result to simulation_results/sim_0069_result.pkl
+[05:41:55] 💾 Saved simulation 64 result to simulation_results/sim_0064_result.pkl
+[05:42:08] 💾 Saved simulation 37 result to simulation_results/sim_0037_result.pkl
+[05:42:34] 💾 Saved simulation 9 result to simulation_results/sim_0009_result.pkl
+[05:42:44] 📊 PROGRESS: 60/100 complete ( 60.0%) • active sims: [3:180, 38:180, 41:180, 43:180, 44:180, 45:180, 48:180, 50:180, 53:180, 55:180 +30 more]
+[05:43:10] 💾 Saved simulation 93 result to simulation_results/sim_0093_result.pkl
+[05:43:24] 💾 Saved simulation 88 result to simulation_results/sim_0088_result.pkl
+[05:43:33] 💾 Saved simulation 3 result to simulation_results/sim_0003_result.pkl
+[05:43:44] 💾 Saved simulation 90 result to simulation_results/sim_0090_result.pkl
+[05:43:54] 📊 PROGRESS: 64/100 complete ( 64.0%) • active sims: [38:180, 41:180, 43:180, 44:180, 45:180, 48:180, 50:180, 53:180, 55:180, 57:180 +26 more]
+[05:44:54] 📊 PROGRESS: 64/100 complete ( 64.0%) • active sims: [38:180, 41:180, 43:180, 44:180, 45:180, 48:180, 50:180, 53:180, 55:180, 57:180 +26 more]
+[05:45:03] 💾 Saved simulation 44 result to simulation_results/sim_0044_result.pkl
+[05:45:33] 💾 Saved simulation 72 result to simulation_results/sim_0072_result.pkl
+[05:46:01] 💾 Saved simulation 85 result to simulation_results/sim_0085_result.pkl
+[05:46:01] 📊 PROGRESS: 67/100 complete ( 67.0%) • active sims: [38:180, 41:180, 43:180, 45:180, 48:180, 50:180, 53:180, 55:180, 57:180, 60:180 +23 more]
+[05:46:10] 💾 Saved simulation 71 result to simulation_results/sim_0071_result.pkl
+[05:47:10] 📊 PROGRESS: 68/100 complete ( 68.0%) • active sims: [38:180, 41:180, 43:180, 45:180, 48:180, 50:180, 53:180, 55:180, 57:180, 60:180 +22 more]
+[05:47:18] 💾 Saved simulation 41 result to simulation_results/sim_0041_result.pkl
+[05:47:22] 💾 Saved simulation 75 result to simulation_results/sim_0075_result.pkl
+[05:47:43] 💾 Saved simulation 53 result to simulation_results/sim_0053_result.pkl
+[05:48:13] 📊 PROGRESS: 71/100 complete ( 71.0%) • active sims: [38:180, 43:180, 45:180, 48:180, 50:180, 55:180, 57:180, 60:180, 63:180, 65:180 +19 more]
+[05:48:34] 💾 Saved simulation 55 result to simulation_results/sim_0055_result.pkl
+[05:49:11] 💾 Saved simulation 63 result to simulation_results/sim_0063_result.pkl
+[05:49:17] 💾 Saved simulation 91 result to simulation_results/sim_0091_result.pkl
+[05:49:17] 📊 PROGRESS: 74/100 complete ( 74.0%) • active sims: [38:180, 43:180, 45:180, 48:180, 50:180, 57:180, 60:180, 65:180, 68:180, 70:180 +16 more]
+[05:50:04] 💾 Saved simulation 45 result to simulation_results/sim_0045_result.pkl
+[05:50:13] 💾 Saved simulation 48 result to simulation_results/sim_0048_result.pkl
+[05:50:23] 📊 PROGRESS: 76/100 complete ( 76.0%) • active sims: [38:180, 43:180, 50:180, 57:180, 60:180, 65:180, 68:180, 70:180, 73:180, 74:180 +14 more]
+[05:51:23] 📊 PROGRESS: 76/100 complete ( 76.0%) • active sims: [38:180, 43:180, 50:180, 57:180, 60:180, 65:180, 68:180, 70:180, 73:180, 74:180 +14 more]
+[05:51:30] 💾 Saved simulation 60 result to simulation_results/sim_0060_result.pkl
+[05:51:34] 💾 Saved simulation 76 result to simulation_results/sim_0076_result.pkl
+[05:52:13] 💾 Saved simulation 50 result to simulation_results/sim_0050_result.pkl
+[05:52:14] 💾 Saved simulation 97 result to simulation_results/sim_0097_result.pkl
+[05:52:24] 📊 PROGRESS: 80/100 complete ( 80.0%) • active sims: [38:180, 43:180, 57:180, 65:180, 68:180, 70:180, 73:180, 74:180, 77:180, 78:180 +10 more]
+[05:52:50] 💾 Saved simulation 96 result to simulation_results/sim_0096_result.pkl
+[05:53:30] 📊 PROGRESS: 81/100 complete ( 81.0%) • active sims: [38:180, 43:180, 57:180, 65:180, 68:180, 70:180, 73:180, 74:180, 77:180, 78:180 +9 more]
+[05:53:48] 💾 Saved simulation 70 result to simulation_results/sim_0070_result.pkl
+[05:53:53] 💾 Saved simulation 83 result to simulation_results/sim_0083_result.pkl
+[05:54:29] 💾 Saved simulation 74 result to simulation_results/sim_0074_result.pkl
+[05:54:39] 📊 PROGRESS: 84/100 complete ( 84.0%) • active sims: [38:180, 43:180, 57:180, 65:180, 68:180, 73:180, 77:180, 78:180, 82:180, 84:180 +6 more]
+[05:55:39] 📊 PROGRESS: 84/100 complete ( 84.0%) • active sims: [38:180, 43:180, 57:180, 65:180, 68:180, 73:180, 77:180, 78:180, 82:180, 84:180 +6 more]
+[05:55:49] 💾 Saved simulation 92 result to simulation_results/sim_0092_result.pkl
+[05:55:58] 💾 Saved simulation 68 result to simulation_results/sim_0068_result.pkl
+[05:56:06] 💾 Saved simulation 43 result to simulation_results/sim_0043_result.pkl
+[05:56:46] 📊 PROGRESS: 87/100 complete ( 87.0%) • active sims: [38:180, 57:180, 65:180, 73:180, 77:180, 78:180, 82:180, 84:180, 86:180, 87:180 +3 more]
+[05:57:29] 💾 Saved simulation 94 result to simulation_results/sim_0094_result.pkl
+[05:57:35] 💾 Saved simulation 82 result to simulation_results/sim_0082_result.pkl
+[05:57:55] 📊 PROGRESS: 89/100 complete ( 89.0%) • active sims: [38:180, 57:180, 65:180, 73:180, 77:180, 78:180, 84:180, 86:180, 87:180, 95:180 +1 more]
+[05:58:20] 💾 Saved simulation 98 result to simulation_results/sim_0098_result.pkl
+[05:58:21] 💾 Saved simulation 77 result to simulation_results/sim_0077_result.pkl
+[05:58:32] 💾 Saved simulation 78 result to simulation_results/sim_0078_result.pkl
+[05:59:02] 📊 PROGRESS: 92/100 complete ( 92.0%) • active sims: [38:180, 57:180, 65:180, 73:180, 84:180, 86:180, 87:180, 95:180]
+[05:59:42] 💾 Saved simulation 65 result to simulation_results/sim_0065_result.pkl
+[06:00:12] 📊 PROGRESS: 93/100 complete ( 93.0%) • active sims: [38:180, 57:180, 73:180, 84:180, 86:180, 87:180, 95:180]
+[06:01:03] 💾 Saved simulation 73 result to simulation_results/sim_0073_result.pkl
+[06:01:13] 📊 PROGRESS: 94/100 complete ( 94.0%) • active sims: [38:180, 57:180, 84:180, 86:180, 87:180, 95:180]
+[06:01:19] 💾 Saved simulation 38 result to simulation_results/sim_0038_result.pkl
+[06:02:19] 📊 PROGRESS: 95/100 complete ( 95.0%) • active sims: [57:180, 84:180, 86:180, 87:180, 95:180]
+[06:02:23] 💾 Saved simulation 57 result to simulation_results/sim_0057_result.pkl
+[06:02:27] 💾 Saved simulation 84 result to simulation_results/sim_0084_result.pkl
+[06:02:56] 💾 Saved simulation 86 result to simulation_results/sim_0086_result.pkl
+[06:03:26] 📊 PROGRESS: 98/100 complete ( 98.0%) • active sims: [87:180, 95:180]
+[06:03:56] 💾 Saved simulation 87 result to simulation_results/sim_0087_result.pkl
+[06:04:04] 💾 Saved simulation 95 result to simulation_results/sim_0095_result.pkl
+[06:04:04] 📂 Loading all completed results...
+[06:04:04] 🎉 EXPERIMENT COMPLETE: 100 simulations in 22391.32 seconds
+[06:04:04] 📊 Analyzing 100 simulation results...
+[06:04:04] 🔍 Analyzing emergent patterns with realistic parameters...
+[06:04:04] 📈 Creating visualizations...
+[06:04:04] 📊 Creating realistic parameter visualization analysis...
+[06:04:05] ✅ Visualization saved as realistic_parameters_analysis.png
+[06:04:05] 🎯 Identifying critical thresholds...
+[06:04:05] 🎯 Identifying critical thresholds for realistic parameters...
+[06:04:05] 
+============================================================
+[06:04:05] 🔍 REALISTIC PARAMETERS THRESHOLD ANALYSIS
+[06:04:05] ============================================================
+[06:04:05] 💾 Saving comprehensive results...
+[06:04:05] 💾 Saving realistic parameters results to: /home/spamtrashheap/society_sim
+[06:04:06] 
+✅ Successfully saved 3 files:
+[06:04:06]    📊 realistic_parameters_simulation_results.csv (0.07 MB)
+[06:04:06]    📈 realistic_parameters_summary_stats.csv
+[06:04:06]    📋 realistic_parameters_experiment_summary.txt
+[06:04:06] ✅ Experiment completed: 3 files saved
