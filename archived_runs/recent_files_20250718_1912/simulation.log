@@ -1,0 +1,393 @@
+nohup: ignoring input
+[18:18:52] 🔬 Enhanced Constraint Cascade Simulation v3
+[18:18:52] ================================================================================
+[18:18:52] 🎯 Streamlined 13-parameter interface
+[18:18:52] ⚡ Improved interpretability and performance
+[18:18:52] 📊 Enhanced logging frequencies
+[18:18:52] 📈 Aggregate progress reporting
+[18:18:52] ✅ All original functionality preserved
+[18:18:52] 🎯 Running 150 v3 simulations...
+[18:18:52] ✅ Generated 150 v3 parameter sets
+[18:18:52] 🚀 Starting v3 mass experiment with 150 simulations...
+[18:18:52] 🔧 Using v3 streamlined 13-parameter configuration
+[18:18:52] 🔧 Using 8 CPU cores for multiprocessing...
+[18:18:52] 📁 Setting up v3 scheduler with results directory: simulation_results
+[18:18:52] ⚙️  Initializing v3 LoadBalancedScheduler with 150 simulations...
+[18:18:52] 📁 Setting up results directory: simulation_results
+[18:18:52] 🔄 Generating work queue for 150 simulations...
+[18:18:52]    📋 Processing simulation 1/150 for work queue...
+[18:18:52]    📋 Processing simulation 26/150 for work queue...
+[18:18:52]    📋 Processing simulation 51/150 for work queue...
+[18:18:52]    📋 Processing simulation 76/150 for work queue...
+[18:18:52]    📋 Processing simulation 101/150 for work queue...
+[18:18:52]    📋 Processing simulation 126/150 for work queue...
+[18:18:52] ✅ v3 LoadBalancedScheduler initialized with 150 work items
+[18:18:52] 🏭 Starting ProcessPoolExecutor with 8 workers...
+[18:18:52] 📤 Submitting initial batch of 16 work items...
+[18:18:52] ✅ Initial batch submitted, 16 futures active
+[18:19:59] 📊 PROGRESS: 870/45000 rounds (  1.9% of total work) ...
+[18:20:59] 📊 PROGRESS: 1770/45000 rounds (  3.9% of total work) ...
+[18:22:01] 📊 PROGRESS: 2640/45000 rounds (  5.9% of total work) ...
+[18:23:03] 📊 PROGRESS: 3510/45000 rounds (  7.8% of total work) ...
+[18:24:04] 📊 PROGRESS: 4440/45000 rounds (  9.9% of total work) ...
+[18:25:06] 📊 PROGRESS: 5280/45000 rounds ( 11.7% of total work) ...
+[18:26:08] 📊 PROGRESS: 5820/45000 rounds ( 12.9% of total work) ...
+[18:27:09] 📊 PROGRESS: 6660/45000 rounds ( 14.8% of total work) ...
+[18:28:12] 📊 PROGRESS: 7200/45000 rounds ( 16.0% of total work) ...
+[18:29:13] 📊 PROGRESS: 7890/45000 rounds ( 17.5% of total work) ...
+[18:30:16] 📊 PROGRESS: 8610/45000 rounds ( 19.1% of total work) ...
+[18:31:16] 📊 PROGRESS: 9390/45000 rounds ( 20.9% of total work) ...
+[18:32:19] 📊 PROGRESS: 10200/45000 rounds ( 22.7% of total work) ...
+[18:33:22] 📊 PROGRESS: 10710/45000 rounds ( 23.8% of total work) ...
+[18:34:32] 📊 PROGRESS: 11610/45000 rounds ( 25.8% of total work) ...
+[18:35:32] 📊 PROGRESS: 12180/45000 rounds ( 27.1% of total work) ...
+[18:36:32] 📊 PROGRESS: 12870/45000 rounds ( 28.6% of total work) ...
+[18:37:38] 📊 PROGRESS: 13680/45000 rounds ( 30.4% of total work) ...
+[18:38:40] 📊 PROGRESS: 14550/45000 rounds ( 32.3% of total work) ...
+[18:39:45] 📊 PROGRESS: 15060/45000 rounds ( 33.5% of total work) ...
+[18:40:51] 📊 PROGRESS: 15990/45000 rounds ( 35.5% of total work) ...
+[18:41:52] 📊 PROGRESS: 16530/45000 rounds ( 36.7% of total work) ...
+[18:43:00] 📊 PROGRESS: 17250/45000 rounds ( 38.3% of total work) ...
+[18:44:07] 📊 PROGRESS: 18120/45000 rounds ( 40.3% of total work) ...
+[18:45:08] 📊 PROGRESS: 18870/45000 rounds ( 41.9% of total work) ...
+[18:46:15] 📊 PROGRESS: 19590/45000 rounds ( 43.5% of total work) ...
+[18:47:22] 📊 PROGRESS: 20430/45000 rounds ( 45.4% of total work) ...
+[18:48:24] 📊 PROGRESS: 21120/45000 rounds ( 46.9% of total work) ...
+[18:49:25] 📊 PROGRESS: 21690/45000 rounds ( 48.2% of total work) ...
+[18:50:28] 📊 PROGRESS: 22470/45000 rounds ( 49.9% of total work) ...
+[18:51:36] 📊 PROGRESS: 23310/45000 rounds ( 51.8% of total work) ...
+[18:52:42] 📊 PROGRESS: 24150/45000 rounds ( 53.7% of total work) ...
+[18:53:43] 📊 PROGRESS: 24720/45000 rounds ( 54.9% of total work) ...
+[18:54:44] 📊 PROGRESS: 25530/45000 rounds ( 56.7% of total work) ...
+[18:55:44] 📊 PROGRESS: 26070/45000 rounds ( 57.9% of total work) ...
+[18:56:46] 📊 PROGRESS: 26760/45000 rounds ( 59.5% of total work) ...
+[18:57:48] 📊 PROGRESS: 27480/45000 rounds ( 61.1% of total work) ...
+[18:58:48] 📊 PROGRESS: 28260/45000 rounds ( 62.8% of total work) ...
+[18:59:54] 📊 PROGRESS: 28980/45000 rounds ( 64.4% of total work) ...
+[19:00:58] 📊 PROGRESS: 29670/45000 rounds ( 65.9% of total work) ...
+[19:01:58] 📊 PROGRESS: 30420/45000 rounds ( 67.6% of total work) ...
+[19:02:59] 📊 PROGRESS: 30990/45000 rounds ( 68.9% of total work) ...
+[19:04:01] 📊 PROGRESS: 31740/45000 rounds ( 70.5% of total work) ...
+[19:05:04] 📊 PROGRESS: 32490/45000 rounds ( 72.2% of total work) ...
+[19:06:05] 📊 PROGRESS: 33360/45000 rounds ( 74.1% of total work) ...
+[19:07:05] 📊 PROGRESS: 33870/45000 rounds ( 75.3% of total work) ...
+[19:08:06] 📊 PROGRESS: 34650/45000 rounds ( 77.0% of total work) ...
+[19:09:14] 📊 PROGRESS: 35280/45000 rounds ( 78.4% of total work) ...
+[19:10:15] 📊 PROGRESS: 36390/45000 rounds ( 80.9% of total work) ...
+[19:11:18] 📊 PROGRESS: 38340/45000 rounds ( 85.2% of total work) ...
+[19:11:35] 💾 Saved complete simulation 5 to simulation_results/sim_0005_result.pkl
+[19:11:35] 📄 Saved JSON version for simulation 5 to simulation_results/sim_0005_result.json
+[19:11:36] 💾 Saved complete simulation 6 to simulation_results/sim_0006_result.pkl
+[19:11:36] 📄 Saved JSON version for simulation 6 to simulation_results/sim_0006_result.json
+[19:11:38] 💾 Saved complete simulation 4 to simulation_results/sim_0004_result.pkl
+[19:11:38] 📄 Saved JSON version for simulation 4 to simulation_results/sim_0004_result.json
+[19:11:44] 💾 Saved complete simulation 9 to simulation_results/sim_0009_result.pkl
+[19:11:44] 📄 Saved JSON version for simulation 9 to simulation_results/sim_0009_result.json
+[19:11:45] 💾 Saved complete simulation 3 to simulation_results/sim_0003_result.pkl
+[19:11:45] 📄 Saved JSON version for simulation 3 to simulation_results/sim_0003_result.json
+[19:11:45] 💾 Saved complete simulation 11 to simulation_results/sim_0011_result.pkl
+[19:11:45] 📄 Saved JSON version for simulation 11 to simulation_results/sim_0011_result.json
+[19:11:45] 💾 Saved complete simulation 14 to simulation_results/sim_0014_result.pkl
+[19:11:45] 📄 Saved JSON version for simulation 14 to simulation_results/sim_0014_result.json
+[19:11:47] 💾 Saved complete simulation 0 to simulation_results/sim_0000_result.pkl
+[19:11:47] 📄 Saved JSON version for simulation 0 to simulation_results/sim_0000_result.json
+[19:11:47] 💾 Saved complete simulation 13 to simulation_results/sim_0013_result.pkl
+[19:11:47] 📄 Saved JSON version for simulation 13 to simulation_results/sim_0013_result.json
+[19:11:47] 💾 Saved complete simulation 18 to simulation_results/sim_0018_result.pkl
+[19:11:47] 📄 Saved JSON version for simulation 18 to simulation_results/sim_0018_result.json
+[19:11:47] 💾 Saved complete simulation 8 to simulation_results/sim_0008_result.pkl
+[19:11:47] 📄 Saved JSON version for simulation 8 to simulation_results/sim_0008_result.json
+[19:11:47] 💾 Saved complete simulation 28 to simulation_results/sim_0028_result.pkl
+[19:11:47] 📄 Saved JSON version for simulation 28 to simulation_results/sim_0028_result.json
+[19:11:48] 💾 Saved complete simulation 19 to simulation_results/sim_0019_result.pkl
+[19:11:48] 📄 Saved JSON version for simulation 19 to simulation_results/sim_0019_result.json
+[19:11:48] 💾 Saved complete simulation 30 to simulation_results/sim_0030_result.pkl
+[19:11:48] 📄 Saved JSON version for simulation 30 to simulation_results/sim_0030_result.json
+[19:11:48] 💾 Saved complete simulation 12 to simulation_results/sim_0012_result.pkl
+[19:11:48] 📄 Saved JSON version for simulation 12 to simulation_results/sim_0012_result.json
+[19:11:48] 💾 Saved complete simulation 37 to simulation_results/sim_0037_result.pkl
+[19:11:48] 📄 Saved JSON version for simulation 37 to simulation_results/sim_0037_result.json
+[19:11:49] 💾 Saved complete simulation 42 to simulation_results/sim_0042_result.pkl
+[19:11:49] 📄 Saved JSON version for simulation 42 to simulation_results/sim_0042_result.json
+[19:11:49] 💾 Saved complete simulation 20 to simulation_results/sim_0020_result.pkl
+[19:11:49] 📄 Saved JSON version for simulation 20 to simulation_results/sim_0020_result.json
+[19:11:49] 💾 Saved complete simulation 22 to simulation_results/sim_0022_result.pkl
+[19:11:49] 📄 Saved JSON version for simulation 22 to simulation_results/sim_0022_result.json
+[19:11:49] 💾 Saved complete simulation 47 to simulation_results/sim_0047_result.pkl
+[19:11:49] 📄 Saved JSON version for simulation 47 to simulation_results/sim_0047_result.json
+[19:11:50] 💾 Saved complete simulation 7 to simulation_results/sim_0007_result.pkl
+[19:11:50] 📄 Saved JSON version for simulation 7 to simulation_results/sim_0007_result.json
+[19:11:50] 💾 Saved complete simulation 26 to simulation_results/sim_0026_result.pkl
+[19:11:50] 📄 Saved JSON version for simulation 26 to simulation_results/sim_0026_result.json
+[19:11:54] 💾 Saved complete simulation 16 to simulation_results/sim_0016_result.pkl
+[19:11:54] 📄 Saved JSON version for simulation 16 to simulation_results/sim_0016_result.json
+[19:11:54] 💾 Saved complete simulation 49 to simulation_results/sim_0049_result.pkl
+[19:11:54] 📄 Saved JSON version for simulation 49 to simulation_results/sim_0049_result.json
+[19:11:54] 💾 Saved complete simulation 38 to simulation_results/sim_0038_result.pkl
+[19:11:54] 📄 Saved JSON version for simulation 38 to simulation_results/sim_0038_result.json
+[19:11:54] 💾 Saved complete simulation 25 to simulation_results/sim_0025_result.pkl
+[19:11:54] 📄 Saved JSON version for simulation 25 to simulation_results/sim_0025_result.json
+[19:11:54] 💾 Saved complete simulation 15 to simulation_results/sim_0015_result.pkl
+[19:11:54] 📄 Saved JSON version for simulation 15 to simulation_results/sim_0015_result.json
+[19:11:58] 💾 Saved complete simulation 45 to simulation_results/sim_0045_result.pkl
+[19:11:58] 📄 Saved JSON version for simulation 45 to simulation_results/sim_0045_result.json
+[19:11:59] 💾 Saved complete simulation 36 to simulation_results/sim_0036_result.pkl
+[19:11:59] 📄 Saved JSON version for simulation 36 to simulation_results/sim_0036_result.json
+[19:11:59] 💾 Saved complete simulation 39 to simulation_results/sim_0039_result.pkl
+[19:11:59] 📄 Saved JSON version for simulation 39 to simulation_results/sim_0039_result.json
+[19:11:59] 💾 Saved complete simulation 33 to simulation_results/sim_0033_result.pkl
+[19:11:59] 📄 Saved JSON version for simulation 33 to simulation_results/sim_0033_result.json
+[19:12:00] 💾 Saved complete simulation 54 to simulation_results/sim_0054_result.pkl
+[19:12:00] 📄 Saved JSON version for simulation 54 to simulation_results/sim_0054_result.json
+[19:12:00] 💾 Saved complete simulation 52 to simulation_results/sim_0052_result.pkl
+[19:12:00] 📄 Saved JSON version for simulation 52 to simulation_results/sim_0052_result.json
+[19:12:00] 💾 Saved complete simulation 41 to simulation_results/sim_0041_result.pkl
+[19:12:00] 📄 Saved JSON version for simulation 41 to simulation_results/sim_0041_result.json
+[19:12:00] 💾 Saved complete simulation 56 to simulation_results/sim_0056_result.pkl
+[19:12:00] 📄 Saved JSON version for simulation 56 to simulation_results/sim_0056_result.json
+[19:12:00] 💾 Saved complete simulation 64 to simulation_results/sim_0064_result.pkl
+[19:12:00] 📄 Saved JSON version for simulation 64 to simulation_results/sim_0064_result.json
+[19:12:00] 💾 Saved complete simulation 55 to simulation_results/sim_0055_result.pkl
+[19:12:00] 📄 Saved JSON version for simulation 55 to simulation_results/sim_0055_result.json
+[19:12:01] 💾 Saved complete simulation 57 to simulation_results/sim_0057_result.pkl
+[19:12:01] 📄 Saved JSON version for simulation 57 to simulation_results/sim_0057_result.json
+[19:12:01] 💾 Saved complete simulation 32 to simulation_results/sim_0032_result.pkl
+[19:12:01] 📄 Saved JSON version for simulation 32 to simulation_results/sim_0032_result.json
+[19:12:01] 💾 Saved complete simulation 53 to simulation_results/sim_0053_result.pkl
+[19:12:01] 📄 Saved JSON version for simulation 53 to simulation_results/sim_0053_result.json
+[19:12:01] 💾 Saved complete simulation 72 to simulation_results/sim_0072_result.pkl
+[19:12:01] 📄 Saved JSON version for simulation 72 to simulation_results/sim_0072_result.json
+[19:12:01] 💾 Saved complete simulation 66 to simulation_results/sim_0066_result.pkl
+[19:12:01] 📄 Saved JSON version for simulation 66 to simulation_results/sim_0066_result.json
+[19:12:01] 💾 Saved complete simulation 24 to simulation_results/sim_0024_result.pkl
+[19:12:01] 📄 Saved JSON version for simulation 24 to simulation_results/sim_0024_result.json
+[19:12:01] 💾 Saved complete simulation 58 to simulation_results/sim_0058_result.pkl
+[19:12:01] 📄 Saved JSON version for simulation 58 to simulation_results/sim_0058_result.json
+[19:12:02] 💾 Saved complete simulation 1 to simulation_results/sim_0001_result.pkl
+[19:12:02] 📄 Saved JSON version for simulation 1 to simulation_results/sim_0001_result.json
+[19:12:04] 💾 Saved complete simulation 59 to simulation_results/sim_0059_result.pkl
+[19:12:04] 📄 Saved JSON version for simulation 59 to simulation_results/sim_0059_result.json
+[19:12:04] 💾 Saved complete simulation 69 to simulation_results/sim_0069_result.pkl
+[19:12:04] 📄 Saved JSON version for simulation 69 to simulation_results/sim_0069_result.json
+[19:12:04] 💾 Saved complete simulation 50 to simulation_results/sim_0050_result.pkl
+[19:12:04] 📄 Saved JSON version for simulation 50 to simulation_results/sim_0050_result.json
+[19:12:04] 💾 Saved complete simulation 70 to simulation_results/sim_0070_result.pkl
+[19:12:04] 📄 Saved JSON version for simulation 70 to simulation_results/sim_0070_result.json
+[19:12:05] 💾 Saved complete simulation 74 to simulation_results/sim_0074_result.pkl
+[19:12:05] 📄 Saved JSON version for simulation 74 to simulation_results/sim_0074_result.json
+[19:12:05] 💾 Saved complete simulation 44 to simulation_results/sim_0044_result.pkl
+[19:12:05] 📄 Saved JSON version for simulation 44 to simulation_results/sim_0044_result.json
+[19:12:05] 💾 Saved complete simulation 60 to simulation_results/sim_0060_result.pkl
+[19:12:05] 📄 Saved JSON version for simulation 60 to simulation_results/sim_0060_result.json
+[19:12:06] 💾 Saved complete simulation 88 to simulation_results/sim_0088_result.pkl
+[19:12:06] 📄 Saved JSON version for simulation 88 to simulation_results/sim_0088_result.json
+[19:12:06] 💾 Saved complete simulation 79 to simulation_results/sim_0079_result.pkl
+[19:12:06] 📄 Saved JSON version for simulation 79 to simulation_results/sim_0079_result.json
+[19:12:07] 💾 Saved complete simulation 77 to simulation_results/sim_0077_result.pkl
+[19:12:07] 📄 Saved JSON version for simulation 77 to simulation_results/sim_0077_result.json
+[19:12:07] 💾 Saved complete simulation 29 to simulation_results/sim_0029_result.pkl
+[19:12:07] 📄 Saved JSON version for simulation 29 to simulation_results/sim_0029_result.json
+[19:12:07] 💾 Saved complete simulation 10 to simulation_results/sim_0010_result.pkl
+[19:12:07] 📄 Saved JSON version for simulation 10 to simulation_results/sim_0010_result.json
+[19:12:08] 💾 Saved complete simulation 83 to simulation_results/sim_0083_result.pkl
+[19:12:08] 📄 Saved JSON version for simulation 83 to simulation_results/sim_0083_result.json
+[19:12:08] 💾 Saved complete simulation 75 to simulation_results/sim_0075_result.pkl
+[19:12:08] 📄 Saved JSON version for simulation 75 to simulation_results/sim_0075_result.json
+[19:12:08] 💾 Saved complete simulation 67 to simulation_results/sim_0067_result.pkl
+[19:12:08] 📄 Saved JSON version for simulation 67 to simulation_results/sim_0067_result.json
+[19:12:08] 💾 Saved complete simulation 95 to simulation_results/sim_0095_result.pkl
+[19:12:08] 📄 Saved JSON version for simulation 95 to simulation_results/sim_0095_result.json
+[19:12:08] 💾 Saved complete simulation 85 to simulation_results/sim_0085_result.pkl
+[19:12:08] 📄 Saved JSON version for simulation 85 to simulation_results/sim_0085_result.json
+[19:12:08] 💾 Saved complete simulation 84 to simulation_results/sim_0084_result.pkl
+[19:12:08] 📄 Saved JSON version for simulation 84 to simulation_results/sim_0084_result.json
+[19:12:08] 💾 Saved complete simulation 89 to simulation_results/sim_0089_result.pkl
+[19:12:08] 📄 Saved JSON version for simulation 89 to simulation_results/sim_0089_result.json
+[19:12:08] 💾 Saved complete simulation 63 to simulation_results/sim_0063_result.pkl
+[19:12:08] 📄 Saved JSON version for simulation 63 to simulation_results/sim_0063_result.json
+[19:12:08] 💾 Saved complete simulation 101 to simulation_results/sim_0101_result.pkl
+[19:12:08] 📄 Saved JSON version for simulation 101 to simulation_results/sim_0101_result.json
+[19:12:08] 💾 Saved complete simulation 87 to simulation_results/sim_0087_result.pkl
+[19:12:08] 📄 Saved JSON version for simulation 87 to simulation_results/sim_0087_result.json
+[19:12:09] 💾 Saved complete simulation 73 to simulation_results/sim_0073_result.pkl
+[19:12:09] 📄 Saved JSON version for simulation 73 to simulation_results/sim_0073_result.json
+[19:12:09] 💾 Saved complete simulation 23 to simulation_results/sim_0023_result.pkl
+[19:12:09] 📄 Saved JSON version for simulation 23 to simulation_results/sim_0023_result.json
+[19:12:09] 💾 Saved complete simulation 62 to simulation_results/sim_0062_result.pkl
+[19:12:09] 📄 Saved JSON version for simulation 62 to simulation_results/sim_0062_result.json
+[19:12:09] 💾 Saved complete simulation 93 to simulation_results/sim_0093_result.pkl
+[19:12:09] 📄 Saved JSON version for simulation 93 to simulation_results/sim_0093_result.json
+[19:12:09] 💾 Saved complete simulation 106 to simulation_results/sim_0106_result.pkl
+[19:12:09] 📄 Saved JSON version for simulation 106 to simulation_results/sim_0106_result.json
+[19:12:10] 💾 Saved complete simulation 48 to simulation_results/sim_0048_result.pkl
+[19:12:10] 📄 Saved JSON version for simulation 48 to simulation_results/sim_0048_result.json
+[19:12:10] 💾 Saved complete simulation 78 to simulation_results/sim_0078_result.pkl
+[19:12:10] 📄 Saved JSON version for simulation 78 to simulation_results/sim_0078_result.json
+[19:12:10] 💾 Saved complete simulation 113 to simulation_results/sim_0113_result.pkl
+[19:12:10] 📄 Saved JSON version for simulation 113 to simulation_results/sim_0113_result.json
+[19:12:10] 💾 Saved complete simulation 94 to simulation_results/sim_0094_result.pkl
+[19:12:10] 📄 Saved JSON version for simulation 94 to simulation_results/sim_0094_result.json
+[19:12:10] 💾 Saved complete simulation 40 to simulation_results/sim_0040_result.pkl
+[19:12:10] 📄 Saved JSON version for simulation 40 to simulation_results/sim_0040_result.json
+[19:12:10] 💾 Saved complete simulation 104 to simulation_results/sim_0104_result.pkl
+[19:12:10] 📄 Saved JSON version for simulation 104 to simulation_results/sim_0104_result.json
+[19:12:11] 💾 Saved complete simulation 108 to simulation_results/sim_0108_result.pkl
+[19:12:11] 📄 Saved JSON version for simulation 108 to simulation_results/sim_0108_result.json
+[19:12:11] 💾 Saved complete simulation 86 to simulation_results/sim_0086_result.pkl
+[19:12:11] 📄 Saved JSON version for simulation 86 to simulation_results/sim_0086_result.json
+[19:12:11] 💾 Saved complete simulation 117 to simulation_results/sim_0117_result.pkl
+[19:12:11] 📄 Saved JSON version for simulation 117 to simulation_results/sim_0117_result.json
+[19:12:11] 💾 Saved complete simulation 96 to simulation_results/sim_0096_result.pkl
+[19:12:11] 📄 Saved JSON version for simulation 96 to simulation_results/sim_0096_result.json
+[19:12:12] 💾 Saved complete simulation 115 to simulation_results/sim_0115_result.pkl
+[19:12:12] 📄 Saved JSON version for simulation 115 to simulation_results/sim_0115_result.json
+[19:12:12] 💾 Saved complete simulation 2 to simulation_results/sim_0002_result.pkl
+[19:12:12] 📄 Saved JSON version for simulation 2 to simulation_results/sim_0002_result.json
+[19:12:12] 💾 Saved complete simulation 17 to simulation_results/sim_0017_result.pkl
+[19:12:12] 📄 Saved JSON version for simulation 17 to simulation_results/sim_0017_result.json
+[19:12:12] 💾 Saved complete simulation 114 to simulation_results/sim_0114_result.pkl
+[19:12:12] 📄 Saved JSON version for simulation 114 to simulation_results/sim_0114_result.json
+[19:12:12] 💾 Saved complete simulation 97 to simulation_results/sim_0097_result.pkl
+[19:12:12] 📄 Saved JSON version for simulation 97 to simulation_results/sim_0097_result.json
+[19:12:13] 💾 Saved complete simulation 116 to simulation_results/sim_0116_result.pkl
+[19:12:13] 📄 Saved JSON version for simulation 116 to simulation_results/sim_0116_result.json
+[19:12:13] 💾 Saved complete simulation 122 to simulation_results/sim_0122_result.pkl
+[19:12:13] 📄 Saved JSON version for simulation 122 to simulation_results/sim_0122_result.json
+[19:12:13] 💾 Saved complete simulation 34 to simulation_results/sim_0034_result.pkl
+[19:12:13] 📄 Saved JSON version for simulation 34 to simulation_results/sim_0034_result.json
+[19:12:13] 💾 Saved complete simulation 27 to simulation_results/sim_0027_result.pkl
+[19:12:13] 📄 Saved JSON version for simulation 27 to simulation_results/sim_0027_result.json
+[19:12:13] 💾 Saved complete simulation 127 to simulation_results/sim_0127_result.pkl
+[19:12:13] 📄 Saved JSON version for simulation 127 to simulation_results/sim_0127_result.json
+[19:12:13] 💾 Saved complete simulation 132 to simulation_results/sim_0132_result.pkl
+[19:12:13] 📄 Saved JSON version for simulation 132 to simulation_results/sim_0132_result.json
+[19:12:13] 💾 Saved complete simulation 120 to simulation_results/sim_0120_result.pkl
+[19:12:13] 📄 Saved JSON version for simulation 120 to simulation_results/sim_0120_result.json
+[19:12:13] 💾 Saved complete simulation 118 to simulation_results/sim_0118_result.pkl
+[19:12:13] 📄 Saved JSON version for simulation 118 to simulation_results/sim_0118_result.json
+[19:12:13] 💾 Saved complete simulation 98 to simulation_results/sim_0098_result.pkl
+[19:12:13] 📄 Saved JSON version for simulation 98 to simulation_results/sim_0098_result.json
+[19:12:13] 💾 Saved complete simulation 102 to simulation_results/sim_0102_result.pkl
+[19:12:13] 📄 Saved JSON version for simulation 102 to simulation_results/sim_0102_result.json
+[19:12:14] 💾 Saved complete simulation 46 to simulation_results/sim_0046_result.pkl
+[19:12:14] 📄 Saved JSON version for simulation 46 to simulation_results/sim_0046_result.json
+[19:12:14] 💾 Saved complete simulation 137 to simulation_results/sim_0137_result.pkl
+[19:12:14] 📄 Saved JSON version for simulation 137 to simulation_results/sim_0137_result.json
+[19:12:14] 💾 Saved complete simulation 71 to simulation_results/sim_0071_result.pkl
+[19:12:14] 📄 Saved JSON version for simulation 71 to simulation_results/sim_0071_result.json
+[19:12:14] 💾 Saved complete simulation 128 to simulation_results/sim_0128_result.pkl
+[19:12:14] 📄 Saved JSON version for simulation 128 to simulation_results/sim_0128_result.json
+[19:12:14] 💾 Saved complete simulation 119 to simulation_results/sim_0119_result.pkl
+[19:12:14] 📄 Saved JSON version for simulation 119 to simulation_results/sim_0119_result.json
+[19:12:14] 💾 Saved complete simulation 143 to simulation_results/sim_0143_result.pkl
+[19:12:14] 📄 Saved JSON version for simulation 143 to simulation_results/sim_0143_result.json
+[19:12:14] 💾 Saved complete simulation 146 to simulation_results/sim_0146_result.pkl
+[19:12:14] 📄 Saved JSON version for simulation 146 to simulation_results/sim_0146_result.json
+[19:12:14] 💾 Saved complete simulation 92 to simulation_results/sim_0092_result.pkl
+[19:12:14] 📄 Saved JSON version for simulation 92 to simulation_results/sim_0092_result.json
+[19:12:14] 💾 Saved complete simulation 100 to simulation_results/sim_0100_result.pkl
+[19:12:14] 📄 Saved JSON version for simulation 100 to simulation_results/sim_0100_result.json
+[19:12:14] 💾 Saved complete simulation 129 to simulation_results/sim_0129_result.pkl
+[19:12:14] 📄 Saved JSON version for simulation 129 to simulation_results/sim_0129_result.json
+[19:12:14] 💾 Saved complete simulation 124 to simulation_results/sim_0124_result.pkl
+[19:12:14] 📄 Saved JSON version for simulation 124 to simulation_results/sim_0124_result.json
+[19:12:15] 💾 Saved complete simulation 147 to simulation_results/sim_0147_result.pkl
+[19:12:15] 📄 Saved JSON version for simulation 147 to simulation_results/sim_0147_result.json
+[19:12:15] 💾 Saved complete simulation 31 to simulation_results/sim_0031_result.pkl
+[19:12:15] 📄 Saved JSON version for simulation 31 to simulation_results/sim_0031_result.json
+[19:12:15] 💾 Saved complete simulation 125 to simulation_results/sim_0125_result.pkl
+[19:12:15] 📄 Saved JSON version for simulation 125 to simulation_results/sim_0125_result.json
+[19:12:15] 💾 Saved complete simulation 112 to simulation_results/sim_0112_result.pkl
+[19:12:15] 📄 Saved JSON version for simulation 112 to simulation_results/sim_0112_result.json
+[19:12:15] 💾 Saved complete simulation 135 to simulation_results/sim_0135_result.pkl
+[19:12:15] 📄 Saved JSON version for simulation 135 to simulation_results/sim_0135_result.json
+[19:12:15] 💾 Saved complete simulation 131 to simulation_results/sim_0131_result.pkl
+[19:12:15] 📄 Saved JSON version for simulation 131 to simulation_results/sim_0131_result.json
+[19:12:15] 💾 Saved complete simulation 144 to simulation_results/sim_0144_result.pkl
+[19:12:15] 📄 Saved JSON version for simulation 144 to simulation_results/sim_0144_result.json
+[19:12:15] 💾 Saved complete simulation 103 to simulation_results/sim_0103_result.pkl
+[19:12:15] 📄 Saved JSON version for simulation 103 to simulation_results/sim_0103_result.json
+[19:12:15] 💾 Saved complete simulation 142 to simulation_results/sim_0142_result.pkl
+[19:12:15] 📄 Saved JSON version for simulation 142 to simulation_results/sim_0142_result.json
+[19:12:15] 💾 Saved complete simulation 145 to simulation_results/sim_0145_result.pkl
+[19:12:15] 📄 Saved JSON version for simulation 145 to simulation_results/sim_0145_result.json
+[19:12:16] 💾 Saved complete simulation 148 to simulation_results/sim_0148_result.pkl
+[19:12:16] 📄 Saved JSON version for simulation 148 to simulation_results/sim_0148_result.json
+[19:12:16] 💾 Saved complete simulation 61 to simulation_results/sim_0061_result.pkl
+[19:12:16] 📄 Saved JSON version for simulation 61 to simulation_results/sim_0061_result.json
+[19:12:16] 💾 Saved complete simulation 35 to simulation_results/sim_0035_result.pkl
+[19:12:16] 📄 Saved JSON version for simulation 35 to simulation_results/sim_0035_result.json
+[19:12:16] 💾 Saved complete simulation 107 to simulation_results/sim_0107_result.pkl
+[19:12:16] 📄 Saved JSON version for simulation 107 to simulation_results/sim_0107_result.json
+[19:12:16] 💾 Saved complete simulation 105 to simulation_results/sim_0105_result.pkl
+[19:12:16] 📄 Saved JSON version for simulation 105 to simulation_results/sim_0105_result.json
+[19:12:16] 💾 Saved complete simulation 123 to simulation_results/sim_0123_result.pkl
+[19:12:16] 📄 Saved JSON version for simulation 123 to simulation_results/sim_0123_result.json
+[19:12:16] 💾 Saved complete simulation 149 to simulation_results/sim_0149_result.pkl
+[19:12:16] 📄 Saved JSON version for simulation 149 to simulation_results/sim_0149_result.json
+[19:12:16] 💾 Saved complete simulation 130 to simulation_results/sim_0130_result.pkl
+[19:12:16] 📄 Saved JSON version for simulation 130 to simulation_results/sim_0130_result.json
+[19:12:16] 💾 Saved complete simulation 133 to simulation_results/sim_0133_result.pkl
+[19:12:16] 📄 Saved JSON version for simulation 133 to simulation_results/sim_0133_result.json
+[19:12:16] 💾 Saved complete simulation 65 to simulation_results/sim_0065_result.pkl
+[19:12:16] 📄 Saved JSON version for simulation 65 to simulation_results/sim_0065_result.json
+[19:12:17] 💾 Saved complete simulation 134 to simulation_results/sim_0134_result.pkl
+[19:12:17] 📄 Saved JSON version for simulation 134 to simulation_results/sim_0134_result.json
+[19:12:17] 💾 Saved complete simulation 51 to simulation_results/sim_0051_result.pkl
+[19:12:17] 📄 Saved JSON version for simulation 51 to simulation_results/sim_0051_result.json
+[19:12:17] 💾 Saved complete simulation 43 to simulation_results/sim_0043_result.pkl
+[19:12:17] 📄 Saved JSON version for simulation 43 to simulation_results/sim_0043_result.json
+[19:12:17] 💾 Saved complete simulation 68 to simulation_results/sim_0068_result.pkl
+[19:12:17] 📄 Saved JSON version for simulation 68 to simulation_results/sim_0068_result.json
+[19:12:18] 💾 Saved complete simulation 76 to simulation_results/sim_0076_result.pkl
+[19:12:18] 📄 Saved JSON version for simulation 76 to simulation_results/sim_0076_result.json
+[19:12:18] 💾 Saved complete simulation 110 to simulation_results/sim_0110_result.pkl
+[19:12:18] 📄 Saved JSON version for simulation 110 to simulation_results/sim_0110_result.json
+[19:12:18] 💾 Saved complete simulation 21 to simulation_results/sim_0021_result.pkl
+[19:12:18] 📄 Saved JSON version for simulation 21 to simulation_results/sim_0021_result.json
+[19:12:18] 💾 Saved complete simulation 138 to simulation_results/sim_0138_result.pkl
+[19:12:18] 📄 Saved JSON version for simulation 138 to simulation_results/sim_0138_result.json
+[19:12:18] 📊 PROGRESS: 44460/45000 rounds ( 98.8% of total work) ...
+[19:12:19] 💾 Saved complete simulation 109 to simulation_results/sim_0109_result.pkl
+[19:12:19] 📄 Saved JSON version for simulation 109 to simulation_results/sim_0109_result.json
+[19:12:19] 💾 Saved complete simulation 80 to simulation_results/sim_0080_result.pkl
+[19:12:19] 📄 Saved JSON version for simulation 80 to simulation_results/sim_0080_result.json
+[19:12:19] 💾 Saved complete simulation 82 to simulation_results/sim_0082_result.pkl
+[19:12:19] 📄 Saved JSON version for simulation 82 to simulation_results/sim_0082_result.json
+[19:12:19] 💾 Saved complete simulation 81 to simulation_results/sim_0081_result.pkl
+[19:12:19] 📄 Saved JSON version for simulation 81 to simulation_results/sim_0081_result.json
+[19:12:19] 💾 Saved complete simulation 126 to simulation_results/sim_0126_result.pkl
+[19:12:19] 📄 Saved JSON version for simulation 126 to simulation_results/sim_0126_result.json
+[19:12:20] 💾 Saved complete simulation 90 to simulation_results/sim_0090_result.pkl
+[19:12:20] 📄 Saved JSON version for simulation 90 to simulation_results/sim_0090_result.json
+[19:12:20] 💾 Saved complete simulation 141 to simulation_results/sim_0141_result.pkl
+[19:12:20] 📄 Saved JSON version for simulation 141 to simulation_results/sim_0141_result.json
+[19:12:20] 💾 Saved complete simulation 91 to simulation_results/sim_0091_result.pkl
+[19:12:20] 📄 Saved JSON version for simulation 91 to simulation_results/sim_0091_result.json
+[19:12:20] 💾 Saved complete simulation 99 to simulation_results/sim_0099_result.pkl
+[19:12:20] 📄 Saved JSON version for simulation 99 to simulation_results/sim_0099_result.json
+[19:12:20] 💾 Saved complete simulation 139 to simulation_results/sim_0139_result.pkl
+[19:12:20] 📄 Saved JSON version for simulation 139 to simulation_results/sim_0139_result.json
+[19:12:20] 💾 Saved complete simulation 111 to simulation_results/sim_0111_result.pkl
+[19:12:20] 📄 Saved JSON version for simulation 111 to simulation_results/sim_0111_result.json
+[19:12:22] 💾 Saved complete simulation 136 to simulation_results/sim_0136_result.pkl
+[19:12:22] 📄 Saved JSON version for simulation 136 to simulation_results/sim_0136_result.json
+[19:12:24] 💾 Saved complete simulation 140 to simulation_results/sim_0140_result.pkl
+[19:12:24] 📄 Saved JSON version for simulation 140 to simulation_results/sim_0140_result.json
+[19:12:24] 💾 Saved complete simulation 121 to simulation_results/sim_0121_result.pkl
+[19:12:24] 📄 Saved JSON version for simulation 121 to simulation_results/sim_0121_result.json
+[19:12:24] 📂 Loading all completed v3 results...
+[19:12:24] 🎉 v3 EXPERIMENT COMPLETE: 150 simulations in 3212.35 seconds
+[19:12:24] 📊 Analyzing 150 v3 simulation results...
+[19:12:24] 🔍 Analyzing v3 emergent patterns...
+[19:12:24] 📈 Creating v3 visualizations...
+[19:12:24] 📊 Creating v3 visualization analysis...
+[19:12:27] ✅ v3 Visualization saved as v3_streamlined_analysis.png
+[19:12:27] 💾 Saving comprehensive v3 results...
+[19:12:27] 💾 Saving v3 results to: /home/spamtrashheap/society_sim
+[19:12:27] 
+✅ Successfully saved 3 v3 files:
+[19:12:27]    📊 v3_streamlined_simulation_results.csv (0.06 MB)
+[19:12:27]    📈 v3_summary_stats.csv
+[19:12:27]    📋 v3_experiment_summary.txt
+[19:12:27] ✅ v3 Experiment completed: 3 files saved
