@@ -1908,11 +1908,14 @@ def run_tests(test_type: str):
         timestamp_print("✅ v3 Quick tests passed")
     
     elif test_type == 'smoke':
-        # Smoke test (FIXED: use reasonable test duration)
+        # Smoke test (FIXED: create simulation directly to control parameters)
         params = sample_config()
         params.max_rounds = 30  # Short test
         
-        result = run_single_simulation(0)
+        # Create simulation directly instead of using run_single_simulation
+        sim = EnhancedMassSimulation(params, 0)
+        result = sim.run_simulation()
+        
         assert result.rounds_completed > 0
         assert result.final_population >= 0
         assert result.parameters.max_rounds == 30
@@ -1920,7 +1923,7 @@ def run_tests(test_type: str):
         timestamp_print("✅ v3 Smoke test passed")
     
     elif test_type == 'batch':
-        # Batch test (FIXED: reasonable test parameters)
+        # Batch test (FIXED: create simulations directly)
         start_time = time.time()
         
         results = []
@@ -1939,6 +1942,7 @@ def run_tests(test_type: str):
             assert result.rounds_completed > 0
             assert hasattr(result.parameters, 'shock_interval_years')
             assert hasattr(result.parameters, 'resilience_profile')
+            assert result.parameters.max_rounds == 60
             
         timestamp_print("✅ v3 Result structure validation passed")
 
