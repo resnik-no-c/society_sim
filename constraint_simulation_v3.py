@@ -366,7 +366,7 @@ class FastRelationship:
 class SimulationConfig:
     """v3 Streamlined 13-parameter configuration"""
     # Core v3 parameters
-    shock_interval_years: int  # Choice set: [2, 5, 10, 20]
+    shock_interval_years: int  # Choice set: [10, 15, 20, 25]
     homophily_bias: float  # uniform(0.0, 0.8)
     num_groups: int  # choice([1, 2, 3])
     out_group_trust_bias: float  # uniform(0.8, 1.2)
@@ -394,7 +394,7 @@ class SimulationConfig:
     def __post_init__(self):
         """Validate parameters after initialization"""
         # Validate v3 parameters
-        assert self.shock_interval_years in [2, 5, 10, 20], f"Invalid shock_interval_years: {self.shock_interval_years}"
+        assert self.shock_interval_years in [10, 15, 20, 25], f"Invalid shock_interval_years: {self.shock_interval_years}"
         assert 0.0 <= self.homophily_bias <= 0.8, f"Invalid homophily_bias: {self.homophily_bias}"
         assert self.num_groups in [1, 2, 3], f"Invalid num_groups: {self.num_groups}"
         assert 0.8 <= self.out_group_trust_bias <= 1.2, f"Invalid out_group_trust_bias: {self.out_group_trust_bias}"
@@ -798,13 +798,13 @@ def sample_config() -> SimulationConfig:
             intervention_interval=intervention_interval,
             intervention_scale=random.uniform(0.05, 0.30),
             event_bonus=random.uniform(1.5, 2.5),
-            base_trust_delta=random.uniform(0.05, 0.20),
+            base_trust_delta=random.uniform(0.03, 0.08),
             group_trust_bias=random.uniform(1.2, 2.0),
             resilience_profile={
                 'threshold': random.uniform(0.1, 0.4),
                 'noise': random.uniform(0.0, 0.15)
             },
-            turnover_rate=random.uniform(0.02, 0.05),
+            turnover_rate=random.uniform(0.08, 0.05),
             social_diffusion=random.uniform(0.0, 0.10),
             max_rounds=DEFAULT_MAX_ROUNDS
         )

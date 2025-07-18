@@ -44,3 +44,6 @@ nohup python3 -u constraint_simulation_v2.py -n 1000 --multiprocessing > simulat
 
 # Help and options
 python3 constraint_simulation_v2.py --help
+
+# Compressing results from the past 30 minutes
+find . -type f -mmin -30 -print0 | tar --null -czvf recent_files_$(date +%Y%m%d_%H%M).tar.gz --files-from -

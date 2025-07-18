@@ -381,7 +381,7 @@ If you use this simulation in research, please cite:
 
 ```
 Enhanced Constraint Cascade Simulation v3: A Streamlined Agent-Based Model 
-for Cooperation Dynamics Under Social Stress. 2024.
+for Cooperation Dynamics Under Social Stress. 2025.
 ```
 
 ## 📜 License
