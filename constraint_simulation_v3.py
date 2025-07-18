@@ -399,7 +399,14 @@ class SimulationConfig:
         assert self.num_groups in [1, 2, 3], f"Invalid num_groups: {self.num_groups}"
         assert 0.8 <= self.out_group_trust_bias <= 1.2, f"Invalid out_group_trust_bias: {self.out_group_trust_bias}"
         assert 1.1 <= self.out_group_penalty <= 1.5, f"Invalid out_group_penalty: {self.out_group_penalty}"
-        assert self.intervention_interval in [10, 15, 20, 25], f"Invalid intervention_interval: {self.intervention_interval}"
+        
+        # FIXED: Allow intervention_interval = 0 for single-group scenarios
+        if self.num_groups == 1:
+            assert self.intervention_interval == 0, f"Single group must have intervention_interval = 0, got: {self.intervention_interval}"
+            assert self.homophily_bias == 0.0, f"Single group must have homophily_bias = 0.0, got: {self.homophily_bias}"
+        else:
+            assert self.intervention_interval in [10, 15, 20, 25], f"Invalid intervention_interval: {self.intervention_interval}"
+            
         assert 0.05 <= self.intervention_scale <= 0.30, f"Invalid intervention_scale: {self.intervention_scale}"
         assert 1.5 <= self.event_bonus <= 2.5, f"Invalid event_bonus: {self.event_bonus}"
         assert 0.05 <= self.base_trust_delta <= 0.20, f"Invalid base_trust_delta: {self.base_trust_delta}"
@@ -412,11 +419,6 @@ class SimulationConfig:
         assert 'noise' in self.resilience_profile, "Missing noise in resilience_profile"
         assert 0.1 <= self.resilience_profile['threshold'] <= 0.4, f"Invalid resilience threshold: {self.resilience_profile['threshold']}"
         assert 0.0 <= self.resilience_profile['noise'] <= 0.15, f"Invalid resilience noise: {self.resilience_profile['noise']}"
-        
-        # Adjust parameters based on num_groups
-        if self.num_groups == 1:
-            self.homophily_bias = 0.0  # No homophily with single group
-            self.intervention_interval = 0  # No cross-group interventions
 
 @dataclass
 class EnhancedSimulationResults:
@@ -779,7 +781,7 @@ def sample_config() -> SimulationConfig:
         # Sample num_groups first as it affects other parameters
         num_groups = random.choice([1, 2, 3])
         
-        # Sample homophily_bias (0 for single group)
+        # FIXED: Adjust dependent parameters BEFORE creating config object
         if num_groups == 1:
             homophily_bias = 0.0
             intervention_interval = 0  # No interventions for single group
@@ -807,40 +809,38 @@ def sample_config() -> SimulationConfig:
             max_rounds=DEFAULT_MAX_ROUNDS
         )
         
-        # Validate configuration
-        try:
-            config.__post_init__()
-        except AssertionError as e:
-            timestamp_print(f"⚠️ Parameter validation failed: {e}, using defaults")
-            # Return a safe default configuration
-            return SimulationConfig(
-                shock_interval_years=10,
-                homophily_bias=0.5 if num_groups > 1 else 0.0,
-                num_groups=num_groups,
-                out_group_trust_bias=1.0,
-                out_group_penalty=1.3,
-                intervention_interval=15 if num_groups > 1 else 0,
-                intervention_scale=0.15,
-                event_bonus=2.0,
-                base_trust_delta=0.12,
-                group_trust_bias=1.6,
-                resilience_profile={'threshold': 0.25, 'noise': 0.075},
-                turnover_rate=0.035,
-                social_diffusion=0.05,
-                max_rounds=DEFAULT_MAX_ROUNDS
-            )
-        
         return config
+        
+    except AssertionError as e:
+        timestamp_print(f"⚠️ Parameter validation failed: {e}, using defaults")
+        # FIXED: Create safe defaults with proper single-group handling
+        safe_num_groups = random.choice([1, 2, 3])
+        return SimulationConfig(
+            shock_interval_years=10,
+            homophily_bias=0.0 if safe_num_groups == 1 else 0.5,
+            num_groups=safe_num_groups,
+            out_group_trust_bias=1.0,
+            out_group_penalty=1.2,  # Valid minimum
+            intervention_interval=0 if safe_num_groups == 1 else 15,
+            intervention_scale=0.15,
+            event_bonus=2.0,
+            base_trust_delta=0.12,
+            group_trust_bias=1.6,
+            resilience_profile={'threshold': 0.25, 'noise': 0.075},
+            turnover_rate=0.035,
+            social_diffusion=0.05,
+            max_rounds=DEFAULT_MAX_ROUNDS
+        )
         
     except Exception as e:
         timestamp_print(f"❌ Error in parameter sampling: {e}, using safe defaults")
-        # Return ultra-safe defaults
+        # Return ultra-safe single-group defaults
         return SimulationConfig(
             shock_interval_years=10,
             homophily_bias=0.0,
             num_groups=1,
             out_group_trust_bias=1.0,
-            out_group_penalty=1.0,
+            out_group_penalty=1.2,  # Valid minimum
             intervention_interval=0,
             intervention_scale=0.1,
             event_bonus=2.0,
