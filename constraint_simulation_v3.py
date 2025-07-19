@@ -338,13 +338,14 @@ class MaslowNeeds:
 @dataclass
 class FastRelationship:
     """Enhanced relationship tracking"""
-    trust: float = 0.5
+    trust: Optional[float] = None
     interaction_count: int = 0
     cooperation_history: deque = field(default_factory=lambda: deque(maxlen=40))
     last_interaction_round: int = 0
     is_same_group: bool = True
     betrayal_count: int = 0
     cooperation_count: int = 0
+    is_developed: bool = False  # NEW: Track relationship development
     
     def update_trust(self, cooperated: bool, round_num: int, base_delta: float,
                     group_bias: float = 1.0, out_group_bias: float = 1.0):
@@ -352,6 +353,11 @@ class FastRelationship:
         self.interaction_count += 1
         self.last_interaction_round = round_num
         self.cooperation_history.append(cooperated)
+
+        if self.trust is None:
+            self.trust = 0.7 if cooperated else 0.3  # Start based on experience
+            self.is_developed = True
+            return
         
         if cooperated:
             self.cooperation_count += 1
@@ -512,11 +518,14 @@ class OptimizedPerson:
         self.is_dead = False
         self.is_born = (parent_a is not None and parent_b is not None)
         
-        # v3 resilience profile with per-agent variation (FIXED: proper bounds checking)
+        # FIXED: Separate cooperation from resilience
+        self.cooperation_threshold = random.uniform(0.3, 0.7)  # For decisions
+
+        # FIXED: Resilience now controls stress recovery, not cooperation
         base_threshold = params.resilience_profile['threshold']
         noise_range = params.resilience_profile['noise']
-        self.resilience_threshold = base_threshold + random.uniform(-noise_range, noise_range)
-        self.resilience_threshold = max(0.01, min(0.99, self.resilience_threshold))
+        self.stress_recovery_rate = base_threshold + random.uniform(-noise_range, noise_range)
+        self.stress_recovery_rate = max(0.01, min(0.99, self.stress_recovery_rate))
         self.resilience_noise = noise_range
         
         self.acute_stress = 0.0
@@ -616,7 +625,7 @@ class OptimizedPerson:
         self.maslow_pressure = max(0, total_pressure - total_relief)
     
     def calculate_cooperation_decision(self, other: 'OptimizedPerson', round_num: int, params: SimulationConfig) -> bool:
-        """v3 cooperation decision using resilience profile (FIXED: more robust logic)"""
++        """FIXED: Use cooperation threshold, not resilience threshold"""
         if self.strategy == 'selfish':
             return False
         
@@ -624,9 +633,8 @@ class OptimizedPerson:
         if random.random() < 0.02:
             return False
         
-        # Use resilience threshold with noise (FIXED: safer bounds)
-        noise_adjustment = random.uniform(-self.resilience_noise, self.resilience_noise)
-        effective_threshold = self.resilience_threshold + noise_adjustment
+        # FIXED: Use cooperation threshold instead
+        effective_threshold = self.cooperation_threshold
         effective_threshold = max(0.01, min(0.99, effective_threshold))
         
         relationship = self.get_relationship(other.id, round_num, getattr(other, 'group_id', None))
@@ -695,13 +703,18 @@ class OptimizedPerson:
             needs.esteem = max(0, needs.esteem - 0.01)
         
         self._calculate_maslow_pressure_fast()
+
+        # FIXED: Use stress_recovery_rate for constraint decay
         
         chronic_stress = np.mean(self.chronic_queue) if self.chronic_queue else 0
         self.constraint_level = chronic_stress * 1.6
         
         need_satisfaction = (needs.physiological + needs.safety + needs.love + 
                            needs.esteem + needs.self_actualization) / 50
-        pressure_decay = 0.01 * need_satisfaction
+        
+        # FIXED: Use individual recovery rate
+        pressure_decay = self.stress_recovery_rate * need_satisfaction
+
         self.constraint_level = max(0, self.constraint_level - pressure_decay)
     
     def add_constraint_pressure(self, amount: float, is_from_out_group: bool = False, 
@@ -991,6 +1004,16 @@ class EnhancedMassSimulation:
         self.maslow_log_counter = 0
         self.social_diffusion_log_counter = 0
         self.network_topology_log_counter = 0
+
+        # NEW: Institutional memory system
+        self.institutional_memory = {
+            'total_shocks_experienced': 0,
+            'average_shock_severity': 0.0,
+            'learned_resilience_bonus': 0.0,
+            'crisis_response_knowledge': 0.0,
+        }
+        self.recovery_phase_rounds = 0
+        self.in_recovery_phase = False        
         
         self._initialize_population()
     
@@ -1012,8 +1035,20 @@ class EnhancedMassSimulation:
         """Apply shock with proper magnitude (FIXED: safer shock application)"""
         shock_severity = self._draw_shock_magnitude()
         shock_severity = min(2.0, max(0.1, shock_severity))  # Bound shock magnitude
-        self.system_stress += shock_severity
+        
+        # NEW: Institutional memory reduces shock impact
+        memory_reduction = min(0.3, self.institutional_memory['learned_resilience_bonus'])
+        effective_severity = shock_severity * (1 - memory_reduction)
+        self.system_stress += effective_severity
+
         self.shock_events += 1
+
+        # NEW: Update institutional memory
+        self.institutional_memory['total_shocks_experienced'] += 1
+        old_avg = self.institutional_memory['average_shock_severity']
+        n = self.institutional_memory['total_shocks_experienced']
+        self.institutional_memory['average_shock_severity'] = (old_avg * (n-1) + shock_severity) / n
+        self.institutional_memory['learned_resilience_bonus'] += 0.01
         
         # Apply shock to all people
         alive_people = [p for p in self.people if not p.is_dead]
@@ -1059,13 +1094,20 @@ class EnhancedMassSimulation:
             num_selected = min(num_selected, len(alive_people))
             selected_agents = random.sample(alive_people, num_selected)
             
-            # Apply event bonus to their interactions
+            # FIXED: Additive trust boost instead of multiplicative
+            trust_boost = 0.1 * self.params.event_bonus
             for agent in selected_agents:
                 agent.mixing_event_participations += 1
-                # Boost trust temporarily (but safely)
+                # FIXED: Additive trust improvement 
                 for rel in agent.relationships.values():
-                    boost_factor = min(1.5, self.params.event_bonus)  # Cap boost
-                    rel.trust = min(1.0, rel.trust * boost_factor)
+                    if rel.trust is not None:  # Only boost developed relationships
+                        rel.trust = min(1.0, rel.trust + trust_boost)
+
+                # NEW: Reduce stress and boost social needs
+                stress_reduction = 0.05 * self.params.event_bonus
+                agent.constraint_level = max(0, agent.constraint_level - stress_reduction)
+                agent.maslow_needs.love = min(10, agent.maslow_needs.love + 0.5)
+                agent.maslow_needs.esteem = min(10, agent.maslow_needs.esteem + 0.3)
             
             if len(selected_agents) > 1:
                 self.successful_mixing_events += 1
@@ -1185,20 +1227,22 @@ class EnhancedMassSimulation:
                 for group, strategies in group_cooperation.items()}
     
     def _calculate_trust_levels(self) -> Tuple[float, float]:
-        """Calculate average in-group and out-group trust levels"""
+      """FIXED: Calculate trust levels excluding undeveloped relationships"""
         alive_people = [p for p in self.people if not p.is_dead]
         in_group_trusts = []
         out_group_trusts = []
         
         for person in alive_people:
             for rel in person.relationships.values():
-                if hasattr(rel, 'is_same_group'):
-                    if rel.is_same_group:
-                        in_group_trusts.append(rel.trust)
+                # CRITICAL: Only include developed relationships
+                if rel.trust is not None and rel.is_developed:
+                    if hasattr(rel, 'is_same_group'):
+                        if rel.is_same_group:
+                            in_group_trusts.append(rel.trust)
+                        else:
+                            out_group_trusts.append(rel.trust)
                     else:
-                        out_group_trusts.append(rel.trust)
-                else:
-                    in_group_trusts.append(rel.trust)
+                        in_group_trusts.append(rel.trust)
         
         avg_in_group = sum(in_group_trusts) / len(in_group_trusts) if in_group_trusts else 0.5
         avg_out_group = sum(out_group_trusts) / len(out_group_trusts) if out_group_trusts else 0.5
@@ -1255,11 +1299,27 @@ class EnhancedMassSimulation:
                         self._check_recoveries()
                         self._update_population()
                         self._collect_round_data()
+
+                        # NEW: Update recovery dynamics
+                        self._update_recovery_dynamics()
+
                     except Exception as e:
                         timestamp_print(f"⚠️ Error in population updates round {self.round}: {e}")
                     
                     # Decay system stress (FIXED: safe bounds)
                     self.system_stress = max(0, self.system_stress - 0.01)
+
+    def _update_recovery_dynamics(self):
+        """NEW: Implement proper recovery time-scales"""
+        if self.in_recovery_phase:
+            self.recovery_phase_rounds += 1
+            if self.recovery_phase_rounds >= 10:  # 2-3 years recovery
+                self.in_recovery_phase = False
+                # Apply institutional learning boost
+                knowledge_bonus = self.institutional_memory['crisis_response_knowledge']
+                # ... boost cooperative agents' social needs ...
+                self.institutional_memory['crisis_response_knowledge'] = min(1.0, 
+                    self.institutional_memory['crisis_response_knowledge'] + 0.05)
                     
                     # Progress reporting (less frequent to reduce noise)
                     if self.round == 1 or self.round % 30 == 0:
