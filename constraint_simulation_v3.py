@@ -441,58 +441,57 @@ class EnhancedSimulationResults:
     parameters: SimulationConfig
     run_id: int
     
-    # Final outcomes
+    # Final outcomes (required fields first)
     final_population: int
     final_cooperation_rate: float
-    behavioral_cooperation_rate: float = 0.0  # NEW: Actual behavioral cooperation
     final_constrained_rate: float
     
-    # System dynamics
+    # System dynamics (required fields)
     rounds_completed: int
     extinction_occurred: bool
     first_cascade_round: Optional[int]
     total_cascade_events: int
     total_shock_events: int
     
-    # Strategy changes
+    # Strategy changes (required fields)
     total_defections: int
     total_redemptions: int
     net_strategy_change: int
-
-    redemption_rate: float = 0.0  # NEW: Corrected redemption rate
-     
-    # NEW: Detailed interaction outcomes
-    total_encounters: int = 0
-    total_mutual_cooperation: int = 0
-    total_mutual_defection: int = 0
-    total_mixed_outcomes: int = 0
     
-    # Population metrics
+    # Population metrics (required fields)
     total_births: int
     total_deaths: int
     max_population_reached: int
     population_stability: float
     
-    # Pressure metrics
+    # Pressure metrics (required fields)
     avg_system_stress: float
     max_system_stress: float
     avg_maslow_pressure: float
     avg_basic_needs_crisis_rate: float
     
-    # Maslow evolution
+    # Maslow evolution (required fields)
     initial_needs_avg: Dict[str, float]
     final_needs_avg: Dict[str, float]
     needs_improvement: Dict[str, float]
     
-    # Cooperation benefits
+    # Cooperation benefits (required fields)
     avg_trust_level: float
     cooperation_benefit_total: float
     
-    # Additional metrics
+    # Additional metrics (required fields)
     population_growth: float
     cooperation_resilience: float
     
-    # Inter-Group Metrics - all preserved
+    # NEW/Optional fields (all with defaults)
+    behavioral_cooperation_rate: float = 0.0
+    redemption_rate: float = 0.0
+    total_encounters: int = 0
+    total_mutual_cooperation: int = 0
+    total_mutual_defection: int = 0
+    total_mixed_outcomes: int = 0
+    
+    # Inter-Group Metrics (with defaults)
     final_group_populations: Dict[str, int] = field(default_factory=dict)
     final_group_cooperation_rates: Dict[str, float] = field(default_factory=dict)
     in_group_interaction_rate: float = 0.0
@@ -507,7 +506,7 @@ class EnhancedSimulationResults:
     group_extinction_events: int = 0
     trust_asymmetry: float = 0.0
     
-    # Interaction metrics
+    # Interaction metrics (with defaults)
     total_interactions: int = 0
     total_mutual_coop: int = 0
     avg_interaction_processing_time: float = 0.0
