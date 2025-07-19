@@ -367,6 +367,10 @@ class FastRelationship:
             self.trust = 0.7 if cooperated else 0.3  # Start based on experience
             self.is_developed = True
             return
+
+        self.interaction_count += 1
+        self.last_interaction_round = round_num
+        self.cooperation_history.append(cooperated)
         
         if cooperated:
             self.cooperation_count += 1
@@ -409,7 +413,7 @@ class SimulationConfig:
     def __post_init__(self):
         """Validate parameters after initialization"""
         # Validate v3 parameters
-        assert self.shock_interval_years in [10, 15, 20, 25], f"Invalid shock_interval_years: {self.shock_interval_years}"
+        assert self.shock_interval_years in [2, 5, 10, 20], f"Invalid shock_interval_years: {self.shock_interval_years}"
         assert 0.0 <= self.homophily_bias <= 0.8, f"Invalid homophily_bias: {self.homophily_bias}"
         assert self.num_groups in [1, 2, 3], f"Invalid num_groups: {self.num_groups}"
         assert 0.8 <= self.out_group_trust_bias <= 1.2, f"Invalid out_group_trust_bias: {self.out_group_trust_bias}"
@@ -544,6 +548,7 @@ class OptimizedPerson:
         self.stress_recovery_rate = base_threshold + random.uniform(-noise_range, noise_range)
         self.stress_recovery_rate = max(0.01, min(0.99, self.stress_recovery_rate))
         self.resilience_noise = noise_range
+        self.resilience_threshold = self.stress_recovery_rate
         
         self.acute_stress = 0.0
         self.chronic_queue = deque(maxlen=16)  # 4-year window
@@ -682,7 +687,7 @@ class OptimizedPerson:
                 del self.relationships[oldest_id]
             
             is_same_group = (other_group_id is None or self.group_id == other_group_id)
-            relationship = FastRelationship(is_same_group=is_same_group)
+            relationship = FastRelationship(is_same_group=is_same_group, trust=0)
             self.relationships[other_id] = relationship
         return self.relationships[other_id]
     
@@ -799,7 +804,7 @@ class OptimizedPerson:
         if not self.relationships:
             return 0.0
         
-        trust_values = [rel.trust for rel in self.relationships.values()]
+        trust_values = [rel.trust for rel in self.relationships.values() if rel.trust is not None]
         trust_values.sort(reverse=True)
         return np.mean(trust_values[:5])
 
@@ -834,7 +839,7 @@ def sample_config() -> SimulationConfig:
                 'threshold': random.uniform(0.1, 0.4),
                 'noise': random.uniform(0.0, 0.15)
             },
-            turnover_rate=random.uniform(0.08, 0.05),
+            turnover_rate=random.uniform(0.05, 0.08),
             social_diffusion=random.uniform(0.0, 0.10),
             max_rounds=DEFAULT_MAX_ROUNDS
         )
@@ -1161,7 +1166,7 @@ class EnhancedMassSimulation:
                 if not person.relationships:
                     continue  # Skip people with no relationships
                     
-                trust_values = [rel.trust for rel in person.relationships.values()]
+                trust_values = [rel.trust for rel in person.relationships.values() if rel.trust is not None]
                 if not trust_values:
                     continue
                     
@@ -1262,26 +1267,30 @@ class EnhancedMassSimulation:
                 for group, strategies in group_cooperation.items()}
     
     def _calculate_trust_levels(self) -> Tuple[float, float]:
-      """FIXED: Calculate trust levels excluding undeveloped relationships"""
-      alive_people = [p for p in self.people if not p.is_dead]
-      in_group_trusts = []
-      out_group_trusts = []
-      for person in alive_people:
-        for rel in person.relationships.values():
-        # CRITICAL: Only include developed relationships
-            if rel.trust is not None and rel.is_developed:
-                if hasattr(rel, 'is_same_group'):
-                    if rel.is_same_group:
+    """FIXED: Calculate trust levels properly"""
+    try:
+        alive_people = [p for p in self.people if not p.is_dead]
+        in_group_trusts = []
+        out_group_trusts = []
+        
+        for person in alive_people:
+            for rel in person.relationships.values():
+                # Only include relationships with actual trust values
+                if rel.trust is not None and getattr(rel, 'is_developed', True):
+                    if getattr(rel, 'is_same_group', True):
                         in_group_trusts.append(rel.trust)
                     else:
                         out_group_trusts.append(rel.trust)
-            else:
-                in_group_trusts.append(rel.trust)
         
+        # FIXED: Calculate averages AFTER processing all people
         avg_in_group = sum(in_group_trusts) / len(in_group_trusts) if in_group_trusts else 0.5
         avg_out_group = sum(out_group_trusts) / len(out_group_trusts) if out_group_trusts else 0.5
         
         return avg_in_group, avg_out_group
+        
+    except Exception as e:
+        timestamp_print(f"⚠️ Error in trust calculation: {e}")
+        return 0.5, 0.5
     
     def run_simulation(self) -> EnhancedSimulationResults:
         """Run v3 enhanced simulation (FIXED: more robust error handling)"""
@@ -2022,7 +2031,7 @@ def run_tests(test_type: str):
         # Test relationship
         other = OptimizedPerson(2, params, group_id="B")
         rel = person.get_relationship(other.id, 1, other.group_id)
-        assert rel.trust == 0.5
+        assert rel.trust == 0
         
         rel.update_trust(True, 1, params.base_trust_delta, params.group_trust_bias, params.out_group_trust_bias)
         assert rel.trust > 0.5
