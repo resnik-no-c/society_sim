@@ -687,7 +687,7 @@ class OptimizedPerson:
                 del self.relationships[oldest_id]
             
             is_same_group = (other_group_id is None or self.group_id == other_group_id)
-            relationship = FastRelationship(is_same_group=is_same_group)
+            relationship = FastRelationship(is_same_group=is_same_group, trust=0)
             self.relationships[other_id] = relationship
         return self.relationships[other_id]
     
