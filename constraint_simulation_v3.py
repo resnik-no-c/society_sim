@@ -520,7 +520,7 @@ class OptimizedPerson:
                  'rounds_as_cooperative', 'maslow_needs', 'maslow_pressure', 'is_born',
                  'group_id', 'in_group_interactions', 'out_group_interactions', 
                  'mixing_event_participations', 'acute_stress', 'chronic_queue', 
-                 'base_coop', 'society_trust', 'resilience_threshold', 'resilience_noise']
+                 'base_coop', 'society_trust', 'resilience_threshold', 'resilience_noise', 'cooperation_threshold', 'stress_recovery_rate']
     
     def __init__(self, person_id: int, params: SimulationConfig, 
                  parent_a: Optional['OptimizedPerson'] = None, 
