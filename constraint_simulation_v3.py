@@ -833,13 +833,13 @@ def sample_config() -> SimulationConfig:
             intervention_interval=intervention_interval,
             intervention_scale=random.uniform(0.05, 0.30),
             event_bonus=random.uniform(1.5, 2.5),
-            base_trust_delta=random.uniform(0.03, 0.08),
+            base_trust_delta=random.uniform(0.05, 0.2),
             group_trust_bias=random.uniform(1.2, 2.0),
             resilience_profile={
                 'threshold': random.uniform(0.1, 0.4),
                 'noise': random.uniform(0.0, 0.15)
             },
-            turnover_rate=random.uniform(0.05, 0.08),
+            turnover_rate=random.uniform(0.02, 0.05),
             social_diffusion=random.uniform(0.0, 0.10),
             max_rounds=DEFAULT_MAX_ROUNDS
         )
