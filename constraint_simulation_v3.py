@@ -1264,21 +1264,20 @@ class EnhancedMassSimulation:
     
     def _calculate_trust_levels(self) -> Tuple[float, float]:
       """FIXED: Calculate trust levels excluding undeveloped relationships"""
-        alive_people = [p for p in self.people if not p.is_dead]
-        in_group_trusts = []
-        out_group_trusts = []
-        
-        for person in alive_people:
-            for rel in person.relationships.values():
-                # CRITICAL: Only include developed relationships
-                if rel.trust is not None and rel.is_developed:
-                    if hasattr(rel, 'is_same_group'):
-                        if rel.is_same_group:
-                            in_group_trusts.append(rel.trust)
-                        else:
-                            out_group_trusts.append(rel.trust)
-                    else:
+      alive_people = [p for p in self.people if not p.is_dead]
+      in_group_trusts = []
+      out_group_trusts = []
+      for person in alive_people:
+        for rel in person.relationships.values():
+        # CRITICAL: Only include developed relationships
+            if rel.trust is not None and rel.is_developed:
+                if hasattr(rel, 'is_same_group'):
+                    if rel.is_same_group:
                         in_group_trusts.append(rel.trust)
+                    else:
+                        out_group_trusts.append(rel.trust)
+            else:
+                in_group_trusts.append(rel.trust)
         
         avg_in_group = sum(in_group_trusts) / len(in_group_trusts) if in_group_trusts else 0.5
         avg_out_group = sum(out_group_trusts) / len(out_group_trusts) if out_group_trusts else 0.5
