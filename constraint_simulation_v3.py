@@ -1267,30 +1267,30 @@ class EnhancedMassSimulation:
                 for group, strategies in group_cooperation.items()}
     
     def _calculate_trust_levels(self) -> Tuple[float, float]:
-    """FIXED: Calculate trust levels properly"""
-    try:
-        alive_people = [p for p in self.people if not p.is_dead]
-        in_group_trusts = []
-        out_group_trusts = []
-        
-        for person in alive_people:
-            for rel in person.relationships.values():
-                # Only include relationships with actual trust values
-                if rel.trust is not None and getattr(rel, 'is_developed', True):
-                    if getattr(rel, 'is_same_group', True):
-                        in_group_trusts.append(rel.trust)
-                    else:
-                        out_group_trusts.append(rel.trust)
-        
-        # FIXED: Calculate averages AFTER processing all people
-        avg_in_group = sum(in_group_trusts) / len(in_group_trusts) if in_group_trusts else 0.5
-        avg_out_group = sum(out_group_trusts) / len(out_group_trusts) if out_group_trusts else 0.5
-        
-        return avg_in_group, avg_out_group
-        
-    except Exception as e:
-        timestamp_print(f"⚠️ Error in trust calculation: {e}")
-        return 0.5, 0.5
+        """FIXED: Calculate trust levels properly"""
+        try:
+            alive_people = [p for p in self.people if not p.is_dead]
+            in_group_trusts = []
+            out_group_trusts = []
+            
+            for person in alive_people:
+                for rel in person.relationships.values():
+                    # Only include relationships with actual trust values
+                    if rel.trust is not None and getattr(rel, 'is_developed', True):
+                        if getattr(rel, 'is_same_group', True):
+                            in_group_trusts.append(rel.trust)
+                        else:
+                            out_group_trusts.append(rel.trust)
+            
+            # FIXED: Calculate averages AFTER processing all people
+            avg_in_group = sum(in_group_trusts) / len(in_group_trusts) if in_group_trusts else 0.5
+            avg_out_group = sum(out_group_trusts) / len(out_group_trusts) if out_group_trusts else 0.5
+            
+            return avg_in_group, avg_out_group
+            
+        except Exception as e:
+            timestamp_print(f"⚠️ Error in trust calculation: {e}")
+            return 0.5, 0.5
     
     def run_simulation(self) -> EnhancedSimulationResults:
         """Run v3 enhanced simulation (FIXED: more robust error handling)"""
