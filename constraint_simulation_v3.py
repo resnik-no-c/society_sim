@@ -1343,13 +1343,6 @@ class EnhancedMassSimulation:
                     
                     # Decay system stress (FIXED: safe bounds)
                     self.system_stress = max(0, self.system_stress - 0.01)
-
-    def _update_recovery_dynamics(self):
-        """NEW: Implement proper recovery time-scales"""
-
-# REPLACE WITH THIS CORRECTED VERSION:
-                    # Decay system stress (FIXED: safe bounds)
-                    self.system_stress = max(0, self.system_stress - 0.01)
                     
                     # Progress reporting (less frequent to reduce noise)
                     if self.round == 1 or self.round % 30 == 0:
@@ -1366,6 +1359,30 @@ class EnhancedMassSimulation:
         except Exception as sim_error:
             timestamp_print(f"❌ Critical error in simulation {self.run_id}: {sim_error}")
             return self._generate_emergency_result()
+
+    def _update_recovery_dynamics(self):
+        """NEW: Implement proper recovery time-scales"""
+        if self.in_recovery_phase:
+            self.recovery_phase_rounds += 1
+            
+            # Recovery takes 8-12 rounds (2-3 years) after shocks
+            if self.recovery_phase_rounds >= 10:
+                self.in_recovery_phase = False
+                self.recovery_phase_rounds = 0
+                
+                # Apply institutional learning boost
+                alive_people = [p for p in self.people if not p.is_dead]
+                knowledge_bonus = self.institutional_memory['crisis_response_knowledge']
+                
+                for person in alive_people:
+                    if person.strategy == 'cooperative':
+                        # Boost cooperation-related needs during recovery
+                        person.maslow_needs.love = min(10, person.maslow_needs.love + knowledge_bonus)
+                        person.maslow_needs.esteem = min(10, person.maslow_needs.esteem + knowledge_bonus * 0.7)
+                
+                # Institutional knowledge grows
+                self.institutional_memory['crisis_response_knowledge'] = min(1.0, 
+                    self.institutional_memory['crisis_response_knowledge'] + 0.05)
    
     
     def _generate_results(self, initial_traits: Dict[str, float], 
