@@ -643,7 +643,7 @@ class OptimizedPerson:
         self.maslow_pressure = max(0, total_pressure - total_relief)
     
     def calculate_cooperation_decision(self, other: 'OptimizedPerson', round_num: int, params: SimulationConfig) -> bool:
-+        """FIXED: Use cooperation threshold, not resilience threshold"""
+        """FIXED: Use cooperation threshold, not resilience threshold"""
         if self.strategy == 'selfish':
             return False
         
