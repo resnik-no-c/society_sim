@@ -212,6 +212,7 @@ def save_incremental_csv(result, csv_file: str = "simulation_results_incremental
         
         # === FINAL OUTCOMES ===
         'final_cooperation_rate': result.final_cooperation_rate,
+        'behavioral_cooperation_rate': getattr(result, 'behavioral_cooperation_rate', 0.0),
         'final_constrained_rate': result.final_constrained_rate,
         'final_population': result.final_population,
         'extinction_occurred': result.extinction_occurred,
@@ -226,7 +227,15 @@ def save_incremental_csv(result, csv_file: str = "simulation_results_incremental
         'total_defections': result.total_defections,
         'total_redemptions': result.total_redemptions,
         'net_strategy_change': result.net_strategy_change,
-        'redemption_rate': result.total_redemptions / max(1, result.total_defections),
+        'redemption_rate': getattr(result, 'redemption_rate', 0.0),  # Use corrected calculation
+
+        # === NEW: DETAILED INTERACTION METRICS ===
+        'total_encounters': getattr(result, 'total_encounters', 0),
+        'total_mutual_cooperation': getattr(result, 'total_mutual_cooperation', 0),
+        'total_mutual_defection': getattr(result, 'total_mutual_defection', 0),
+        'total_mixed_outcomes': getattr(result, 'total_mixed_outcomes', 0),
+        'cooperation_consistency': (getattr(result, 'behavioral_cooperation_rate', 0.0) / 
+                                   max(0.001, result.final_cooperation_rate)),
         
         # === POPULATION METRICS ===
         'total_births': result.total_births,
@@ -435,6 +444,7 @@ class EnhancedSimulationResults:
     # Final outcomes
     final_population: int
     final_cooperation_rate: float
+    behavioral_cooperation_rate: float = 0.0  # NEW: Actual behavioral cooperation
     final_constrained_rate: float
     
     # System dynamics
@@ -448,6 +458,14 @@ class EnhancedSimulationResults:
     total_defections: int
     total_redemptions: int
     net_strategy_change: int
+
+    redemption_rate: float = 0.0  # NEW: Corrected redemption rate
+     
+    # NEW: Detailed interaction outcomes
+    total_encounters: int = 0
+    total_mutual_cooperation: int = 0
+    total_mutual_defection: int = 0
+    total_mixed_outcomes: int = 0
     
     # Population metrics
     total_births: int
@@ -905,6 +923,17 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
                 # Cooperation decisions
                 person_coop = person.calculate_cooperation_decision(partner, round_num, params)
                 partner_coop = partner.calculate_cooperation_decision(person, round_num, params)
+
+                # NEW: Proper encounter tracking (count each interaction once)
+                sim_ref.total_encounters += 1
+                
+                # NEW: Track outcome types
+                if person_coop and partner_coop:
+                    sim_ref.total_mutual_cooperation += 1
+                elif not person_coop and not partner_coop:
+                    sim_ref.total_mutual_defection += 1
+                else:
+                    sim_ref.total_mixed_outcomes += 1
                 
                 # Update relationships with v3 trust mechanics (FIXED: safer trust updates)
                 person_rel = person.get_relationship(partner.id, round_num, 
@@ -919,7 +948,7 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
                                        params.group_trust_bias, params.out_group_trust_bias)
                 
                 # Track interactions (FIXED: safer group comparison)
-                sim_ref.total_interactions += 1
+                sim_ref.total_interactions += 1 #deprecated, keeping for legacy compatibility
                 person_group = getattr(person, 'group_id', 'A')
                 partner_group = getattr(partner, 'group_id', 'A')
                 
@@ -934,7 +963,7 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
                 
                 # Handle cooperation outcomes
                 if person_coop and partner_coop:
-                    sim_ref.total_mutual_coop += 1
+                    sim_ref.total_mutual_coop += 1 #deprecated, keeping for legacy compatibility
                     # Boost love needs safely
                     person.maslow_needs.love = min(10, person.maslow_needs.love + 0.1)
                     partner.maslow_needs.love = min(10, partner.maslow_needs.love + 0.1)
@@ -997,7 +1026,14 @@ class EnhancedMassSimulation:
         self.out_group_constraint_amplifications = 0
         
         # Interaction tracking
-        self.total_interactions = 0
+        self.total_interactions = 0 #Deprecated, kept for reverse compatibility
+
+        # NEW: Proper encounter tracking
+        self.total_encounters = 0  # Count each pairwise interaction once
+        self.total_mutual_cooperation = 0  # Both agents cooperate
+        self.total_mutual_defection = 0   # Both agents defect
+        self.total_mixed_outcomes = 0     # One cooperates, one defects
+
         self.total_mutual_coop = 0
         
         # v3 logging counters
@@ -1343,6 +1379,13 @@ class EnhancedMassSimulation:
         alive_people = [p for p in self.people if not p.is_dead]
         cooperative = [p for p in alive_people if p.strategy == 'cooperative']
         constrained = [p for p in alive_people if p.is_constrained]
+
+        # CRITICAL FIX: Calculate both identity-based and behavioral cooperation
+        identity_cooperation_rate = len(cooperative) / max(1, len(alive_people))
+        
+        # NEW: Behavioral cooperation rate (what we actually want)
+        behavioral_cooperation_rate = (self.total_mutual_cooperation / max(1, self.total_encounters) 
+                                     if self.total_encounters > 0 else 0.0)
         
         final_traits = self._get_average_traits()
         trait_evolution = {k: final_traits[k] - initial_traits[k] for k in initial_traits.keys()}
@@ -1379,6 +1422,10 @@ class EnhancedMassSimulation:
         # Growth rate
         max_pop_reached = max(self.population_history) if self.population_history else self.params.initial_population
         population_growth = max_pop_reached / self.params.initial_population
+
+        # FIXED: Correct redemption rate calculation
+        total_strategy_switches = self.total_defections + self.total_redemptions
+        redemption_rate = self.total_redemptions / max(1, total_strategy_switches)       
         
         # Inter-group specific calculations
         final_group_populations = self._get_group_populations()
@@ -1404,7 +1451,8 @@ class EnhancedMassSimulation:
             
             # All original metrics preserved
             final_population=len(alive_people),
-            final_cooperation_rate=len(cooperative) / max(1, len(alive_people)),
+            final_cooperation_rate=identity_cooperation_rate,  # Keep for compatibility
+            behavioral_cooperation_rate=behavioral_cooperation_rate,  # NEW: Actual cooperation
             final_constrained_rate=len(constrained) / max(1, len(alive_people)),
             rounds_completed=self.round,
             extinction_occurred=len(alive_people) == 0,
@@ -1414,6 +1462,7 @@ class EnhancedMassSimulation:
             total_defections=self.total_defections,
             total_redemptions=self.total_redemptions,
             net_strategy_change=self.total_defections - self.total_redemptions,
+            redemption_rate=redemption_rate,  # NEW: Corrected calculatio
             total_births=self.total_births,
             total_deaths=self.total_deaths,
             max_population_reached=max_pop_reached,
@@ -1429,6 +1478,12 @@ class EnhancedMassSimulation:
             cooperation_benefit_total=self.cooperation_benefit_total,
             population_growth=population_growth,
             cooperation_resilience=len(cooperative) / max(1, len(alive_people)),
+
+            # NEW: Detailed interaction outcomes
+            total_encounters=self.total_encounters,
+            total_mutual_cooperation=self.total_mutual_cooperation,
+            total_mutual_defection=self.total_mutual_defection,
+            total_mixed_outcomes=self.total_mixed_outcomes,
             
             # Inter-Group Metrics - all preserved
             final_group_populations=final_group_populations,
