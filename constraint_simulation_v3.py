@@ -1346,15 +1346,10 @@ class EnhancedMassSimulation:
 
     def _update_recovery_dynamics(self):
         """NEW: Implement proper recovery time-scales"""
-        if self.in_recovery_phase:
-            self.recovery_phase_rounds += 1
-            if self.recovery_phase_rounds >= 10:  # 2-3 years recovery
-                self.in_recovery_phase = False
-                # Apply institutional learning boost
-                knowledge_bonus = self.institutional_memory['crisis_response_knowledge']
-                # ... boost cooperative agents' social needs ...
-                self.institutional_memory['crisis_response_knowledge'] = min(1.0, 
-                    self.institutional_memory['crisis_response_knowledge'] + 0.05)
+
+# REPLACE WITH THIS CORRECTED VERSION:
+                    # Decay system stress (FIXED: safe bounds)
+                    self.system_stress = max(0, self.system_stress - 0.01)
                     
                     # Progress reporting (less frequent to reduce noise)
                     if self.round == 1 or self.round % 30 == 0:
@@ -1371,6 +1366,7 @@ class EnhancedMassSimulation:
         except Exception as sim_error:
             timestamp_print(f"❌ Critical error in simulation {self.run_id}: {sim_error}")
             return self._generate_emergency_result()
+   
     
     def _generate_results(self, initial_traits: Dict[str, float], 
                          initial_group_populations: Dict[str, int]) -> EnhancedSimulationResults:
