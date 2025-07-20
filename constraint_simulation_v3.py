@@ -758,7 +758,7 @@ class OptimizedPerson:
                     return trust_score + interaction_score + recency_bonus
                 
                 weakest_id = min(self.relationships.keys(), key=relationship_strength)
-                del self.relationships[oldest_id]
+                del self.relationships[weakest_id]
             
             is_same_group = (other_group_id is None or self.group_id == other_group_id)
             relationship = FastRelationship(is_same_group=is_same_group)
