@@ -430,8 +430,8 @@ class FastRelationship:
             self.trust = min(1.0, self.trust + delta)
         else:
             self.betrayal_count += 1
-            # Asymmetric trust loss - trust falls faster than it rises
-            delta = -1.5 * base_delta * (group_bias if self.is_same_group else out_group_bias)
+            # EMPIRICAL FIX: Mild asymmetric trust loss (1.1x vs 1.5x)
+            delta = -1.1 * base_delta * (group_bias if self.is_same_group else out_group_bias)
             self.trust = max(0.0, self.trust + delta)
 
 @dataclass
@@ -596,7 +596,7 @@ class OptimizedPerson:
         self.is_born = (parent_a is not None and parent_b is not None)
         
         # MAJOR FIX #5: Separate cooperation decisions from stress recovery
-        self.cooperation_threshold = random.uniform(0.3, 0.7)  # For cooperation decisions only
+        self.cooperation_threshold = random.uniform(0.15, 0.4)  # For cooperation decisions only
         
         # Resilience now controls stress recovery, not cooperation
         base_threshold = params.resilience_profile['threshold']
@@ -747,8 +747,17 @@ class OptimizedPerson:
         """Get or create relationship with group awareness"""
         if other_id not in self.relationships:
             if len(self.relationships) >= 150:
-                oldest_id = min(self.relationships.keys(), 
-                              key=lambda k: self.relationships[k].last_interaction_round)
+                # CRITICAL FIX: Delete weakest relationship, not most recent
+                # Priority: 1) Lowest trust, 2) Fewest interactions, 3) Most recent
+                def relationship_strength(rel_id):
+                    rel = self.relationships[rel_id]
+                    # Composite strength score (higher = stronger relationship)
+                    trust_score = rel.trust * 1000  # Trust is most important
+                    interaction_score = min(rel.interaction_count, 50)  # Cap at 50
+                    recency_bonus = max(0, 50 - (round_num - rel.last_interaction_round))
+                    return trust_score + interaction_score + recency_bonus
+                
+                weakest_id = min(self.relationships.keys(), key=relationship_strength)
                 del self.relationships[oldest_id]
             
             is_same_group = (other_group_id is None or self.group_id == other_group_id)
@@ -799,7 +808,7 @@ class OptimizedPerson:
                            needs.esteem + needs.self_actualization) / 50
         
         # Use individual recovery rate for stress decay
-        pressure_decay = self.stress_recovery_rate * need_satisfaction * 0.01
+        pressure_decay = self.stress_recovery_rate * need_satisfaction * 0.5
         self.constraint_level = max(0, self.constraint_level - pressure_decay)
     
     def add_constraint_pressure(self, amount: float, is_from_out_group: bool = False, 
@@ -896,7 +905,7 @@ def sample_config() -> SimulationConfig:
             intervention_interval=intervention_interval,
             intervention_scale=random.uniform(0.05, 0.30),
             event_bonus=random.uniform(1.5, 2.5),
-            base_trust_delta=random.uniform(0.05, 0.2),
+            base_trust_delta=random.uniform(0.1, 0.3),
             group_trust_bias=random.uniform(1.2, 2.0),
             resilience_profile={
                 'threshold': random.uniform(0.1, 0.4),
@@ -922,7 +931,7 @@ def sample_config() -> SimulationConfig:
             intervention_interval=0 if safe_num_groups == 1 else 15,
             intervention_scale=0.15,
             event_bonus=2.0,
-            base_trust_delta=0.12,
+            base_trust_delta=0.2,
             group_trust_bias=1.6,
             resilience_profile={'threshold': 0.25, 'noise': 0.075},
             turnover_rate=0.035,
@@ -942,7 +951,7 @@ def sample_config() -> SimulationConfig:
             intervention_interval=0,
             intervention_scale=0.1,
             event_bonus=2.0,
-            base_trust_delta=0.1,
+            base_trust_delta=0.2,
             group_trust_bias=1.5,
             resilience_profile={'threshold': 0.25, 'noise': 0.05},
             turnover_rate=0.03,
@@ -959,8 +968,7 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
     if len(alive_people) < 2:
         return
     
-    # CRITICAL FIX #1: Create unique interaction pairs to avoid double-counting
-    # Limit interactions to prevent explosion
+    # EMPIRICAL FIX: Increase meaningful interactions for relationship development
     max_interactions_total = min(len(alive_people) * 2, len(alive_people) * (len(alive_people) - 1) // 4)
     interactions_processed = 0
     
@@ -970,8 +978,8 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
         if person.is_dead:
             continue
         
-        # Each person gets limited interactions per round
-        max_interactions_per_person = min(3, len(alive_people) // 10 + 1)
+        # EMPIRICAL FIX: Increase from 3 to 8 meaningful interactions per round
+        max_interactions_per_person = min(8, len(alive_people) // 8 + 2)
         person_interactions = 0
         
         for _ in range(max_interactions_per_person):
@@ -1063,9 +1071,14 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
                 person.maslow_needs.love = min(10, person.maslow_needs.love + 0.1)
                 partner.maslow_needs.love = min(10, partner.maslow_needs.love + 0.1)
                 
-                # Birth possibility with turnover rate
-                if (len(sim_ref.people) < params.max_population and 
-                    random.random() < params.turnover_rate):
+                # CRITICAL FIX: Remove cooperation dependency for births
+                # Births should depend on demographics, not cooperation
+            
+            # EMPIRICAL FIX: Realistic birth logic (separate from cooperation)
+            if (len(sim_ref.people) < params.max_population and 
+                random.random() < params.turnover_rate / 4):  # Reduce rate since not cooperation-gated
+                # Random partner selection for births (more realistic)
+                if random.random() < 0.3:  # 30% chance any interaction could lead to birth
                     sim_ref._create_birth(person, partner)
                     
             elif not person_coop or not partner_coop:
@@ -1076,7 +1089,7 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
                     sim_ref.total_defections += 1
                 
                 # Apply constraint pressure with out-group penalty
-                base_pressure = 0.03
+                base_pressure = 0.08
                 
                 if not partner_coop:
                     is_out_group = person_group != partner_group
@@ -1241,9 +1254,13 @@ class EnhancedMassSimulation:
             trust_boost = 0.1 * self.params.event_bonus
             for agent in selected_agents:
                 agent.mixing_event_participations += 1
-                # Boost relationships moderately
+                # Only boost out-group relationships (intervention purpose)
                 for rel in agent.relationships.values():
-                    rel.trust = min(1.0, rel.trust + trust_boost)
+                    if hasattr(rel, 'is_same_group') and not rel.is_same_group:
+                        rel.trust = min(1.0, rel.trust + trust_boost)
+                    # Give smaller general boost to all relationships
+                    else:
+                        rel.trust = min(1.0, rel.trust + trust_boost * 0.3)
                 
                 # Reduce stress and boost social needs
                 stress_reduction = 0.05 * self.params.event_bonus
@@ -1268,11 +1285,22 @@ class EnhancedMassSimulation:
                 if not person.relationships:
                     continue
                     
-                trust_values = [rel.trust for rel in person.relationships.values()]
-                if not trust_values:
+                # CRITICAL FIX: Weight trust diffusion by relationship strength
+                weighted_trust_sum = 0
+                total_weights = 0
+                
+                for rel in person.relationships.values():
+                    # Weight by interaction count and trust level
+                    weight = min(rel.interaction_count, 20) * (0.5 + rel.trust)
+                    weighted_trust_sum += rel.trust * weight
+                    total_weights += weight
+                
+                if total_weights == 0:
                     continue
                     
-                avg_neighbor_trust = np.mean(trust_values)
+                avg_neighbor_trust = weighted_trust_sum / total_weights
+                if not trust_values:
+                    continue
                 
                 # Smooth trust values toward network average
                 for rel in person.relationships.values():
