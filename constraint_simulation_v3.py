@@ -160,7 +160,7 @@ def save_simulation_result(result, results_dir: str = "simulation_results"):
                 'initial_population': getattr(result.parameters, 'initial_population', 200),
                 'max_population': getattr(result.parameters, 'max_population', 800),
                 'maslow_variation': getattr(result.parameters, 'maslow_variation', 0.5),
-                'constraint_threshold_range': getattr(result.parameters, 'constraint_threshold_range', [0.05, 0.25]),
+                'constraint_threshold_range': getattr(result.parameters, 'constraint_threshold_range', [0.15, 0.35]),
                 'recovery_threshold': getattr(result.parameters, 'recovery_threshold', 0.3),
                 'cooperation_bonus': getattr(result.parameters, 'cooperation_bonus', 0.2),
                 'trust_threshold': getattr(result.parameters, 'trust_threshold', 0.6),
@@ -596,7 +596,7 @@ class OptimizedPerson:
         self.is_born = (parent_a is not None and parent_b is not None)
         
         # MAJOR FIX #5: Separate cooperation decisions from stress recovery
-        self.cooperation_threshold = random.uniform(0.15, 0.4)  # For cooperation decisions only
+        self.cooperation_threshold = random.uniform(0.2, 0.35)  # For cooperation decisions only
         
         # Resilience now controls stress recovery, not cooperation
         base_threshold = params.resilience_profile['threshold']
@@ -905,7 +905,7 @@ def sample_config() -> SimulationConfig:
             intervention_interval=intervention_interval,
             intervention_scale=random.uniform(0.05, 0.30),
             event_bonus=random.uniform(1.5, 2.5),
-            base_trust_delta=random.uniform(0.1, 0.3),
+            base_trust_delta=random.uniform(0.05, 0.08),
             group_trust_bias=random.uniform(1.2, 2.0),
             resilience_profile={
                 'threshold': random.uniform(0.1, 0.4),
@@ -1089,7 +1089,7 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
                     sim_ref.total_defections += 1
                 
                 # Apply constraint pressure with out-group penalty
-                base_pressure = 0.08
+                base_pressure = 0.02
                 
                 if not partner_coop:
                     is_out_group = person_group != partner_group
