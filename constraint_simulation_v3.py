@@ -717,7 +717,7 @@ class OptimizedPerson:
             return False
         
         # Small chance of random defection
-        if random.random() < 0.02:
+        if random.random() < 0.005:
             return False
         
         # MAJOR FIX #5: Use cooperation_threshold consistently for decisions
@@ -1089,7 +1089,7 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
                     sim_ref.total_defections += 1
                 
                 # Apply constraint pressure with out-group penalty
-                base_pressure = 0.02
+                base_pressure = 0.01
                 
                 if not partner_coop:
                     is_out_group = person_group != partner_group
