@@ -1299,8 +1299,7 @@ class EnhancedMassSimulation:
                     continue
                     
                 avg_neighbor_trust = weighted_trust_sum / total_weights
-                if not trust_values:
-                    continue
+                continue
                 
                 # Smooth trust values toward network average
                 for rel in person.relationships.values():
