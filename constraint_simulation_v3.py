@@ -424,7 +424,7 @@ class FastRelationship:
         self.is_developed = True
 
         # Experience-based first impression
-       if self.trust is None:
+        if self.trust is None:
            self.trust = 0.7 if cooperated else 0.3  # Start based on first experience
            return
         
