@@ -418,11 +418,15 @@ class FastRelationship:
     def update_trust(self, cooperated: bool, round_num: int, base_delta: float,
                     group_bias: float = 1.0, out_group_bias: float = 1.0):
         """CRITICAL FIX #2: Update trust without duplicate increments"""
-        # CRITICAL FIX #2: Only increment counters ONCE
         self.interaction_count += 1
         self.last_interaction_round = round_num
         self.cooperation_history.append(cooperated)
         self.is_developed = True
+
+        # Experience-based first impression
+       if self.trust is None:
+           self.trust = 0.7 if cooperated else 0.3  # Start based on first experience
+           return
         
         if cooperated:
             self.cooperation_count += 1
@@ -466,7 +470,7 @@ class SimulationConfig:
     def __post_init__(self):
         """Validate parameters after initialization"""
         # CRITICAL FIX #3: Validate v3 parameters with correct ranges
-        assert self.shock_interval_years in [10, 15, 20, 25], f"Invalid shock_interval_years: {self.shock_interval_years}"
+        assert self.shock_interval_years in [2, 5, 10, 20], f"Invalid shock_interval_years: {self.shock_interval_years}"
         assert 0.0 <= self.homophily_bias <= 0.8, f"Invalid homophily_bias: {self.homophily_bias}"
         assert self.num_groups in [1, 2, 3], f"Invalid num_groups: {self.num_groups}"
         assert 0.8 <= self.out_group_trust_bias <= 1.2, f"Invalid out_group_trust_bias: {self.out_group_trust_bias}"
@@ -897,7 +901,7 @@ def sample_config() -> SimulationConfig:
             intervention_interval = random.choice([10, 15, 20, 25])
         
         config = SimulationConfig(
-            shock_interval_years=random.choice([10, 15, 20, 25]),  # CRITICAL FIX #3: Use documented ranges
+            shock_interval_years=random.choice([2, 5, 10, 20]),  # CRITICAL FIX #3: Use documented ranges
             homophily_bias=homophily_bias,
             num_groups=num_groups,
             out_group_trust_bias=random.uniform(0.8, 1.2),
@@ -1299,7 +1303,6 @@ class EnhancedMassSimulation:
                     continue
                     
                 avg_neighbor_trust = weighted_trust_sum / total_weights
-                continue
                 
                 # Smooth trust values toward network average
                 for rel in person.relationships.values():
@@ -1307,7 +1310,7 @@ class EnhancedMassSimulation:
                     new_trust = ((1 - self.params.social_diffusion) * old_trust + 
                                 self.params.social_diffusion * avg_neighbor_trust)
                     rel.trust = max(0.0, min(1.0, new_trust))
-                    
+                                    
         except Exception as e:
             timestamp_print(f"⚠️ Error in social diffusion: {e}")
     
@@ -1393,23 +1396,24 @@ class EnhancedMassSimulation:
                 for group, strategies in group_cooperation.items()}
     
     def _calculate_trust_levels(self) -> Tuple[float, float]:
-        """MAJOR FIX #4 & SIGNIFICANT FIX #10: Calculate trust levels properly during processing"""
+        """Calculate trust levels excluding undeveloped relationships"""
         alive_people = [p for p in self.people if not p.is_dead]
         in_group_trusts = []
         out_group_trusts = []
         
-        # MAJOR FIX #4: Include ALL relationships, not just developed ones
         for person in alive_people:
             for rel in person.relationships.values():
                 # Include all relationships with valid trust values
-                if hasattr(rel, 'is_same_group'):
-                    if rel.is_same_group:
-                        in_group_trusts.append(rel.trust)
+               # CRITICAL: Only include developed relationships with valid trust
+               if rel.trust is not None and rel.is_developed:
+                    if hasattr(rel, 'is_same_group'):
+                        if rel.is_same_group:
+                            in_group_trusts.append(rel.trust)
+                        else:
+                            out_group_trusts.append(rel.trust)
                     else:
-                        out_group_trusts.append(rel.trust)
-                else:
-                    # Default to in-group if group information is missing
-                    in_group_trusts.append(rel.trust)
+                        # Default to in-group if group information is missing
+                        in_group_trusts.append(rel.trust)
         
         # SIGNIFICANT FIX #10: Calculate during processing, handle edge cases
         avg_in_group = sum(in_group_trusts) / len(in_group_trusts) if in_group_trusts else 0.5
