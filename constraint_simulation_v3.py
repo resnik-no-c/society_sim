@@ -434,8 +434,8 @@ class FastRelationship:
             self.trust = min(1.0, self.trust + delta)
         else:
             self.betrayal_count += 1
-            # EMPIRICAL FIX: Mild asymmetric trust loss (1.1x vs 1.5x)
-            delta = -1.1 * base_delta * (group_bias if self.is_same_group else out_group_bias)
+            asymmetry_factor = 2.2  # Was 1.1 - now matches empirical loss aversion research
+            delta = -asymmetry_factor * base_delta * (group_bias if self.is_same_group else out_group_bias)
             self.trust = max(0.0, self.trust + delta)
 
 @dataclass
@@ -461,8 +461,8 @@ class SimulationConfig:
     initial_population: int = DEFAULT_INITIAL_POPULATION
     max_population: int = DEFAULT_MAX_POPULATION
     maslow_variation: float = 0.5
-    constraint_threshold_range: Tuple[float, float] = (0.05, 0.25)
-    recovery_threshold: float = 0.3
+    constraint_threshold_range: Tuple[float, float] = (0.2, 0.8)
+    recovery_threshold: float = 0.15
     cooperation_bonus: float = 0.2
     trust_threshold: float = 0.6
     max_relationships_per_person: int = 150
@@ -495,6 +495,7 @@ class SimulationConfig:
         assert 'noise' in self.resilience_profile, "Missing noise in resilience_profile"
         assert 0.1 <= self.resilience_profile['threshold'] <= 0.4, f"Invalid resilience threshold: {self.resilience_profile['threshold']}"
         assert 0.0 <= self.resilience_profile['noise'] <= 0.15, f"Invalid resilience noise: {self.resilience_profile['noise']}"
+        assert 0.0 <= self.recovery_threshold <= 1.0, f"Invalid recovery_threshold: {self.recovery_threshold}"
 
 @dataclass
 class EnhancedSimulationResults:
@@ -594,7 +595,10 @@ class OptimizedPerson:
         self.strategy = 'cooperative'
         self.constraint_level = 0.0
         self.constraint_threshold = random.uniform(*params.constraint_threshold_range)
-        self.recovery_threshold = params.recovery_threshold
+
+        recovery_factor = random.uniform(0.5,0.8)
+
+        self.recovery_threshold = self.constraint_threshold * recovery_factor
         self.is_constrained = False
         self.is_dead = False
         self.is_born = (parent_a is not None and parent_b is not None)
@@ -721,7 +725,7 @@ class OptimizedPerson:
             return False
         
         # Small chance of random defection
-        if random.random() < 0.005:
+        if random.random() < 0.02:
             return False
         
         # MAJOR FIX #5: Use cooperation_threshold consistently for decisions
@@ -732,14 +736,25 @@ class OptimizedPerson:
         
         if relationship.interaction_count == 0:
             # First interaction - use base probability
-            base_prob = 1 - effective_threshold  # Higher threshold = lower cooperation
-            
+            base_prob = max(0.1, 1.0 - self.cooperation_threshold)
+
             # Group-based modification
             if hasattr(self, 'group_id') and hasattr(other, 'group_id'):
                 if self.group_id == other.group_id:
-                    base_prob *= 1.2  # More likely to cooperate with in-group
+                    base_prob = min(0.95, base_prob * 1.2)  # More likely with in-group
                 else:
-                    base_prob *= 0.8  # Less likely with out-group
+                    base_prob = max(0.05, base_prob * 0.8)  # Less likely with out-group
+
+            return random.random() < base_prob
+
+        else:
+            return relationship.trust >= self.cooperation_threshold
+            
+        # 9. POSITIVE MASLOW OVERRIDES
+        if maslow_priority == 'self_actualization_boost':
+            base_prob *= 1.2   # Self-actualization lift
+        elif maslow_priority == 'group_seeking':
+            base_prob += 0.05  # Belonging boost
             
             return random.random() < max(0.05, min(0.95, base_prob))
         else:
@@ -806,7 +821,7 @@ class OptimizedPerson:
 
         # MAJOR FIX #5: Use stress_recovery_rate for constraint decay (not cooperation decisions)
         chronic_stress = np.mean(self.chronic_queue) if self.chronic_queue else 0
-        self.constraint_level = chronic_stress * 1.6
+        self.constraint_level = chronic_stress * 1.2
         
         need_satisfaction = (needs.physiological + needs.safety + needs.love + 
                            needs.esteem + needs.self_actualization) / 50
@@ -821,7 +836,7 @@ class OptimizedPerson:
         if self.is_dead:
             return False
         
-        maslow_amplifier = 1 + (self.maslow_pressure * 0.5)
+        maslow_amplifier = 1 + (self.maslow_pressure * 0.2)
         
         if is_from_out_group:
             amount *= out_group_penalty
@@ -837,7 +852,7 @@ class OptimizedPerson:
     def check_for_recovery(self, params: SimulationConfig) -> bool:
         """Check if person can recover to cooperative strategy"""
         if self.strategy == 'selfish' and self.constraint_level < self.recovery_threshold:
-            recovery_chance = 0.6
+            recovery_chance = 0.8
             
             if self.maslow_needs.love > 7:
                 recovery_chance += 0.2
@@ -851,9 +866,9 @@ class OptimizedPerson:
             recovery_chance += top5_trust * 0.3
             
             if self.rounds_as_selfish > 50:
-                recovery_chance *= 0.7
+                recovery_chance *= 0.85
             
-            if random.random() < recovery_chance:
+            if random.random() < min(0.95, recovery_chance):  # Cap at 95%
                 self.switch_to_cooperative()
                 return True
         return False
@@ -909,7 +924,7 @@ def sample_config() -> SimulationConfig:
             intervention_interval=intervention_interval,
             intervention_scale=random.uniform(0.05, 0.30),
             event_bonus=random.uniform(1.5, 2.5),
-            base_trust_delta=random.uniform(0.05, 0.08),
+            base_trust_delta=random.uniform(0.05, 0.2),
             group_trust_bias=random.uniform(1.2, 2.0),
             resilience_profile={
                 'threshold': random.uniform(0.1, 0.4),
@@ -1093,7 +1108,7 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
                     sim_ref.total_defections += 1
                 
                 # Apply constraint pressure with out-group penalty
-                base_pressure = 0.01
+                base_pressure = 0.15
                 
                 if not partner_coop:
                     is_out_group = person_group != partner_group
@@ -1280,40 +1295,36 @@ class EnhancedMassSimulation:
     
     def _apply_social_diffusion(self, alive_people: List[OptimizedPerson]):
         """Apply social diffusion of trust values"""
-        if self.params.social_diffusion <= 0:
+        """Apply network-neighbor diffusion of trust and update institutional memory."""
+        sd = self.params.social_diffusion
+        if sd <= 0:
             return
+        total = 0.0
+        count = 0
+        for person in alive_people:
+            neighbors = getattr(person, 'network_neighbors', set())
+            if not neighbors:
+                continue
+            vals = [person.relationships[n].trust
+                    for n in neighbors if n in person.relationships]
+            if not vals:
+                continue
+            local = sum(vals) / len(vals)
+            total += local
+            count += 1
+            for n in neighbors:
+                if n in person.relationships:
+                    r = person.relationships[n]
+                    r.trust = max(0.0, min(1.0,
+                        (1-sd)*r.trust + sd*local
+                    ))
+        # institutional memory: decay or reinforce
+        if count:
+            net_avg = total / count
+            self.institutional_memory = (1-sd)*self.institutional_memory + sd*net_avg
+        else:
+            self.institutional_memory *= (1 - sd*0.1)
         
-        try:
-            # Calculate average neighbor trust for each person
-            for person in alive_people:
-                if not person.relationships:
-                    continue
-                    
-                # CRITICAL FIX: Weight trust diffusion by relationship strength
-                weighted_trust_sum = 0
-                total_weights = 0
-                
-                for rel in person.relationships.values():
-                    # Weight by interaction count and trust level
-                    weight = min(rel.interaction_count, 20) * (0.5 + rel.trust)
-                    weighted_trust_sum += rel.trust * weight
-                    total_weights += weight
-                
-                if total_weights == 0:
-                    continue
-                    
-                avg_neighbor_trust = weighted_trust_sum / total_weights
-                
-                # Smooth trust values toward network average
-                for rel in person.relationships.values():
-                    old_trust = rel.trust
-                    new_trust = ((1 - self.params.social_diffusion) * old_trust + 
-                                self.params.social_diffusion * avg_neighbor_trust)
-                    rel.trust = max(0.0, min(1.0, new_trust))
-                                    
-        except Exception as e:
-            timestamp_print(f"⚠️ Error in social diffusion: {e}")
-    
     def _create_birth(self, parent_a: OptimizedPerson, parent_b: OptimizedPerson):
         """Create new person with group inheritance"""
         new_person = OptimizedPerson(self.next_person_id, self.params, parent_a, parent_b)
