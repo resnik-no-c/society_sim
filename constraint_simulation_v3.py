@@ -819,15 +819,21 @@ class OptimizedPerson:
         
         self._calculate_maslow_pressure_fast()
 
-        # MAJOR FIX #5: Use stress_recovery_rate for constraint decay (not cooperation decisions)
+        # FIX BUG #2: Add natural stress decay to chronic queue
+        if self.chronic_queue:
+            # Each stress memory fades 2% per round (natural forgetting)
+            for i in range(len(self.chronic_queue)):
+                self.chronic_queue[i] *= 0.98
+        
+        # Calculate constraint level
         chronic_stress = np.mean(self.chronic_queue) if self.chronic_queue else 0
         self.constraint_level = chronic_stress * 1.2
         
         need_satisfaction = (needs.physiological + needs.safety + needs.love + 
                            needs.esteem + needs.self_actualization) / 50
         
-        # Use individual recovery rate for stress decay
-        pressure_decay = self.stress_recovery_rate * need_satisfaction * 0.5
+        # FIX BUG #2: Research-based stress decay multiplier (was 0.5, now 1.0)
+        pressure_decay = self.stress_recovery_rate * need_satisfaction * 1.0
         self.constraint_level = max(0, self.constraint_level - pressure_decay)
     
     def add_constraint_pressure(self, amount: float, is_from_out_group: bool = False, 
@@ -841,8 +847,13 @@ class OptimizedPerson:
         if is_from_out_group:
             amount *= out_group_penalty
         
-        self.acute_stress += amount * maslow_amplifier
-        self.chronic_queue.append(self.acute_stress)
+        # FIX BUG #1: Don't accumulate acute_stress indefinitely
+        stress_increment = amount * maslow_amplifier
+        self.chronic_queue.append(stress_increment)
+         
+        # Update constraint level immediately
+        chronic_stress = np.mean(self.chronic_queue) if self.chronic_queue else 0
+        self.constraint_level = chronic_stress * 1.2
         
         if self.strategy == 'cooperative' and self.constraint_level > self.constraint_threshold:
             self.force_switch()
