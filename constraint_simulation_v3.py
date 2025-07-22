@@ -1155,6 +1155,7 @@ class EnhancedMassSimulation:
         self.successful_mixing_events = 0
         self.reputational_spillover_events = 0
         self.out_group_constraint_amplifications = 0
+
         
         # Interaction tracking
         self.total_interactions = 0  # Legacy (deprecated, kept for compatibility)
@@ -1163,6 +1164,7 @@ class EnhancedMassSimulation:
         self.total_mutual_defection = 0   # CRITICAL FIX #1: Proper mutual defection tracking
         self.total_mixed_outcomes = 0     # CRITICAL FIX #1: Proper mixed outcome tracking
         self.total_mutual_coop = 0  # Legacy (deprecated, kept for compatibility)
+        self.institutional_memory = 0.0
         
         # v3 logging counters
         self.maslow_log_counter = 0
@@ -1323,7 +1325,10 @@ class EnhancedMassSimulation:
             net_avg = total / count
             self.institutional_memory = (1-sd)*self.institutional_memory + sd*net_avg
         else:
-            self.institutional_memory *= (1 - sd*0.1)
+            if hasattr(self, 'institutional_memory') and isinstance(self.institutional_memory, (int, float)):
+                self.institutional_memory *= (1 - sd*0.1)
+            elif not hasattr(self, 'institutional_memory'):
+                self.institutional_memory = 0.0
         
     def _create_birth(self, parent_a: OptimizedPerson, parent_b: OptimizedPerson):
         """Create new person with group inheritance"""
