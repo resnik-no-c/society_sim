@@ -818,12 +818,6 @@ class OptimizedPerson:
             needs.esteem = max(0, needs.esteem - 0.01)
         
         self._calculate_maslow_pressure_fast()
-
-        # FIX BUG #2: Add natural stress decay to chronic queue
-        if self.chronic_queue:
-            # Each stress memory fades 2% per round (natural forgetting)
-            for i in range(len(self.chronic_queue)):
-                self.chronic_queue[i] *= 0.98
         
         # Calculate constraint level
         chronic_stress = np.mean(self.chronic_queue) if self.chronic_queue else 0
@@ -1101,12 +1095,10 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
                 person.maslow_needs.love = min(10, person.maslow_needs.love + 0.1)
                 partner.maslow_needs.love = min(10, partner.maslow_needs.love + 0.1)
                 
-                # CRITICAL FIX: Remove cooperation dependency for births
-                # Births should depend on demographics, not cooperation
-            
-            # EMPIRICAL FIX: Realistic birth logic (separate from cooperation)
+
+            # Restore cooperation-dependent birth chance
             if (len(sim_ref.people) < params.max_population and 
-                random.random() < params.turnover_rate / 4):  # Reduce rate since not cooperation-gated
+                random.random() < params.turnover_rate * person.base_coop):  # births ∝ cooperation
                 # Random partner selection for births (more realistic)
                 if random.random() < 0.3:  # 30% chance any interaction could lead to birth
                     sim_ref._create_birth(person, partner)
@@ -1210,6 +1202,10 @@ class EnhancedMassSimulation:
         for i in range(1, self.params.initial_population + 1):
             person = OptimizedPerson(i, self.params)
             self.people.append(person)
+        # Minimal network for diffusion: connect each to 5 random peers
+        for person in self.people:
+            others = [p for p in self.people if p is not person]
+            person.network_neighbors = set(random.sample(others, min(5, len(others))))
     
     def _trigger_shock(self):
         """Apply shock with proper magnitude and institutional memory"""
@@ -1280,7 +1276,10 @@ class EnhancedMassSimulation:
         try:
             num_selected = max(1, int(len(alive_people) * self.params.intervention_scale))
             num_selected = min(num_selected, len(alive_people))
-            selected_agents = random.sample(alive_people, num_selected)
+            # weight toward younger agents
+            ages    = [p.age for p in alive_people]
+            weights = [1.0/(age+1) for age in ages]
+            selected_agents = random.choices(alive_people, weights=weights, k=num_selected)
             
             # Apply event bonus through trust boost and stress reduction
             trust_boost = 0.1 * self.params.event_bonus
