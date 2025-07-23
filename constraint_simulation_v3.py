@@ -367,6 +367,13 @@ def save_incremental_csv(result, csv_file: str = "simulation_results_incremental
         'intervention_intensity': result.parameters.intervention_scale / max(1, result.parameters.intervention_interval),
         'resilience_variability': result.parameters.resilience_profile['noise'] / max(0.001, result.parameters.resilience_profile['threshold']),
         'social_cohesion_factor': result.parameters.social_diffusion * result.avg_trust_level,
+        # NEW: Social network and penalty metrics
+        'avg_network_size': (sum(len(getattr(p, 'network_neighbors', set())) for p in alive_people) / 
+                            max(1, len(alive_people)) if 'alive_people' in locals() else 0),
+        'avg_out_group_penalty_accumulator': (sum(getattr(p, 'out_group_penalty_accumulator', 0) for p in alive_people) / 
+                                            max(1, len(alive_people)) if 'alive_people' in locals() else 0),
+        'max_out_group_penalty_accumulator': (max((getattr(p, 'out_group_penalty_accumulator', 0) for p in alive_people), default=0) 
+                                            if 'alive_people' in locals() else 0),
     }
     
     df_row = pd.DataFrame([row_data])
@@ -585,7 +592,7 @@ class OptimizedPerson:
                  'group_id', 'in_group_interactions', 'out_group_interactions', 
                  'mixing_event_participations', 'acute_stress', 'chronic_queue', 
                  'base_coop', 'society_trust', 'resilience_threshold', 'resilience_noise', 
-                 'cooperation_threshold', 'stress_recovery_rate','network_neighbors']
+                 'cooperation_threshold', 'stress_recovery_rate','network_neighbors','out_group_penalty_accumulator']
     
     def __init__(self, person_id: int, params: SimulationConfig, 
                  parent_a: Optional['OptimizedPerson'] = None, 
@@ -629,6 +636,7 @@ class OptimizedPerson:
         self.age = 0
         # prepare neighbor set for diffusion
         self.network_neighbors: Set['OptimizedPerson'] = set()
+        self.out_group_penalty_accumulator = 0.0  # Persistent out-group penalty
         
         self.strategy_changes = 0
         self.rounds_as_selfish = 0
@@ -830,6 +838,11 @@ class OptimizedPerson:
         
         # FIX BUG #2: Research-based stress decay multiplier (was 0.5, now 1.0)
         pressure_decay = self.stress_recovery_rate * need_satisfaction * 1.0
+
+        # NEW: Very slow decay of out-group penalty accumulator (5x slower than normal decay)
+        penalty_decay = pressure_decay / 5.0  # Much slower decay for accumulated penalties
+        self.out_group_penalty_accumulator = max(0, self.out_group_penalty_accumulator - penalty_decay)
+
         self.constraint_level = max(0, self.constraint_level - pressure_decay)
     
     def add_constraint_pressure(self, amount: float, is_from_out_group: bool = False, 
@@ -842,14 +855,16 @@ class OptimizedPerson:
         
         if is_from_out_group:
             amount *= out_group_penalty
+            self.out_group_penalty_accumulator += amount * 0.15  # 15% goes to permanent accumulator
         
         # FIX BUG #1: Don't accumulate acute_stress indefinitely
         stress_increment = amount * maslow_amplifier
         self.chronic_queue.append(stress_increment)
          
-        # Update constraint level immediately
+        # Update constraint level immediately (including accumulated penalties)
         chronic_stress = np.mean(self.chronic_queue) if self.chronic_queue else 0
-        self.constraint_level = chronic_stress * 1.2
+        accumulated_penalty_factor = self.out_group_penalty_accumulator * 0.25  # 25% of accumulated penalties
+        self.constraint_level = chronic_stress * 1.2 + accumulated_penalty_factor
         
         if self.strategy == 'cooperative' and self.constraint_level > self.constraint_threshold:
             self.force_switch()
@@ -1017,19 +1032,33 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
             if not potential_partners:
                 break
             
-            if (params.num_groups > 1 and 
-                random.random() < params.homophily_bias and 
-                hasattr(person, 'group_id')):
-                # Try same group first
-                same_group_partners = [p for p in potential_partners 
-                                     if hasattr(p, 'group_id') and p.group_id == person.group_id]
-                if same_group_partners:
-                    partner = random.choice(same_group_partners)
+            # ENHANCED: 40% chance to interact with network neighbor first
+            partner = None
+            
+            if (hasattr(person, 'network_neighbors') and 
+                person.network_neighbors and 
+                random.random() < 0.4):  # 40% network neighbor preference
+                
+                network_partners = [p for p in potential_partners 
+                                  if p in person.network_neighbors]
+                if network_partners:
+                    partner = random.choice(network_partners)
+            
+            # If no network partner selected, use existing homophily logic
+            if partner is None:
+                if (params.num_groups > 1 and 
+                    random.random() < params.homophily_bias and 
+                    hasattr(person, 'group_id')):
+                    # Try same group first
+                    same_group_partners = [p for p in potential_partners 
+                                         if hasattr(p, 'group_id') and p.group_id == person.group_id]
+                    if same_group_partners:
+                        partner = random.choice(same_group_partners)
+                    else:
+                        partner = random.choice(potential_partners)
                 else:
+                    # Random selection
                     partner = random.choice(potential_partners)
-            else:
-                # Random selection
-                partner = random.choice(potential_partners)
             
             # CRITICAL FIX #1: Add unique pair, avoid duplicates
             pair = (person, partner)
@@ -1204,10 +1233,36 @@ class EnhancedMassSimulation:
         for i in range(1, self.params.initial_population + 1):
             person = OptimizedPerson(i, self.params)
             self.people.append(person)
-        # Minimal network for diffusion: connect each to 5 random peers
+        # ENHANCED: Create more realistic social networks with group bias
         for person in self.people:
             others = [p for p in self.people if p is not person]
-            person.network_neighbors = set(random.sample(others, min(5, len(others))))
+            network_size = random.randint(4, 8)  # Slightly larger networks
+            
+            # Strong bias toward same group (80% chance for same-group connections)
+            if self.params.num_groups > 1 and len(others) > network_size:
+                same_group = [p for p in others if p.group_id == person.group_id]
+                other_group = [p for p in others if p.group_id != person.group_id]
+                
+                # 80% same group, 20% other groups
+                same_group_count = min(len(same_group), int(network_size * 0.8))
+                other_group_count = min(len(other_group), network_size - same_group_count)
+                
+                selected = []
+                if same_group and same_group_count > 0:
+                    selected.extend(random.sample(same_group, same_group_count))
+                if other_group and other_group_count > 0:
+                    selected.extend(random.sample(other_group, other_group_count))
+                
+                # Fill remaining slots randomly if needed
+                remaining = [p for p in others if p not in selected]
+                if len(selected) < network_size and remaining:
+                    additional = min(len(remaining), network_size - len(selected))
+                    selected.extend(random.sample(remaining, additional))
+                
+                person.network_neighbors = set(selected)
+            else:
+                # Single group or fallback: random selection
+                person.network_neighbors = set(random.sample(others, min(network_size, len(others))))
     
     def _trigger_shock(self):
         """Apply shock with proper magnitude and institutional memory"""
@@ -1280,7 +1335,7 @@ class EnhancedMassSimulation:
             num_selected = min(num_selected, len(alive_people))
             # weight toward younger agents
             ages    = [p.age for p in alive_people]
-            weights = [1.0/(age+1) for age in ages]
+            weights = [1.0/(age*age + 1) for age in ages]  # Quadratic age weighting (much stronger youth bias)
             selected_agents = random.choices(alive_people, weights=weights, k=num_selected)
             
             # Apply event bonus through trust boost and stress reduction
@@ -1319,19 +1374,33 @@ class EnhancedMassSimulation:
             neighbors = getattr(person, 'network_neighbors', set())
             if not neighbors:
                 continue
-            vals = [person.relationships[n].trust
-                    for n in neighbors if n in person.relationships]
-            if not vals:
+                
+            # Collect trust values from network neighbors (enhanced weighting)
+            neighbor_trusts = []
+            for neighbor in neighbors:
+                if neighbor in person.relationships:
+                    trust_val = person.relationships[neighbor].trust
+                    # Weight by relationship strength (interaction count)
+                    rel = person.relationships[neighbor]
+                    weight = min(rel.interaction_count + 1, 10)  # Cap at 10x weight
+                    neighbor_trusts.extend([trust_val] * weight)  # Repeat based on weight
+            
+            if not neighbor_trusts:
                 continue
-            local = sum(vals) / len(vals)
-            total += local
-            count += 1
-            for n in neighbors:
-                if n in person.relationships:
-                    r = person.relationships[n]
-                    r.trust = max(0.0, min(1.0,
-                        (1-sd)*r.trust + sd*local
-                    ))
+                
+            local_avg = sum(neighbor_trusts) / len(neighbor_trusts)
+            
+            # ENHANCED: Apply stronger diffusion for network neighbors
+            enhanced_diffusion = sd * 1.5  # 50% stronger for network neighbors
+            
+            # Apply diffusion to all relationships, with extra strength for network neighbors
+            for other_id in person.relationships:
+                rel = person.relationships[other_id]
+                diffusion_strength = enhanced_diffusion if other_id in neighbors else sd
+                rel.trust = max(0.0, min(1.0, 
+                    (1 - diffusion_strength) * rel.trust + diffusion_strength * local_avg
+                ))
+
         # institutional memory: decay or reinforce
         if count:
             net_avg = total / count
