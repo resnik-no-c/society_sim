@@ -585,7 +585,7 @@ class OptimizedPerson:
                  'group_id', 'in_group_interactions', 'out_group_interactions', 
                  'mixing_event_participations', 'acute_stress', 'chronic_queue', 
                  'base_coop', 'society_trust', 'resilience_threshold', 'resilience_noise', 
-                 'cooperation_threshold', 'stress_recovery_rate']
+                 'cooperation_threshold', 'stress_recovery_rate','network_neighbors']
     
     def __init__(self, person_id: int, params: SimulationConfig, 
                  parent_a: Optional['OptimizedPerson'] = None, 
@@ -627,6 +627,8 @@ class OptimizedPerson:
         
         self.max_lifespan = int((200 + random.random() * 300) * (params.max_rounds / 500))
         self.age = 0
+        # prepare neighbor set for diffusion
+        self.network_neighbors: Set['OptimizedPerson'] = set()
         
         self.strategy_changes = 0
         self.rounds_as_selfish = 0
