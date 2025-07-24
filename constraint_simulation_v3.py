@@ -1809,6 +1809,7 @@ class EnhancedMassSimulation:
             out_group_constraint_amplifications=self.out_group_constraint_amplifications,
             group_extinction_events=group_extinctions,
             trust_asymmetry=trust_asymmetry,
+            institutional_memory=self.institutional_memory, 
             
             # Interaction metrics
             total_interactions=total_interactions,
@@ -1883,6 +1884,7 @@ class EnhancedMassSimulation:
                 final_group_cooperation_rates={k: 0.0 for k in final_group_populations.keys()},
                 total_interactions=max(0, self.total_interactions),
                 total_mutual_coop=max(0, getattr(self, 'total_mutual_coop', 0)),
+                institutional_memory=self.institutional_memory
             )
         except Exception as emergency_error:
             timestamp_print(f"❌ Even emergency result generation failed: {emergency_error}")
