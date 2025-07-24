@@ -576,6 +576,7 @@ class EnhancedSimulationResults:
     out_group_constraint_amplifications: int = 0
     group_extinction_events: int = 0
     trust_asymmetry: float = 0.0
+    institutional_memory: Dict[str, float] = field(default_factory=dict)
     
     # Interaction metrics (with defaults)
     total_interactions: int = 0
