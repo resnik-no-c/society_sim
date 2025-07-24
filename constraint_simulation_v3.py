@@ -1692,8 +1692,13 @@ class EnhancedMassSimulation:
         
         final_traits = self._get_average_traits()
 
-        # MASLOW FIX: Calculate average of individual changes, not population-level changes
-        trait_evolution = self._get_average_individual_changes()
+        # compute population-level Maslow change as difference of averages
+        initial_traits = initial_trait_avg
+        final_traits = self._get_average_traits()
+        trait_evolution = {
+            trait: final_traits[trait] - initial_traits[trait]
+            for trait in initial_traits
+        }
         # DIAGNOSTIC: Log the difference between methods
         population_level_changes = {k: final_traits[k] - initial_traits[k] for k in initial_traits.keys()}
         if abs(trait_evolution['love'] - population_level_changes['love']) > 0.1:
@@ -1835,7 +1840,12 @@ class EnhancedMassSimulation:
             
             # Safe trait collection
             try:
+                initial_traits = initial_trait_avg
                 final_traits = self._get_average_traits()
+                trait_evolution = {
+                    trait: final_traits[trait] - initial_traits[trait]
+                    for trait in initial_traits
+                }
             except:
                 final_traits = {'physiological': 0, 'safety': 0, 'love': 0, 'esteem': 0, 'self_actualization': 0}
             
