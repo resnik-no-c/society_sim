@@ -1689,13 +1689,13 @@ class EnhancedMassSimulation:
             timestamp_print(f"📊 Sim {self.run_id}: Large cooperation gap - Strategy: {strategy_cooperation_rate:.3f}, Behavioral: {behavioral_cooperation_rate:.3f}")
         
         final_traits = self._get_average_traits()
-       # MASLOW FIX: Calculate average of individual changes, not population-level changes
-       trait_evolution = self._get_average_individual_changes()
-       
-       # DIAGNOSTIC: Log the difference between methods
-       population_level_changes = {k: final_traits[k] - initial_traits[k] for k in initial_traits.keys()}
-       if abs(trait_evolution['love'] - population_level_changes['love']) > 0.1:
-           timestamp_print(f"🔍 Sim {self.run_id}: Maslow tracking difference - Individual: {trait_evolution['love']:.3f}, Population: {population_level_changes['love']:.3f}")
+
+        # MASLOW FIX: Calculate average of individual changes, not population-level changes
+        trait_evolution = self._get_average_individual_changes()
+        # DIAGNOSTIC: Log the difference between methods
+        population_level_changes = {k: final_traits[k] - initial_traits[k] for k in initial_traits.keys()}
+        if abs(trait_evolution['love'] - population_level_changes['love']) > 0.1:
+            timestamp_print(f"🔍 Sim {self.run_id}: Maslow tracking difference - Individual: {trait_evolution['love']:.3f}, Population: {population_level_changes['love']:.3f}")
         
         # Population stability calculation
         if len(self.population_history) > 20:
@@ -1707,7 +1707,6 @@ class EnhancedMassSimulation:
         # Pressure metrics
         avg_maslow_pressure = sum(p.maslow_pressure for p in alive_people) / max(1, len(alive_people))
         basic_needs_crisis = len([p for p in alive_people if p.maslow_needs.physiological < 3 or p.maslow_needs.safety < 3])
-        
         # Trust level calculation
         if self.params.num_groups > 1:
             avg_in_group_trust, avg_out_group_trust = self._calculate_trust_levels()
