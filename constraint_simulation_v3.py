@@ -665,13 +665,13 @@ class OptimizedPerson:
             )
 
        # MASLOW FIX: Store initial values for individual change tracking
-       self.initial_maslow_needs = MaslowNeeds(
-           physiological=self.maslow_needs.physiological,
-           safety=self.maslow_needs.safety,
-           love=self.maslow_needs.love,
-           esteem=self.maslow_needs.esteem,
-           self_actualization=self.maslow_needs.self_actualization
-       )
+           self.initial_maslow_needs = MaslowNeeds(
+               physiological=self.maslow_needs.physiological,
+               safety=self.maslow_needs.safety,
+               love=self.maslow_needs.love,
+               esteem=self.maslow_needs.esteem,
+               self_actualization=self.maslow_needs.self_actualization
+           )
         
         self.maslow_pressure = 0.0
         self._calculate_maslow_pressure_fast()
