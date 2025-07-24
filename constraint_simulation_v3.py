@@ -1660,12 +1660,11 @@ class EnhancedMassSimulation:
         alive_people = [p for p in self.people if not p.is_dead]
         if not alive_people:
             return {k: 0 for k in ['physiological', 'safety', 'love', 'esteem', 'self_actualization']}
-       
-       # Calculate individual changes for each person
-       individual_changes = [p.get_individual_maslow_changes() for p in alive_people]
-       
-       # Average the individual changes
-       return {
+        # Calculate individual changes for each person
+        individual_changes = [p.get_individual_maslow_changes() for p in alive_people]
+
+        # Average the individual changes
+        return {
             'physiological': sum(changes['physiological'] for changes in individual_changes) / len(individual_changes),
             'safety': sum(changes['safety'] for changes in individual_changes) / len(individual_changes),
             'love': sum(changes['love'] for changes in individual_changes) / len(individual_changes),
