@@ -592,7 +592,8 @@ class OptimizedPerson:
                  'group_id', 'in_group_interactions', 'out_group_interactions', 
                  'mixing_event_participations', 'acute_stress', 'chronic_queue', 
                  'base_coop', 'society_trust', 'resilience_threshold', 'resilience_noise', 
-                 'cooperation_threshold', 'stress_recovery_rate','network_neighbors','out_group_penalty_accumulator']
+                 'cooperation_threshold', 'stress_recovery_rate','network_neighbors',
+                 'out_group_penalty_accumulator', 'initial_maslow_needs']
     
     def __init__(self, person_id: int, params: SimulationConfig, 
                  parent_a: Optional['OptimizedPerson'] = None, 
@@ -662,9 +663,28 @@ class OptimizedPerson:
                 esteem=random.random() * 10,
                 self_actualization=random.random() * 10
             )
+
+       # MASLOW FIX: Store initial values for individual change tracking
+       self.initial_maslow_needs = MaslowNeeds(
+           physiological=self.maslow_needs.physiological,
+           safety=self.maslow_needs.safety,
+           love=self.maslow_needs.love,
+           esteem=self.maslow_needs.esteem,
+           self_actualization=self.maslow_needs.self_actualization
+       )
         
         self.maslow_pressure = 0.0
         self._calculate_maslow_pressure_fast()
+
+   def get_individual_maslow_changes(self) -> Dict[str, float]:
+       """Calculate individual Maslow changes from initial values"""
+       return {
+           'physiological': self.maslow_needs.physiological - self.initial_maslow_needs.physiological,
+           'safety': self.maslow_needs.safety - self.initial_maslow_needs.safety,
+           'love': self.maslow_needs.love - self.initial_maslow_needs.love,
+           'esteem': self.maslow_needs.esteem - self.initial_maslow_needs.esteem,
+           'self_actualization': self.maslow_needs.self_actualization - self.initial_maslow_needs.self_actualization
+       }
     
     def _assign_group(self, params: SimulationConfig, group_id: Optional[str], 
                      parent_a: Optional['OptimizedPerson'], parent_b: Optional['OptimizedPerson']) -> str:
@@ -1634,6 +1654,23 @@ class EnhancedMassSimulation:
         except Exception as sim_error:
             timestamp_print(f"❌ Critical error in simulation {self.run_id}: {sim_error}")
             return self._generate_emergency_result()
+
+   def _get_average_individual_changes(self) -> Dict[str, float]:
+       """Calculate average of individual Maslow changes (not population-level changes)"""
+       alive_people = [p for p in self.people if not p.is_dead]
+       if not alive_people:
+           return {k: 0 for k in ['physiological', 'safety', 'love', 'esteem', 'self_actualization']}
+       
+       # Calculate individual changes for each person
+       individual_changes = [p.get_individual_maslow_changes() for p in alive_people]
+       
+       # Average the individual changes
+       return {
+           'physiological': sum(changes['physiological'] for changes in individual_changes) / len(individual_changes),
+           'safety': sum(changes['safety'] for changes in individual_changes) / len(individual_changes),
+           'love': sum(changes['love'] for changes in individual_changes) / len(individual_changes),
+           'esteem': sum(changes['esteem'] for changes in individual_changes) / len(individual_changes),
+           'self_actualization': sum(changes['self_actualization'] for changes in individual_changes) / len(individual_changes)       }
     
     def _generate_results(self, initial_traits: Dict[str, float], 
                          initial_group_populations: Dict[str, int]) -> EnhancedSimulationResults:
@@ -1652,7 +1689,13 @@ class EnhancedMassSimulation:
             timestamp_print(f"📊 Sim {self.run_id}: Large cooperation gap - Strategy: {strategy_cooperation_rate:.3f}, Behavioral: {behavioral_cooperation_rate:.3f}")
         
         final_traits = self._get_average_traits()
-        trait_evolution = {k: final_traits[k] - initial_traits[k] for k in initial_traits.keys()}
+       # MASLOW FIX: Calculate average of individual changes, not population-level changes
+       trait_evolution = self._get_average_individual_changes()
+       
+       # DIAGNOSTIC: Log the difference between methods
+       population_level_changes = {k: final_traits[k] - initial_traits[k] for k in initial_traits.keys()}
+       if abs(trait_evolution['love'] - population_level_changes['love']) > 0.1:
+           timestamp_print(f"🔍 Sim {self.run_id}: Maslow tracking difference - Individual: {trait_evolution['love']:.3f}, Population: {population_level_changes['love']:.3f}")
         
         # Population stability calculation
         if len(self.population_history) > 20:
@@ -2502,6 +2545,12 @@ def analyze_v3_patterns(results: List[EnhancedSimulationResults]) -> pd.DataFram
                 'intervention_intensity': result.parameters.intervention_scale / max(1, result.parameters.intervention_interval),
                 'resilience_variability': result.parameters.resilience_profile['noise'] / max(0.001, result.parameters.resilience_profile['threshold']),
                 'social_cohesion_factor': result.parameters.social_diffusion * result.avg_trust_level,
+
+                # === INSTITUTIONAL MEMORY METRICS (new) ===
+                'total_shocks_experienced': result.institutional_memory['total_shocks_experienced'],
+                'average_shock_severity': result.institutional_memory['average_shock_severity'],
+                'recovery_success_rate': result.institutional_memory['recovery_success_rate'],
+                'crisis_response_knowledge': result.institutional_memory['crisis_response_knowledge'],
             }
             data.append(row)
             
