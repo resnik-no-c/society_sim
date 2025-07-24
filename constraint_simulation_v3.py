@@ -675,16 +675,6 @@ class OptimizedPerson:
         
         self.maslow_pressure = 0.0
         self._calculate_maslow_pressure_fast()
-
-        def get_individual_maslow_changes(self) -> Dict[str, float]:
-            """Calculate individual Maslow changes from initial values"""
-            return {
-            'physiological': self.maslow_needs.physiological - self.initial_maslow_needs.physiological,
-            'safety': self.maslow_needs.safety - self.initial_maslow_needs.safety,
-            'love': self.maslow_needs.love - self.initial_maslow_needs.love,
-            'esteem': self.maslow_needs.esteem - self.initial_maslow_needs.esteem,
-            'self_actualization': self.maslow_needs.self_actualization - self.initial_maslow_needs.self_actualization
-        }
     
     def _assign_group(self, params: SimulationConfig, group_id: Optional[str], 
                      parent_a: Optional['OptimizedPerson'], parent_b: Optional['OptimizedPerson']) -> str:
@@ -813,6 +803,17 @@ class OptimizedPerson:
             relationship = FastRelationship(is_same_group=is_same_group)
             self.relationships[other_id] = relationship
         return self.relationships[other_id]
+
+
+    def get_individual_maslow_changes(self) -> Dict[str, float]:
+        """Calculate individual Maslow changes from initial values"""
+        return {
+        'physiological': self.maslow_needs.physiological - self.initial_maslow_needs.physiological,
+        'safety': self.maslow_needs.safety - self.initial_maslow_needs.safety,
+        'love': self.maslow_needs.love - self.initial_maslow_needs.love,
+        'esteem': self.maslow_needs.esteem - self.initial_maslow_needs.esteem,
+        'self_actualization': self.maslow_needs.self_actualization - self.initial_maslow_needs.self_actualization
+            }
     
     def update(self, system_stress: float, params: SimulationConfig, cooperation_bonus: float = 0):
         """Update person state"""
