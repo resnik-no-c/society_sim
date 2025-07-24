@@ -1479,7 +1479,7 @@ class EnhancedMassSimulation:
     
     def _get_average_traits(self) -> Dict[str, float]:
         """Get average Maslow traits"""
-        alive_people = [p for p in self.people if not p.is_dead]
+        alive_people = [p for p in self.people if not p.is_dead and not p.is_born] #excluding newborns from Maslow needs calculaiton
         if not alive_people:
             return {k: 0 for k in ['physiological', 'safety', 'love', 'esteem', 'self_actualization']}
         
