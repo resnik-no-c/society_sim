@@ -387,6 +387,33 @@ def save_incremental_csv(result, csv_file: str = "simulation_results_incremental
         timestamp_print(f"❌ Error saving to comprehensive incremental CSV: {e}")
         return False
 
+def safe_get_institutional_memory(institutional_memory, key, default=0.0):
+    """Safely get institutional memory value with fallback"""
+    if not institutional_memory or not isinstance(institutional_memory, dict):
+        return default
+    return institutional_memory.get(key, default)
+
+# HELPER FUNCTION: Add this to the top of the file after imports
+def validate_institutional_memory(institutional_memory):
+    """Validate and fix institutional memory structure"""
+    if not isinstance(institutional_memory, dict):
+        return {}
+    
+    required_keys = {
+        'total_shocks_experienced': 0,
+        'average_shock_severity': 0.0,
+        'recovery_success_rate': 0.0,
+        'crisis_response_knowledge': 0.0,
+        'collective_learning_factor': 1.0,
+        'learned_resilience_bonus': 0.0
+    }
+    
+    for key, default_value in required_keys.items():
+        if key not in institutional_memory:
+            institutional_memory[key] = default_value
+    
+    return institutional_memory
+
 # ===== 2. V3 DATA CLASSES =====
 
 @dataclass
@@ -1208,25 +1235,12 @@ class EnhancedMassSimulation:
         self.total_mutual_defection = 0   # CRITICAL FIX #1: Proper mutual defection tracking
         self.total_mixed_outcomes = 0     # CRITICAL FIX #1: Proper mixed outcome tracking
         self.total_mutual_coop = 0  # Legacy (deprecated, kept for compatibility)
-        self.institutional_memory = 0.0
+        self._initialize_institutional_memory()
         
         # v3 logging counters
         self.maslow_log_counter = 0
         self.social_diffusion_log_counter = 0
         self.network_topology_log_counter = 0
-
-        # SIGNIFICANT FIX #8: Complete institutional memory system
-        self.institutional_memory = {
-            'total_shocks_experienced': 0,
-            'average_shock_severity': 0.0,
-            'learned_resilience_bonus': 0.0,
-            'crisis_response_knowledge': 0.0,
-            'recovery_success_rate': 0.0,
-            'collective_learning_factor': 1.0
-        }
-        self.recovery_phase_rounds = 0
-        self.in_recovery_phase = False
-        self.shocks_without_recovery = 0
         
         self._initialize_population()
         # Store initial state for results generation
@@ -1246,6 +1260,32 @@ class EnhancedMassSimulation:
         for i in range(1, self.params.initial_population + 1):
             person = OptimizedPerson(i, self.params)
             self.people.append(person)
+
+    def _initialize_institutional_memory(self):
+        """Initialize institutional memory with all required keys and proper defaults"""
+        self.institutional_memory = {
+            # Core shock and recovery tracking
+            'total_shocks_experienced': 0,
+            'average_shock_severity': 0.0,
+            'learned_resilience_bonus': 0.0,
+            'crisis_response_knowledge': 0.0,
+            'recovery_success_rate': 0.0,
+            
+            # Social learning and adaptation
+            'collective_learning_factor': 1.0,
+            'trust_network_strength': 0.5,
+            'social_cohesion_momentum': 0.5,
+            
+            # Institutional adaptation metrics
+            'institutional_adaptation': 0.0,
+            'policy_effectiveness': 0.5,
+            'community_resilience': 0.5
+        }
+        
+        # Initialize recovery tracking variables
+        self.recovery_phase_rounds = 0
+        self.in_recovery_phase = False
+        self.shocks_without_recovery = 0
         # ENHANCED: Create more realistic social networks with group bias
         for person in self.people:
             others = [p for p in self.people if p is not person]
@@ -1282,34 +1322,61 @@ class EnhancedMassSimulation:
         shock_severity = self._draw_shock_magnitude()
         shock_severity = min(2.0, max(0.1, shock_severity))
         
-        # SIGNIFICANT FIX #8: Apply institutional memory to reduce shock impact
+        # FIXED: Initialize all required institutional memory keys
+        required_keys = {
+            'learned_resilience_bonus': 0.0,
+            'total_shocks_experienced': 0,
+            'average_shock_severity': 0.0,
+            'crisis_response_knowledge': 0.0,
+            'collective_learning_factor': 1.0
+        }
+        
+        for key, default_value in required_keys.items():
+            if key not in self.institutional_memory:
+                self.institutional_memory[key] = default_value
+        
+        # Apply institutional memory to reduce shock impact
         memory_reduction = self.institutional_memory['learned_resilience_bonus'] * 0.3
-        effective_severity = shock_severity * (1 - memory_reduction)
+        collective_bonus = (self.institutional_memory['collective_learning_factor'] - 1.0) * 0.2
+        total_reduction = memory_reduction + collective_bonus
+    
+        effective_severity = shock_severity * (1 - total_reduction)
         self.system_stress += effective_severity
         self.shock_events += 1
         
-        # SIGNIFICANT FIX #8: Update institutional memory properly
+        # Update institutional memory
         self.institutional_memory['total_shocks_experienced'] += 1
         old_avg = self.institutional_memory['average_shock_severity']
         n = self.institutional_memory['total_shocks_experienced']
         self.institutional_memory['average_shock_severity'] = (old_avg * (n-1) + shock_severity) / n
         
         # Increase learned resilience based on experience
-        if self.in_recovery_phase:
+        if getattr(self, 'in_recovery_phase', False):
+            self.institutional_memory['learned_resilience_bonus'] += 0.01
+            self.institutional_memory['learned_resilience_bonus'] = min(0.5, self.institutional_memory['learned_resilience_bonus'])
             self.institutional_memory['learned_resilience_bonus'] += 0.01
         else:
-            self.shocks_without_recovery += 1
+            self.shocks_without_recovery = getattr(self, 'shocks_without_recovery', 0) + 1
             
         # Start recovery phase
         self.in_recovery_phase = True
         self.recovery_phase_rounds = 0
         
-        # Apply shock to all people
+        # Apply shock to all people with institutional benefits
         alive_people = [p for p in self.people if not p.is_dead]
+        learning_factor = self.institutional_memory['collective_learning_factor']       
         for person in alive_people:
             try:
-                person.acute_stress += effective_severity * 0.5
-                person.chronic_queue.append(person.acute_stress)
+                alive_people = [p for p in self.people if not p.is_dead]
+                for person in alive_people:
+                    try:
+                        # Apply collective learning to reduce individual impact
+                        individual_shock = effective_severity * 0.5 / learning_factor
+                        person.acute_stress += individual_shock
+                        person.chronic_queue.append(person.acute_stress)
+                    except Exception as e_inner:
+                      timestamp_print(f"⚠️ Error applying shock to person {person.id}: {e_inner}")
+                      continue
             except Exception as e:
                 timestamp_print(f"⚠️ Error applying shock to person {person.id}: {e}")
                 continue
@@ -1376,53 +1443,88 @@ class EnhancedMassSimulation:
             timestamp_print(f"⚠️ Error in intervention event: {e}")
     
     def _apply_social_diffusion(self, alive_people: List[OptimizedPerson]):
-        """Apply social diffusion of trust values"""
         """Apply network-neighbor diffusion of trust and update institutional memory."""
         sd = self.params.social_diffusion
         if sd <= 0:
             return
-        total = 0.0
-        count = 0
+        # FIXED: Initialize missing variables that were causing NameError
+        total_trust_change = 0.0
+        diffusion_events = 0
+        network_coherence = 0.0
+        
         for person in alive_people:
             neighbors = getattr(person, 'network_neighbors', set())
             if not neighbors:
                 continue
                 
-            # Collect trust values from network neighbors (enhanced weighting)
+            # Collect trust values from network neighbors
             neighbor_trusts = []
             for neighbor in neighbors:
-                if neighbor in person.relationships:
-                    trust_val = person.relationships[neighbor].trust
-                    # Weight by relationship strength (interaction count)
-                    rel = person.relationships[neighbor]
+                # FIXED: Use neighbor.id instead of neighbor object
+                if neighbor.id in person.relationships:
+                    trust_val = person.relationships[neighbor.id].trust
+                    # Weight by relationship strength
+                    rel = person.relationships[neighbor.id]
+                    weight = min(rel.interaction_count + 1, 10)  # Cap at 10x weight
+                    neighbor_trusts.extend([trust_val] * weight)  # Repeat based on weight
                     weight = min(rel.interaction_count + 1, 10)  # Cap at 10x weight
                     neighbor_trusts.extend([trust_val] * weight)  # Repeat based on weight
             
             if not neighbor_trusts:
                 continue
+            network_coherence += local_avg  # Track network coherence
                 
             local_avg = sum(neighbor_trusts) / len(neighbor_trusts)
             
-            # ENHANCED: Apply stronger diffusion for network neighbors
+            # Apply diffusion to relationships
             enhanced_diffusion = sd * 1.5  # 50% stronger for network neighbors
             
-            # Apply diffusion to all relationships, with extra strength for network neighbors
             for other_id in person.relationships:
                 rel = person.relationships[other_id]
-                diffusion_strength = enhanced_diffusion if other_id in neighbors else sd
-                rel.trust = max(0.0, min(1.0, 
-                    (1 - diffusion_strength) * rel.trust + diffusion_strength * local_avg
-                ))
+                old_trust = rel.trust
+                
+                # Check if this relationship is with a network neighbor
+                is_neighbor = any(neighbor.id == other_id for neighbor in neighbors)
+                diffusion_strength = enhanced_diffusion if is_neighbor else sd
+                
+                new_trust = max(0.0, min(1.0, 
+                     (1 - diffusion_strength) * rel.trust + diffusion_strength * local_avg
+                 ))
+                
+                # Track changes for institutional memory
+                trust_change = abs(new_trust - old_trust)
+                total_trust_change += trust_change
+                diffusion_events += 1
+                
+                rel.trust = new_trust
 
-        # institutional memory: decay or reinforce
-        if count:
-            net_avg = total / count
-            self.institutional_memory = (1-sd)*self.institutional_memory + sd*net_avg
-        else:
-            if hasattr(self, 'institutional_memory') and isinstance(self.institutional_memory, (int, float)):
-                self.institutional_memory *= (1 - sd*0.1)
-            elif not hasattr(self, 'institutional_memory'):
-                self.institutional_memory = 0.0
+
+        # FIXED: Properly update institutional memory as DICTIONARY, not float
+        if diffusion_events > 0:
+            avg_trust_change = total_trust_change / diffusion_events
+            avg_network_coherence = network_coherence / len([p for p in alive_people if getattr(p, 'network_neighbors', set())])
+            
+            # Update institutional memory dictionary properly
+            if 'trust_network_strength' not in self.institutional_memory:
+                self.institutional_memory['trust_network_strength'] = 0.5
+            if 'collective_learning_factor' not in self.institutional_memory:
+                self.institutional_memory['collective_learning_factor'] = 1.0
+                
+            # Update network strength based on diffusion effectiveness
+            self.institutional_memory['trust_network_strength'] = (
+                0.9 * self.institutional_memory['trust_network_strength'] + 
+                0.1 * avg_network_coherence
+            )
+            
+            # Update collective learning based on trust change magnitude
+            current_learning = self.institutional_memory['collective_learning_factor']
+            if avg_trust_change > 0.1:  # Significant changes indicate active learning
+                self.institutional_memory['collective_learning_factor'] = min(2.0, 
+                    current_learning * (1 + sd * 0.1))
+            else:
+                self.institutional_memory['collective_learning_factor'] = max(0.5,
+                    current_learning * (1 - sd * 0.05))
+
         
     def _create_birth(self, parent_a: OptimizedPerson, parent_b: OptimizedPerson):
         """Create new person with group inheritance"""
@@ -1532,48 +1634,71 @@ class EnhancedMassSimulation:
         return avg_in_group, avg_out_group
     
     def _update_recovery_dynamics(self):
-        """SIGNIFICANT FIX #8: Complete recovery dynamics implementation"""
-        if self.in_recovery_phase:
-            self.recovery_phase_rounds += 1
+
+        """Complete recovery dynamics implementation with proper institutional memory"""
+        # FIXED: Initialize recovery tracking variables if missing
+        if not hasattr(self, 'in_recovery_phase'):
+            self.in_recovery_phase = False
+        if not hasattr(self, 'recovery_phase_rounds'):
+            self.recovery_phase_rounds = 0
+        if not hasattr(self, 'shocks_without_recovery'):
+            self.shocks_without_recovery = 0
+        
+        if not self.in_recovery_phase:
+            return
+        
+        self.recovery_phase_rounds += 1
+        
+        # FIXED: Ensure all required keys exist in institutional memory
+        if 'crisis_response_knowledge' not in self.institutional_memory:
+            self.institutional_memory['crisis_response_knowledge'] = 0.0
+        if 'recovery_success_rate' not in self.institutional_memory:
+            self.institutional_memory['recovery_success_rate'] = 0.0
+        if 'collective_learning_factor' not in self.institutional_memory:
+            self.institutional_memory['collective_learning_factor'] = 1.0
+        
+        # Recovery duration based on institutional knowledge
+        base_duration = 8
+        knowledge_reduction = int(self.institutional_memory['crisis_response_knowledge'] * 4)
+        recovery_duration = max(4, base_duration + knowledge_reduction)
+        
+        if self.recovery_phase_rounds >= recovery_duration:
+            self.in_recovery_phase = False
             
-            # Recovery takes 8-12 rounds (2-3 years) after shocks
-            recovery_duration = 8 + int(self.institutional_memory['crisis_response_knowledge'] * 4)
-            
-            if self.recovery_phase_rounds >= recovery_duration:
-                self.in_recovery_phase = False
-                
-                # Calculate recovery success rate
-                alive_people = [p for p in self.people if not p.is_dead]
+            # Calculate recovery success rate
+            alive_people = [p for p in self.people if not p.is_dead]
+            if alive_people:
                 cooperative_count = len([p for p in alive_people if p.strategy == 'cooperative'])
-                recovery_success = cooperative_count / max(1, len(alive_people))
+                recovery_success = cooperative_count / len(alive_people)
                 
-                # Update institutional memory
+                # Update institutional memory with exponential smoothing
                 old_success = self.institutional_memory['recovery_success_rate']
-                self.institutional_memory['recovery_success_rate'] = (old_success + recovery_success) / 2
+                self.institutional_memory['recovery_success_rate'] = 0.8 * old_success + 0.2 * recovery_success
                 
-                # Apply institutional learning boost
+                # Apply institutional learning boost to cooperative agents
                 knowledge_bonus = 0.1 * self.institutional_memory['recovery_success_rate']
                 
                 for person in alive_people:
                     if person.strategy == 'cooperative':
-                        # Boost cooperation-related needs during recovery
                         person.maslow_needs.love = min(10, person.maslow_needs.love + knowledge_bonus)
                         person.maslow_needs.esteem = min(10, person.maslow_needs.esteem + knowledge_bonus * 0.7)
                 
-                # Institutional knowledge grows
-                self.institutional_memory['crisis_response_knowledge'] = min(1.0, 
-                    self.institutional_memory['crisis_response_knowledge'] + 0.05)
-                
-                # Update collective learning factor
+                # Institutional knowledge grows with successful recoveries
                 if recovery_success > 0.5:
+                    self.institutional_memory['crisis_response_knowledge'] = min(1.0, 
+                        self.institutional_memory['crisis_response_knowledge'] + 0.05)
+                    
+                    # Boost collective learning factor
                     self.institutional_memory['collective_learning_factor'] = min(2.0,
                         self.institutional_memory['collective_learning_factor'] * 1.05)
                 else:
+                    # Poor recovery reduces institutional confidence
                     self.institutional_memory['collective_learning_factor'] = max(0.5,
                         self.institutional_memory['collective_learning_factor'] * 0.95)
-                
-                self.recovery_phase_rounds = 0
-                self.shocks_without_recovery = 0
+
+            # Reset recovery tracking
+            self.recovery_phase_rounds = 0
+            self.shocks_without_recovery = 0
     
     def run_simulation(self) -> EnhancedSimulationResults:
         """Run v3 enhanced simulation"""
@@ -1792,7 +1917,7 @@ class EnhancedMassSimulation:
             out_group_constraint_amplifications=self.out_group_constraint_amplifications,
             group_extinction_events=group_extinctions,
             trust_asymmetry=trust_asymmetry,
-            institutional_memory=self.institutional_memory, 
+            institutional_memory=self.institutional_memory.copy(), 
             
             # Interaction metrics
             total_interactions=total_interactions,
@@ -1869,7 +1994,7 @@ class EnhancedMassSimulation:
                 final_group_cooperation_rates={k: 0.0 for k in final_group_populations.keys()},
                 total_interactions=max(0, self.total_interactions),
                 total_mutual_coop=max(0, getattr(self, 'total_mutual_coop', 0)),
-                institutional_memory=self.institutional_memory
+                institutional_memory=getattr(self, 'institutional_memory', {}).copy()
             )
         except Exception as emergency_error:
             timestamp_print(f"❌ Even emergency result generation failed: {emergency_error}")
@@ -2535,10 +2660,11 @@ def analyze_v3_patterns(results: List[EnhancedSimulationResults]) -> pd.DataFram
                 'social_cohesion_factor': result.parameters.social_diffusion * result.avg_trust_level,
 
                 # === INSTITUTIONAL MEMORY METRICS (new) ===
-                'total_shocks_experienced': result.institutional_memory['total_shocks_experienced'],
-                'average_shock_severity': result.institutional_memory['average_shock_severity'],
-                'recovery_success_rate': result.institutional_memory['recovery_success_rate'],
-                'crisis_response_knowledge': result.institutional_memory['crisis_response_knowledge'],
+
+                'total_shocks_experienced': result.institutional_memory.get('total_shocks_experienced', 0),
+                'average_shock_severity': result.institutional_memory.get('average_shock_severity', 0.0),
+                'recovery_success_rate': result.institutional_memory.get('recovery_success_rate', 0.0),
+                'crisis_response_knowledge': result.institutional_memory.get('crisis_response_knowledge', 0.0),
             }
             data.append(row)
             
