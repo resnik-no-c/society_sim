@@ -1,0 +1,17 @@
+@@ -769,15 +769,3 @@
+         return random.random() < base_prob
+ 
+-    else:
+-        return relationship.trust >= self.cooperation_threshold
+-
+-    # 9. POSITIVE MASLOW OVERRIDES
+-    if maslow_priority == 'self_actualization_boost':
+-        base_prob *= 1.2   # Self-actualization lift
+-    elif maslow_priority == 'group_seeking':
+-        base_prob += 0.05  # Belonging boost
+-
+-        return random.random() < max(0.05, min(0.95, base_prob))
+-    else:
+-        # Trust-based decision - cooperate if trust exceeds threshold
+-        return relationship.trust >= effective_threshold
++    # FIXED: Remove orphaned maslow_priority code

@@ -367,10 +367,13 @@ def save_incremental_csv(result, csv_file: str = "simulation_results_incremental
         'intervention_intensity': result.parameters.intervention_scale / max(1, result.parameters.intervention_interval),
         'resilience_variability': result.parameters.resilience_profile['noise'] / max(0.001, result.parameters.resilience_profile['threshold']),
         'social_cohesion_factor': result.parameters.social_diffusion * result.avg_trust_level,
-        # FIXED: Remove undefined variable references
-        'avg_network_size': 0,
-        'avg_out_group_penalty_accumulator': 0,
-        'max_out_group_penalty_accumulator': 0,
+        # NEW: Social network and penalty metrics
+        'avg_network_size': (sum(len(getattr(p, 'network_neighbors', set())) for p in alive_people) / 
+                            max(1, len(alive_people)) if 'alive_people' in locals() else 0),
+        'avg_out_group_penalty_accumulator': (sum(getattr(p, 'out_group_penalty_accumulator', 0) for p in alive_people) / 
+                                            max(1, len(alive_people)) if 'alive_people' in locals() else 0),
+        'max_out_group_penalty_accumulator': (max((getattr(p, 'out_group_penalty_accumulator', 0) for p in alive_people), default=0) 
+                                            if 'alive_people' in locals() else 0),
     }
     
     df_row = pd.DataFrame([row_data])
@@ -766,9 +769,18 @@ class OptimizedPerson:
             return random.random() < base_prob
 
         else:
-            # FIXED: Remove orphaned maslow_priority code
-            # Trust-based decision - cooperate if trust exceeds threshold
             return relationship.trust >= self.cooperation_threshold
+            
+        # 9. POSITIVE MASLOW OVERRIDES
+        if maslow_priority == 'self_actualization_boost':
+            base_prob *= 1.2   # Self-actualization lift
+        elif maslow_priority == 'group_seeking':
+            base_prob += 0.05  # Belonging boost
+            
+            return random.random() < max(0.05, min(0.95, base_prob))
+        else:
+            # Trust-based decision - cooperate if trust exceeds threshold
+            return relationship.trust >= effective_threshold
     
     def get_relationship(self, other_id: int, round_num: int, 
                         other_group_id: Optional[str] = None) -> FastRelationship:
@@ -1229,9 +1241,6 @@ class EnhancedMassSimulation:
         self.shocks_without_recovery = 0
         
         self._initialize_population()
-        # Store initial state for results generation
-        self.initial_trait_avg = self._get_average_traits()
-        self.initial_group_populations = self._get_group_populations()
     
     def _sample_next_shock(self) -> int:
         """Sample next shock timing using Poisson process"""
@@ -1470,7 +1479,7 @@ class EnhancedMassSimulation:
     
     def _get_average_traits(self) -> Dict[str, float]:
         """Get average Maslow traits"""
-        alive_people = [p for p in self.people if not p.is_dead]  # Include all living people
+        alive_people = [p for p in self.people if not p.is_dead and not p.is_born] #excluding newborns from Maslow needs calculaiton
         if not alive_people:
             return {k: 0 for k in ['physiological', 'safety', 'love', 'esteem', 'self_actualization']}
         
@@ -1580,6 +1589,8 @@ class EnhancedMassSimulation:
         timestamp_print(f"🎮 Starting v3 simulation run {self.run_id}")
         
         try:
+            initial_trait_avg = self._get_average_traits()
+            initial_group_populations = self._get_group_populations()
             
             while self.round < self.params.max_rounds:
                 try:
@@ -1640,7 +1651,7 @@ class EnhancedMassSimulation:
                     # Continue to next round rather than crashing
                     continue
             
-            return self._generate_results(self.initial_trait_avg, self.initial_group_populations)
+            return self._generate_results(initial_trait_avg, initial_group_populations)
             
         except Exception as sim_error:
             timestamp_print(f"❌ Critical error in simulation {self.run_id}: {sim_error}")
@@ -1680,7 +1691,18 @@ class EnhancedMassSimulation:
             timestamp_print(f"📊 Sim {self.run_id}: Large cooperation gap - Strategy: {strategy_cooperation_rate:.3f}, Behavioral: {behavioral_cooperation_rate:.3f}")
         
         final_traits = self._get_average_traits()
-        trait_evolution = {k: final_traits[k] - initial_traits[k] for k in initial_traits.keys()}
+
+        # compute population-level Maslow change as difference of averages
+        initial_traits = initial_trait_avg
+        final_traits = self._get_average_traits()
+        trait_evolution = {
+            trait: final_traits[trait] - initial_traits[trait]
+            for trait in initial_traits
+        }
+        # DIAGNOSTIC: Log the difference between methods
+        population_level_changes = {k: final_traits[k] - initial_traits[k] for k in initial_traits.keys()}
+        if abs(trait_evolution['love'] - population_level_changes['love']) > 0.1:
+            timestamp_print(f"🔍 Sim {self.run_id}: Maslow tracking difference - Individual: {trait_evolution['love']:.3f}, Population: {population_level_changes['love']:.3f}")
         
         # Population stability calculation
         if len(self.population_history) > 20:
@@ -1818,11 +1840,14 @@ class EnhancedMassSimulation:
             
             # Safe trait collection
             try:
+                initial_traits = initial_trait_avg
                 final_traits = self._get_average_traits()
-                initial_traits = final_traits.copy()  # Use final as approximation for initial in emergency
+                trait_evolution = {
+                    trait: final_traits[trait] - initial_traits[trait]
+                    for trait in initial_traits
+                }
             except:
                 final_traits = {'physiological': 0, 'safety': 0, 'love': 0, 'esteem': 0, 'self_actualization': 0}
-                initial_traits = final_traits.copy()
             
             # Safe group population collection
             try:
@@ -1853,7 +1878,7 @@ class EnhancedMassSimulation:
                 max_system_stress=0.0,
                 avg_maslow_pressure=0.0,
                 avg_basic_needs_crisis_rate=0.0,
-                initial_needs_avg=initial_traits,
+                initial_needs_avg=final_traits,
                 final_needs_avg=final_traits,
                 needs_improvement={k: 0 for k in final_traits.keys()},
                 avg_trust_level=0.5,
@@ -2124,7 +2149,7 @@ def process_simulation_work(work_and_params: tuple) -> tuple:
         if is_complete:
             initial_trait_avg = sim._get_average_traits()
             initial_group_populations = sim._get_group_populations()
-            result = sim._generate_results(sim.initial_trait_avg, sim.initial_group_populations)
+            result = sim._generate_results(initial_trait_avg, initial_group_populations)
             return ('complete', work.sim_id, result, execution_time, rounds_completed)
         else:
             updated_state = pickle.dumps(sim)
