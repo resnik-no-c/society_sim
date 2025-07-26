@@ -1703,6 +1703,38 @@ class EnhancedMassSimulation:
     def run_simulation(self) -> EnhancedSimulationResults:
         """Run v3 enhanced simulation"""
         timestamp_print(f"🎮 Starting v3 simulation run {self.run_id}")
+
+        import os
+        import pandas as pd
+
+        # At the very start of run_simulation (before the for‑loop over rounds):
+        if not os.path.exists('simulation_results_incremental.csv'):
+            # Define the columns in the exact order your snapshots will use
+            cols = [
+                'run_id', 'timestamp',
+                'shock_interval_years', 'homophily_bias', 'num_groups',
+                'out_group_trust_bias', 'out_group_penalty',
+                'intervention_interval', 'intervention_scale', 'event_bonus',
+                'base_trust_delta', 'group_trust_bias', 'turnover_rate',
+                'social_diffusion', 'max_rounds',
+                'initial_population', 'max_population', 'maslow_variation',
+                'constraint_threshold_min', 'constraint_threshold_max',
+                'recovery_threshold', 'cooperation_bonus', 'trust_threshold',
+                'max_relationships_per_person',
+                'current_cooperation_rate', 'current_population', 'current_system_stress',
+                'first_cascade_round', 'total_cascade_events', 'total_shock_events',
+                'total_defections', 'total_redemptions', 'redemption_rate',
+                'total_interactions', 'total_mutual_cooperation',
+                'total_mutual_defection', 'total_mixed_outcomes',
+                'shock_frequency', 'trust_sensitivity', 'intervention_intensity',
+                'resilience_variability', 'social_cohesion_factor'
+            ]
+            # Create an empty DataFrame with just the header:
+            pd.DataFrame(columns=cols).to_csv(
+                'simulation_results_incremental.csv',
+                index=False
+            )
+
         
         try:
             
