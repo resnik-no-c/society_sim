@@ -2224,6 +2224,30 @@ def process_simulation_work(work_and_params: tuple) -> tuple:
     """Process a single work item with v3 parameters"""
     work, provided_params = work_and_params
     start_time = time.time()
+
+    import os, pandas as pd
+    header_file = 'simulation_results_incremental.csv'
+    if not os.path.isfile(header_file) or os.path.getsize(header_file) == 0:
+        cols = [
+            'run_id','timestamp',
+            'shock_interval_years','homophily_bias','num_groups',
+            'out_group_trust_bias','out_group_penalty',
+            'intervention_interval','intervention_scale','event_bonus',
+            'base_trust_delta','group_trust_bias','turnover_rate',
+            'social_diffusion','max_rounds',
+            'initial_population','max_population','maslow_variation',
+            'constraint_threshold_min','constraint_threshold_max',
+            'recovery_threshold','cooperation_bonus','trust_threshold',
+            'max_relationships_per_person',
+            'current_cooperation_rate','current_population','current_system_stress',
+            'first_cascade_round','total_cascade_events','total_shock_events',
+            'total_defections','total_redemptions','redemption_rate',
+            'total_interactions','total_mutual_cooperation',
+            'total_mutual_defection','total_mixed_outcomes',
+            'shock_frequency','trust_sensitivity','intervention_intensity',
+            'resilience_variability','social_cohesion_factor'
+        ]
+        pd.DataFrame(columns=cols).to_csv(header_file, index=False)
     
     try:
         if work.is_new_simulation:
