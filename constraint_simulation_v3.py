@@ -2235,70 +2235,76 @@ def process_simulation_work(work_and_params: tuple) -> tuple:
             sim._apply_social_diffusion(alive_people)
             
             # ——— Snapshot every 4 rounds ———
-            if sim.round % 4 == 0:
-                import pandas as _pd
-                # Build row_data exactly as save_incremental_csv does
+            if self.round % 4 == 0:
+                import pandas as pd
+                from datetime import datetime
+
+                # Safe getter to avoid AttributeErrors
+                def S(attr, default=0):
+                    return getattr(self, attr, default)
+
                 row_data = {
-                    'run_id': sim.run_id,
-                    'timestamp': datetime.now().isoformat(),
+                    # Identifiers & timestamp
+                    'run_id':           self.run_id,
+                    'timestamp':        datetime.now().isoformat(),
 
-                    # V3 PARAMETERS
-                    'shock_interval_years': sim.params.shock_interval_years,
-                    'homophily_bias': sim.params.homophily_bias,
-                    'num_groups': sim.params.num_groups,
-                    'out_group_trust_bias': sim.params.out_group_trust_bias,
-                    'out_group_penalty': sim.params.out_group_penalty,
-                    'intervention_interval': sim.params.intervention_interval,
-                    'intervention_scale': sim.params.intervention_scale,
-                    'event_bonus': sim.params.event_bonus,
-                    'base_trust_delta': sim.params.base_trust_delta,
-                    'group_trust_bias': sim.params.group_trust_bias,
-                    'resilience_threshold': sim.params.resilience_profile['threshold'],
-                    'resilience_noise': sim.params.resilience_profile['noise'],
-                    'turnover_rate': sim.params.turnover_rate,
-                    'social_diffusion': sim.params.social_diffusion,
-                    'max_rounds': sim.params.max_rounds,
+                    # — static params —
+                    'shock_interval_years':      self.params.shock_interval_years,
+                    'homophily_bias':            self.params.homophily_bias,
+                    'num_groups':                self.params.num_groups,
+                    'out_group_trust_bias':      self.params.out_group_trust_bias,
+                    'out_group_penalty':         self.params.out_group_penalty,
+                    'intervention_interval':     self.params.intervention_interval,
+                    'intervention_scale':        self.params.intervention_scale,
+                    'event_bonus':               self.params.event_bonus,
+                    'base_trust_delta':          self.params.base_trust_delta,
+                    'group_trust_bias':          self.params.group_trust_bias,
+                    'turnover_rate':             self.params.turnover_rate,
+                    'social_diffusion':          self.params.social_diffusion,
+                    'max_rounds':                self.params.max_rounds,
+                    'initial_population':        self.params.initial_population,
+                    'max_population':            self.params.max_population,
+                    'maslow_variation':          self.params.maslow_variation,
+                    'constraint_threshold_min':  self.params.constraint_threshold_range[0],
+                    'constraint_threshold_max':  self.params.constraint_threshold_range[1],
+                    'recovery_threshold':        self.params.recovery_threshold,
+                    'cooperation_bonus':         self.params.cooperation_bonus,
+                    'trust_threshold':           self.params.trust_threshold,
+                    'max_relationships_per_person': self.params.max_relationships_per_person,
 
-                    # Legacy parameters
-                    'initial_population': sim.params.initial_population,
-                    'max_population': sim.params.max_population,
-                    'maslow_variation': sim.params.maslow_variation,
-                    'constraint_threshold_min': sim.params.constraint_threshold_range[0],
-                    'constraint_threshold_max': sim.params.constraint_threshold_range[1],
-                    'recovery_threshold': sim.params.recovery_threshold,
-                    'cooperation_bonus': sim.params.cooperation_bonus,
-                    'trust_threshold': sim.params.trust_threshold,
-                    'max_relationships_per_person': sim.params.max_relationships_per_person,
+                    # — dynamic outcomes so far —
+                    'current_cooperation_rate':   S('total_mutual_cooperation') / max(1, S('total_interactions')),
+                    'current_population':         len([p for p in self.people if not p.is_dead]),
+                    'current_system_stress':      S('system_stress'),
 
-                    # Dynamic outcomes so far
-                    'current_cooperation_rate': (
-                        sim.total_mutual_cooperation
-                        / max(1, sim.total_encounters)
-                    ),
-                    'current_population': len([p for p in sim.people if not p.is_dead]),
-                    'current_system_stress': sim.system_stress,
+                    # — system dynamics so far —
+                    'first_cascade_round':        S('first_cascade_round'),
+                    'total_cascade_events':       S('total_cascade_events'),
+                    'total_shock_events':         S('total_shock_events'),
+                    'total_defections':           S('total_defections'),
+                    'total_redemptions':          S('total_redemptions'),
+                    'redemption_rate':            S('total_redemptions') / max(1, S('total_defections') + S('total_redemptions')),
+                    'total_interactions':         S('total_interactions'),
+                    'total_mutual_cooperation':   S('total_mutual_cooperation'),
+                    'total_mutual_defection':     S('total_mutual_defection'),
+                    'total_mixed_outcomes':       S('total_mixed_outcomes'),
 
-                    # System dynamics so far
-                    'first_cascade_round': sim.first_cascade_round,
-                    'total_cascade_events': sim.total_cascade_events,
-                    'total_shock_events': sim.total_shock_events,
-                    'total_defections': sim.total_defections,
-                    'total_redemptions': sim.total_redemptions,
-                    'redemption_rate': (sim.total_redemptions / max(1, sim.total_defections+sim.total_redemptions)),
-                    'total_encounters': sim.total_interactions,
-                    'total_mutual_cooperation': sim.total_mutual_cooperation,
-                    'total_mutual_defection': sim.total_mutual_defection,
-                    'total_mixed_outcomes': sim.total_mixed_outcomes,
-
-                    # Derived metrics so far
-                    'shock_frequency': 1.0 / max(1, sim.params.shock_interval_years),
-                    'trust_sensitivity': sim.params.base_trust_delta * sim.params.group_trust_bias,
-                    'intervention_intensity': sim.params.intervention_scale / max(1, sim.params.intervention_interval),
-                    'resilience_variability': sim.params.resilience_profile['noise'] / max(0.001, sim.params.resilience_profile['threshold']),
-                    'social_cohesion_factor': sim.params.social_diffusion * sim.avg_trust_level,
+                    # — derived metrics —
+                    'shock_frequency':            1.0 / max(1, self.params.shock_interval_years),
+                    'trust_sensitivity':          self.params.base_trust_delta * self.params.group_trust_bias,
+                    'intervention_intensity':     self.params.intervention_scale / max(1, self.params.intervention_interval),
+                    'resilience_variability':     self.params.resilience_profile['noise'] / max(0.001, self.params.resilience_profile['threshold']),
+                    'social_cohesion_factor':     self.params.social_diffusion * S('avg_trust_level'),
                 }
-                _pd.DataFrame([row_data]).to_csv('simulation_results_incremental.csv',
-                                                mode='a', header=False, index=False)
+
+                # Append to the same incremental CSV (headers must already exist)
+                pd.DataFrame([row_data]).to_csv(
+                    'simulation_results_incremental.csv',
+                    mode='a',
+                    header=False,
+                    index=False
+                )
+
 
             sim._check_recoveries()
             sim._update_population()
