@@ -1268,8 +1268,8 @@ class EnhancedMassSimulation:
             'total_shocks_experienced': 0,
             'average_shock_severity': 0.0,
             'learned_resilience_bonus': 0.0,
-            'crisis_response_knowledge': 0.0,
-            'recovery_success_rate': 0.0,
+            'recovery_success_rate':  self.params.recovery_threshold,
+            'crisis_response_knowledge': self.params.recovery_threshold,
             
             # Social learning and adaptation
             'collective_learning_factor': 1.0,
