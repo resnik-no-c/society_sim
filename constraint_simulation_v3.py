@@ -2271,7 +2271,10 @@ def process_simulation_work(work_and_params: tuple) -> tuple:
                     'max_relationships_per_person': sim.params.max_relationships_per_person,
 
                     # Dynamic outcomes so far
-                    'current_cooperation_rate': sim.behavioral_cooperation_rate,
+                    'current_cooperation_rate': (
+                        sim.total_mutual_cooperation
+                        / max(1, sim.total_encounters)
+                    ),
                     'current_population': len([p for p in sim.people if not p.is_dead]),
                     'current_system_stress': sim.system_stress,
 
