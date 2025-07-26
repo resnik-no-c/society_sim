@@ -2234,6 +2234,69 @@ def process_simulation_work(work_and_params: tuple) -> tuple:
             # Apply social diffusion
             sim._apply_social_diffusion(alive_people)
             
+            # ——— Snapshot every 4 rounds ———
+            if sim.round % 4 == 0:
+                import pandas as _pd
+                # Build row_data exactly as save_incremental_csv does
+                row_data = {
+                    'run_id': sim.run_id,
+                    'timestamp': datetime.now().isoformat(),
+
+                    # V3 PARAMETERS
+                    'shock_interval_years': sim.params.shock_interval_years,
+                    'homophily_bias': sim.params.homophily_bias,
+                    'num_groups': sim.params.num_groups,
+                    'out_group_trust_bias': sim.params.out_group_trust_bias,
+                    'out_group_penalty': sim.params.out_group_penalty,
+                    'intervention_interval': sim.params.intervention_interval,
+                    'intervention_scale': sim.params.intervention_scale,
+                    'event_bonus': sim.params.event_bonus,
+                    'base_trust_delta': sim.params.base_trust_delta,
+                    'group_trust_bias': sim.params.group_trust_bias,
+                    'resilience_threshold': sim.params.resilience_profile['threshold'],
+                    'resilience_noise': sim.params.resilience_profile['noise'],
+                    'turnover_rate': sim.params.turnover_rate,
+                    'social_diffusion': sim.params.social_diffusion,
+                    'max_rounds': sim.params.max_rounds,
+
+                    # Legacy parameters
+                    'initial_population': sim.params.initial_population,
+                    'max_population': sim.params.max_population,
+                    'maslow_variation': sim.params.maslow_variation,
+                    'constraint_threshold_min': sim.params.constraint_threshold_range[0],
+                    'constraint_threshold_max': sim.params.constraint_threshold_range[1],
+                    'recovery_threshold': sim.params.recovery_threshold,
+                    'cooperation_bonus': sim.params.cooperation_bonus,
+                    'trust_threshold': sim.params.trust_threshold,
+                    'max_relationships_per_person': sim.params.max_relationships_per_person,
+
+                    # Dynamic outcomes so far
+                    'current_cooperation_rate': sim.behavioral_cooperation_rate,
+                    'current_population': len([p for p in sim.people if not p.is_dead]),
+                    'current_system_stress': sim.system_stress,
+
+                    # System dynamics so far
+                    'first_cascade_round': sim.first_cascade_round,
+                    'total_cascade_events': sim.total_cascade_events,
+                    'total_shock_events': sim.total_shock_events,
+                    'total_defections': sim.total_defections,
+                    'total_redemptions': sim.total_redemptions,
+                    'redemption_rate': (sim.total_redemptions / max(1, sim.total_defections+sim.total_redemptions)),
+                    'total_encounters': sim.total_interactions,
+                    'total_mutual_cooperation': sim.total_mutual_cooperation,
+                    'total_mutual_defection': sim.total_mutual_defection,
+                    'total_mixed_outcomes': sim.total_mixed_outcomes,
+
+                    # Derived metrics so far
+                    'shock_frequency': 1.0 / max(1, sim.params.shock_interval_years),
+                    'trust_sensitivity': sim.params.base_trust_delta * sim.params.group_trust_bias,
+                    'intervention_intensity': sim.params.intervention_scale / max(1, sim.params.intervention_interval),
+                    'resilience_variability': sim.params.resilience_profile['noise'] / max(0.001, sim.params.resilience_profile['threshold']),
+                    'social_cohesion_factor': sim.params.social_diffusion * sim.avg_trust_level,
+                }
+                _pd.DataFrame([row_data]).to_csv('simulation_results_incremental.csv',
+                                                mode='a', header=False, index=False)
+
             sim._check_recoveries()
             sim._update_population()
             sim._collect_round_data()
