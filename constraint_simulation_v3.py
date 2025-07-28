@@ -714,77 +714,9 @@ class OptimizedPerson:
         self.out_group_interactions = 0
         self.mixing_event_participations = 0
         
-        # Initialize Maslow needs
-        if parent_a and parent_b:
-            self.maslow_needs = self._inherit_traits(
-                parent_a.maslow_needs, parent_b.maslow_needs, 
-                params.maslow_variation, parent_a, parent_b
-            )
-        else:
-            self.maslow_needs = MaslowNeeds(
-                physiological=random.random() * 10,
-                safety=random.random() * 10,
-                love=random.random() * 10,
-                esteem=random.random() * 10,
-                self_actualization=random.random() * 10
-            )
-        
-        # MASLOW FIX: Store initial values for individual change tracking
-        self.initial_maslow_needs = MaslowNeeds(
-            physiological=self.maslow_needs.physiological,
-            safety=self.maslow_needs.safety,
-            love=self.maslow_needs.love,
-            esteem=self.maslow_needs.esteem,
-            self_actualization=self.maslow_needs.self_actualization
-        )
-        
+        # Initialize Maslow needs        
         self.maslow_pressure = 0.0
         self._calculate_maslow_pressure_fast()
-    
-    def lately_forced(self, sim_round: int) -> bool:
-        """True if this agent was forced to switch *this* round."""
-        return self.round_switched == sim_round
-
-        self.is_born = (parent_a is not None and parent_b is not None)
-        
-        # MAJOR FIX #5: Separate cooperation decisions from stress recovery
-        self.cooperation_threshold = random.uniform(0.2, 0.35)  # For cooperation decisions only
-        
-        # Resilience now controls stress recovery, not cooperation
-        base_threshold = params.resilience_profile['threshold']
-        noise_range = params.resilience_profile['noise']
-        self.stress_recovery_rate = base_threshold + random.uniform(-noise_range, noise_range)
-        self.stress_recovery_rate = max(0.01, min(0.99, self.stress_recovery_rate))
-        self.resilience_noise = noise_range
-        self.resilience_threshold = self.stress_recovery_rate  # For stress recovery only
-        
-        self.acute_stress = 0.0
-        self.chronic_queue = deque(maxlen=16)  # 4-year window
-        for _ in range(16):
-            self.chronic_queue.append(0.0)
-        
-        self.base_coop = 0.4 + (random.random() - 0.5) * 0.4
-        self.base_coop = max(0.1, min(0.9, self.base_coop))
-        
-        self.relationships: Dict[int, FastRelationship] = {}
-        self.society_trust = 0.5
-        
-        self.max_lifespan = int((200 + random.random() * 300) * (params.max_rounds / 500))
-        self.age = 0
-        # prepare neighbor set for diffusion
-        self.network_neighbors: Set['OptimizedPerson'] = set()
-        self.out_group_penalty_accumulator = 0.0  # Persistent out-group penalty
-        
-        self.strategy_changes = 0
-        self.rounds_as_selfish = 0
-        self.rounds_as_cooperative = 0
-        
-        # SIGNIFICANT FIX #9: Standardized group assignment logic
-        self.group_id = self._assign_group(params, group_id, parent_a, parent_b)
-            
-        self.in_group_interactions = 0
-        self.out_group_interactions = 0
-        self.mixing_event_participations = 0
         
         if parent_a and parent_b:
             self.maslow_needs = self._inherit_traits(
@@ -814,6 +746,10 @@ class OptimizedPerson:
         # ensure back‑pointer & switch tracker exist, filled in by sim later
         self.sim_ref: Optional['EnhancedMassSimulation'] = None
         self.round_switched: int = -1
+
+    def lately_forced(self, sim_round: int) -> bool:
+        """True if this agent was forced to switch *this* round."""
+        return self.round_switched == sim_round
     
     def _assign_group(self, params: SimulationConfig, group_id: Optional[str], 
                      parent_a: Optional['OptimizedPerson'], parent_b: Optional['OptimizedPerson']) -> str:
