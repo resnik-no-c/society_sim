@@ -487,6 +487,15 @@ class SimulationConfig:
     turnover_rate: float  # uniform(0.02, 0.05)
     social_diffusion: float  # uniform(0.0, 0.10)
     max_rounds: int = DEFAULT_MAX_ROUNDS
+
+
+    # ─── EVENT / DIARY EXTENSIONS ──────────────────────────────────────
+    impact_lags: Tuple[int, ...] = (4, 8, 16)          # post‑event follow‑ups
+    system_stress_crit: float = 1.0                    # endogenous tipping points
+    trust_crit: float = 0.30
+    coop_crit: float = 0.25
+    critical_sample_rate: float = 0.02                 # % agents in *critical* diary
+    extras_sample_rate: float = 0.05                   # % extras sampled every snapshot
     
     # Legacy parameters preserved for compatibility
     initial_population: int = DEFAULT_INITIAL_POPULATION
@@ -934,7 +943,17 @@ class OptimizedPerson:
     
     def force_switch(self):
         """Force switch to selfish strategy"""
-        self.strategy = 'selfish'
+        self.strategy = "selfish"
+        self.round_switched = self.sim_ref.round
+
+        # ─── Register forced‑switch event ──────────────────────────────
+        sim = self.sim_ref
+        sim.event_counter += 1
+        eid = sim.event_counter
+        sim.event_round[eid] = sim.round
+        sim._log_event_snapshot(eid, "during")
+        sim.last_event_id = eid
+
         self.is_constrained = True
         self.strategy_changes += 1
         self.maslow_needs.love *= 0.8
@@ -1241,6 +1260,23 @@ class EnhancedMassSimulation:
         self.maslow_log_counter = 0
         self.social_diffusion_log_counter = 0
         self.network_topology_log_counter = 0
+
+        # ─── EVENT / DIARY STATE ───────────────────────────────────────
+        self.event_counter      = 0
+        self.last_event_id      = None
+        self.event_round        = {}        # eid → round
+
+        self.event_log          = []        # event snapshots
+        self.diary_critical     = []        # focal agents
+        self.diary_extras       = []        # random crowd sample
+
+        # pick focal agents once
+        self.critical_agent_ids = {
+            p.id for p in random.sample(
+                self.people,
+                max(1, int(len(self.people) * self.params.critical_sample_rate))
+            )
+        }
         
         self._initialize_population()
         # Store initial state for results generation
@@ -1259,7 +1295,67 @@ class EnhancedMassSimulation:
         """Initialize population with group distribution"""
         for i in range(1, self.params.initial_population + 1):
             person = OptimizedPerson(i, self.params)
+            person.sim_ref = self                    # back‑pointer for event hooks
             self.people.append(person)
+
+    #   EVENT & DIARY HELPERS
+    # ──────────────────────────────────────────────────────────────────
+    def _log_event_snapshot(self, event_id: int, tag: str) -> None:
+        """Group‑level context + choice‑set indicators around an event."""
+        alive = [p for p in self.people if not p.is_dead]
+        self.event_log.append(dict(
+            run_id=self.run_id, round=self.round, event_id=event_id, tag=tag,
+            mean_trust=self._calculate_trust_levels()[0],
+            system_stress=self.system_stress,
+            coop_rate=self.total_mutual_cooperation / max(1, self.total_encounters),
+            pct_coop_strategy=sum(p.strategy == 'cooperative' for p in alive) / len(alive),
+            pct_high_constraint=sum(p.constraint_level > p.constraint_threshold for p in alive) / len(alive),
+            mean_constraint=np.mean([p.constraint_level for p in alive])
+        ))
+
+    def _capture_diary(self, diary_type: str, agent: "OptimizedPerson", event_id: int | None):
+        """Write one diary entry (critical or extras)."""
+        row = dict(
+            run_id=self.run_id,
+            round=self.round,
+            agent_id=agent.id,
+            event_id=event_id,
+            diary_type=diary_type,
+            group_label=agent.group_id,
+            age_rounds=agent.age,
+            strategy_current=agent.strategy,
+            behaviour_last_encounter=getattr(agent, "last_behaviour", None),
+            constraint_level=agent.constraint_level,
+            constraint_threshold=agent.constraint_threshold,
+            forced_switch_flag=int(getattr(agent, "round_switched", -1) == self.round),
+            trust_in_group_mean=getattr(agent, "trust_in_group", 0.5),
+            trust_out_group_mean=getattr(agent, "trust_out_group", 0.5),
+            trust_out_group_penalty=self.params.out_group_penalty,
+            top5_trust_ids=";".join(map(str, agent.get_top5_trust())),
+            cum_payoff=getattr(agent, "cumulative_payoff", 0.0),
+            cum_coop_actions=getattr(agent, "cum_coop", 0),
+            cum_defect_actions=getattr(agent, "cum_defect", 0),
+            last_shock_exposure=self.round - getattr(agent, "last_shock_round", self.round),
+            alive_flag=int(not agent.is_dead),
+        )
+        (self.diary_critical if diary_type == "critical" else self.diary_extras).append(row)
+
+    def _check_threshold_events(self):
+        """Emit an event when stress / trust / cooperation crosses a critical line."""
+        if (
+            self.system_stress >= self.params.system_stress_crit
+            or self._calculate_trust_levels()[0] <= self.params.trust_crit
+            or (
+                self.total_mutual_cooperation / max(1, self.total_encounters)
+                <= self.params.coop_crit
+            )
+        ):
+            self.event_counter += 1
+            eid = self.event_counter
+            self.event_round[eid] = self.round
+            self._log_event_snapshot(eid, "pre")
+            self.last_event_id = eid
+            self._log_event_snapshot(eid, "during")
 
     def _initialize_institutional_memory(self):
         """Initialize institutional memory with all required keys and proper defaults"""
@@ -1269,7 +1365,7 @@ class EnhancedMassSimulation:
             'average_shock_severity': 0.0,
             'learned_resilience_bonus': 0.0,
             'recovery_success_rate':  self.params.recovery_threshold,
-            'crisis_response_knowledge': self.params.recovery_threshold,
+            import random, math, itertools, collections, logging, json, os, csv, pathlib'crisis_response_knowledge': self.params.recovery_threshold,
             
             # Social learning and adaptation
             'collective_learning_factor': 1.0,
@@ -1342,6 +1438,13 @@ class EnhancedMassSimulation:
     
         effective_severity = shock_severity * (1 - total_reduction)
         self.system_stress += effective_severity
+
+        # ─── Register exogenous‑shock event ────────────────────────────
+        self.event_counter += 1
+        eid = self.event_counter
+        self.event_round[eid] = self.round
+        self._log_event_snapshot(eid, "during")
+        self.last_event_id = eid
         self.shock_events += 1
         
         # Update institutional memory
@@ -1569,6 +1672,22 @@ class EnhancedMassSimulation:
         # Network topology logging (every 4 rounds)
         if self.round % 4 == 0:
             self.network_topology_log_counter += 1
+            # ─── Extras diary (random crowd) ───────────────────────────
+            alive = [p for p in self.people if not p.is_dead]
+            k = max(1, int(len(alive) * self.params.extras_sample_rate))
+            for p in random.sample(alive, k):
+                self._capture_diary("extras", p, self.last_event_id)
+
+            # ─── Critical‑agent diary snapshot ────────────────────────
+            for p in alive:
+                if p.id in self.critical_agent_ids:
+                    self._capture_diary("critical", p, self.last_event_id)
+
+        # ─── Lagged post‑event snapshots ───────────────────────────────
+        if self.last_event_id is not None:
+            lag = self.round - self.event_round[self.last_event_id]
+            if lag in self.params.impact_lags:
+                self._log_event_snapshot(self.last_event_id, f"post_{lag}")
     
     def _get_average_traits(self) -> Dict[str, float]:
         """Get average Maslow traits"""
@@ -1739,6 +1858,8 @@ class EnhancedMassSimulation:
         try:
             
             while self.round < self.params.max_rounds:
+                # Check endogenous tipping‑point at start of loop
+                self._check_threshold_events()
                 try:
                     self.round += 1
                     
@@ -1796,8 +1917,32 @@ class EnhancedMassSimulation:
                     timestamp_print(f"⚠️ Error in round {self.round} of sim {self.run_id}: {round_error}")
                     # Continue to next round rather than crashing
                     continue
-            
-            return self._generate_results(self.initial_trait_avg, self.initial_group_populations)
+                    
+            results = self._generate_results(
+                self.initial_trait_avg, self.initial_group_populations
+            )
+
+            # ─── Flush new CSVs ────────────────────────────────────────────
+            pd.DataFrame(self.event_log).to_csv(
+                "event_log.csv",
+                mode="a",
+                index=False,
+                header=not os.path.exists("event_log.csv"),
+            )
+            pd.DataFrame(self.diary_critical).to_csv(
+                "agent_diary.csv",
+                mode="a",
+                index=False,
+                header=not os.path.exists("agent_diary.csv"),
+            )
+            pd.DataFrame(self.diary_extras).to_csv(
+                "extras_diary.csv",
+                mode="a",
+                index=False,
+                header=not os.path.exists("extras_diary.csv"),
+            )
+
+            return results
             
         except Exception as sim_error:
             timestamp_print(f"❌ Critical error in simulation {self.run_id}: {sim_error}")
