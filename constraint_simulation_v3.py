@@ -2225,7 +2225,12 @@ class EnhancedMassSimulation:
             # Interaction metrics
             total_interactions=total_interactions,
             total_mutual_coop=self.total_mutual_coop,
-            avg_interaction_processing_time=0.0
+            avg_interaction_processing_time=0.0,
+
+            # Agent snapshot metrics
+            event_log=self.event_log.copy(),
+            diary_critical=self.diary_critical.copy(), 
+            diary_extras=self.diary_extras.copy(),
         )
         
         # VALIDATION FIX #12: Validate results before returning
