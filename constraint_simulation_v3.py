@@ -714,10 +714,6 @@ class OptimizedPerson:
         self.out_group_interactions = 0
         self.mixing_event_participations = 0
         
-        # Initialize Maslow needs        
-        self.maslow_pressure = 0.0
-        self._calculate_maslow_pressure_fast()
-        
         if parent_a and parent_b:
             self.maslow_needs = self._inherit_traits(
                 parent_a.maslow_needs, parent_b.maslow_needs, 
