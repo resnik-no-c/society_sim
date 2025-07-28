@@ -12,3 +12,6 @@ python3 -u constraint_simulation_v2.py -n 10 --single-thread
 
 # Compressing results from the past 30 minutes
 find . -type f -mmin -120 -print0 | tar --null -czvf recent_files_$(date +%Y%m%d_%H%M).tar.gz --files-from -
+
+# Smoke Test
+python3 constraint_simulation_v3.py --test smoke

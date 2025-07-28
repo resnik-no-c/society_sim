@@ -630,7 +630,7 @@ class OptimizedPerson:
                  'cooperation_threshold', 'stress_recovery_rate','network_neighbors',
                  'out_group_penalty_accumulator', 'initial_maslow_needs', 'trust_in_group', 
                  'trust_out_group','last_behaviour','cumulative_payoff', 'cum_coop', 'cum_defect',
-                 'last_shock_round', 'is_dead', 'sim_ref', 'round_switched','maslow_needs']
+                 'last_shock_round', 'is_dead', 'sim_ref', 'round_switched','initial_maslow_needs']
     
     def __init__(self, person_id: int, params: SimulationConfig, 
                  parent_a: Optional['OptimizedPerson'] = None, 
@@ -729,6 +729,9 @@ class OptimizedPerson:
         
         self.maslow_pressure = 0.0
         self._calculate_maslow_pressure_fast()
+        # ensure back‑pointer & switch tracker exist, filled in by sim later
+        self.sim_ref: Optional['EnhancedMassSimulation'] = None
+        self.round_switched: int = -1
     
     def _assign_group(self, params: SimulationConfig, group_id: Optional[str], 
                      parent_a: Optional['OptimizedPerson'], parent_b: Optional['OptimizedPerson']) -> str:
@@ -976,6 +979,11 @@ class OptimizedPerson:
 
         self.is_constrained = True
         self.strategy_changes += 1
+
+        # record the round when the switch happened
+        if self.sim_ref is not None:
+            self.round_switched = self.sim_ref.round
+
         self.maslow_needs.love *= 0.8
         self.maslow_needs.esteem *= 0.7
     
@@ -1291,6 +1299,8 @@ class EnhancedMassSimulation:
         self.diary_extras       = []        # random crowd sample
         
         self._initialize_population()
+        pop = len(self.people)
+        n_crit = min(pop, max(1, int(pop*0.02)))
 
  
         # ─── pick focal agents once the population exists ──────────────
@@ -1605,6 +1615,7 @@ class EnhancedMassSimulation:
             
             if not neighbor_trusts:
                 continue
+            local_avg = sum(neighbor_trusts) / len(neighbor_trusts)
             network_coherence += local_avg  # Track network coherence
                 
             local_avg = sum(neighbor_trusts) / len(neighbor_trusts)
@@ -1625,8 +1636,7 @@ class EnhancedMassSimulation:
                  ))
                 
                 # Track changes for institutional memory
-                trust_change = abs(new_trust - old_trust)
-                total_trust_change += trust_change
+                total_trust_change += abs(new_trust - old_trust)
                 diffusion_events += 1
                 
                 rel.trust = new_trust
@@ -1636,6 +1646,8 @@ class EnhancedMassSimulation:
         if diffusion_events > 0:
             avg_trust_change = total_trust_change / diffusion_events
             avg_network_coherence = network_coherence / len([p for p in alive_people if getattr(p, 'network_neighbors', set())])
+            coherent_agents = [p for p in alive_people if getattr(p, 'network_neighbors', set())]
+            avg_network_coherence = network_coherence / len(coherent_agents)
             
             # Update institutional memory dictionary properly
             if 'trust_network_strength' not in self.institutional_memory:
