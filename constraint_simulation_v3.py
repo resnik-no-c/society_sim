@@ -643,7 +643,7 @@ class OptimizedPerson:
                  'cooperation_threshold', 'stress_recovery_rate', 'network_neighbors',
                  'out_group_penalty_accumulator', 'initial_maslow_needs', 'trust_in_group', 
                  'trust_out_group', 'last_behaviour', 'cumulative_payoff', 'cum_coop', 'cum_defect',
-                 'last_shock_round', 'sim_ref', 'round_switched']
+                 'last_shock_round', 'sim_ref', 'round_switched', 'last_payoff']
     
     def __init__(self, person_id: int, params: SimulationConfig, 
                  parent_a: Optional['OptimizedPerson'] = None, 
@@ -672,6 +672,7 @@ class OptimizedPerson:
         self.last_shock_round = 0
         self.trust_in_group = 0.5
         self.trust_out_group = 0.5
+        self.last_payoff = None
         
         # MAJOR FIX #5: Separate cooperation decisions from stress recovery
         self.cooperation_threshold = random.uniform(0.2, 0.35)  # For cooperation decisions only
@@ -712,10 +713,6 @@ class OptimizedPerson:
         self.in_group_interactions = 0
         self.out_group_interactions = 0
         self.mixing_event_participations = 0
-
-        # Payoff tracking
-        self.cumulative_payoff: float = 0.0
-        self.last_payoff: float | None = None
         
         # Initialize Maslow needs
         if parent_a and parent_b:
@@ -1269,6 +1266,8 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
             person_payoff, partner_payoff = PAYOFF[(person_coop, partner_coop)]
             person.cumulative_payoff += person_payoff
             partner.cumulative_payoff += partner_payoff
+            person.last_payoff = person_payoff
+            partner.last_payoff = partner_payoff
             sim_ref.total_payoff += (person_payoff + partner_payoff)
 
             # CRITICAL FIX #1: Count each interaction exactly once
