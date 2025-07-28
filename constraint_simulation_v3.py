@@ -1359,13 +1359,14 @@ class EnhancedMassSimulation:
 
     def _initialize_institutional_memory(self):
         """Initialize institutional memory with all required keys and proper defaults"""
+        import random, math, itertools, collections, logging, json, os, csv, pathlib
         self.institutional_memory = {
             # Core shock and recovery tracking
             'total_shocks_experienced': 0,
             'average_shock_severity': 0.0,
             'learned_resilience_bonus': 0.0,
             'recovery_success_rate':  self.params.recovery_threshold,
-            import random, math, itertools, collections, logging, json, os, csv, pathlib'crisis_response_knowledge': self.params.recovery_threshold,
+            'crisis_response_knowledge': self.params.recovery_threshold,
             
             # Social learning and adaptation
             'collective_learning_factor': 1.0,
@@ -1917,7 +1918,7 @@ class EnhancedMassSimulation:
                     timestamp_print(f"⚠️ Error in round {self.round} of sim {self.run_id}: {round_error}")
                     # Continue to next round rather than crashing
                     continue
-                    
+
             results = self._generate_results(
                 self.initial_trait_avg, self.initial_group_populations
             )
