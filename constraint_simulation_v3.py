@@ -27,6 +27,7 @@ import argparse
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import types
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional, Tuple, Set, NamedTuple
 from collections import defaultdict, deque
