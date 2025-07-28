@@ -649,7 +649,7 @@ class OptimizedPerson:
         self.sim_ref = None
         self.round_switched = -1             # not switched yet
 
-        self.maslow_needs = types.SimpleNamespace(
+        self.maslow_needs = type.SimpleNamespace(
             physiological=0.5,
             safety=0.5,
             love=0.5,
