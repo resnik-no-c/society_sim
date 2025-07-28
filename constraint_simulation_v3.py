@@ -627,7 +627,9 @@ class OptimizedPerson:
                  'mixing_event_participations', 'acute_stress', 'chronic_queue', 
                  'base_coop', 'society_trust', 'resilience_threshold', 'resilience_noise', 
                  'cooperation_threshold', 'stress_recovery_rate','network_neighbors',
-                 'out_group_penalty_accumulator', 'initial_maslow_needs']
+                 'out_group_penalty_accumulator', 'initial_maslow_needs', 'trust_in_group', 
+                 'trust_out_group','last_behaviour','cumulative_payoff', 'cum_coop', 'cum_defect',
+                 'last_shock_round', 'is_dead', 'sim_ref']
     
     def __init__(self, person_id: int, params: SimulationConfig, 
                  parent_a: Optional['OptimizedPerson'] = None, 
@@ -643,6 +645,9 @@ class OptimizedPerson:
         self.recovery_threshold = self.constraint_threshold * recovery_factor
         self.is_constrained = False
         self.is_dead = False
+        # back‑pointer is filled in by the simulation after the agent is created
+        self.sim_ref = None
+
         self.is_born = (parent_a is not None and parent_b is not None)
         
         # MAJOR FIX #5: Separate cooperation decisions from stress recovery
