@@ -649,7 +649,7 @@ class OptimizedPerson:
         self.sim_ref = None
         self.round_switched = -1             # not switched yet
 
-        self.maslow_needs = type.SimpleNamespace(
+        self.maslow_needs = types.SimpleNamespace(
             physiological=0.5,
             safety=0.5,
             love=0.5,
@@ -1387,7 +1387,7 @@ class EnhancedMassSimulation:
 
     def _initialize_institutional_memory(self):
         """Initialize institutional memory with all required keys and proper defaults"""
-        import random, math, itertools, collections, logging, json, os, csv, pathlib
+        import random, math, itertools, collections, logging, json, os, csv, pathlib, types
         self.institutional_memory = {
             # Core shock and recovery tracking
             'total_shocks_experienced': 0,
