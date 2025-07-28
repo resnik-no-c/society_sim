@@ -617,6 +617,11 @@ class EnhancedSimulationResults:
     total_mutual_coop: int = 0
     avg_interaction_processing_time: float = 0.0
 
+    # Event and diary data 
+    event_log: List[Dict] = field(default_factory=list)
+    diary_critical: List[Dict] = field(default_factory=list)
+    diary_extras: List[Dict] = field(default_factory=list)
+
 class OptimizedPerson:
     """Enhanced person with v3 parameter integration"""
     
@@ -2058,25 +2063,10 @@ class EnhancedMassSimulation:
                 self.initial_trait_avg, self.initial_group_populations
             )
 
-            # ─── Flush new CSVs ────────────────────────────────────────────
-            pd.DataFrame(self.event_log).to_csv(
-                "event_log.csv",
-                mode="a",
-                index=False,
-                header=not os.path.exists("event_log.csv"),
-            )
-            pd.DataFrame(self.diary_critical).to_csv(
-                "agent_diary.csv",
-                mode="a",
-                index=False,
-                header=not os.path.exists("agent_diary.csv"),
-            )
-            pd.DataFrame(self.diary_extras).to_csv(
-                "extras_diary.csv",
-                mode="a",
-                index=False,
-                header=not os.path.exists("extras_diary.csv"),
-            )
+            # Add diary and event data to results
+            results.event_log = self.event_log
+            results.diary_critical = self.diary_critical
+            results.diary_extras = self.diary_extras
 
             return results
             
@@ -2307,7 +2297,10 @@ class EnhancedMassSimulation:
                 final_group_cooperation_rates={k: 0.0 for k in final_group_populations.keys()},
                 total_interactions=max(0, self.total_interactions),
                 total_mutual_coop=max(0, getattr(self, 'total_mutual_coop', 0)),
-                institutional_memory=getattr(self, 'institutional_memory', {}).copy()
+                institutional_memory=getattr(self, 'institutional_memory', {}).copy(),
+                event_log=getattr(self, 'event_log', []),
+                diary_critical=getattr(self, 'diary_critical', []),
+                diary_extras=getattr(self, 'diary_extras', [])
             )
         except Exception as emergency_error:
             timestamp_print(f"❌ Even emergency result generation failed: {emergency_error}")
@@ -3240,6 +3233,60 @@ def save_v3_results(df: pd.DataFrame):
     timestamp_print(f"💾 Saving v3 results to: {current_dir}")
     
     saved_files = []
+    # Save consolidated diary and event data
+    try:
+        # Consolidate event logs from all simulations
+        all_event_logs = []
+        all_diary_critical = []
+        all_diary_extras = []
+        
+        # Load data from all simulation results
+        results_dir = "simulation_results"
+        if os.path.exists(results_dir):
+            for i in range(len(df)):
+                try:
+                    with open(f"{results_dir}/sim_{i:04d}_result.pkl", 'rb') as f:
+                        result = pickle.load(f)
+                        if hasattr(result, 'event_log'):
+                            all_event_logs.extend(result.event_log)
+                        if hasattr(result, 'diary_critical'):
+                            all_diary_critical.extend(result.diary_critical)
+                        if hasattr(result, 'diary_extras'):
+                            all_diary_extras.extend(result.diary_extras)
+                except Exception as e:
+                    timestamp_print(f"⚠️ Could not load diary data from simulation {i}: {e}")
+                    continue
+        
+        # Save consolidated event log
+        if all_event_logs:
+            event_df = pd.DataFrame(all_event_logs)
+            event_df.to_csv('event_log.csv', index=False)
+            if os.path.exists('event_log.csv'):
+                saved_files.append(f"📊 event_log.csv ({len(all_event_logs)} events)")
+        
+        # Save consolidated agent diary
+        if all_diary_critical:
+            diary_df = pd.DataFrame(all_diary_critical)
+            diary_df.to_csv('agent_diary.csv', index=False)
+            if os.path.exists('agent_diary.csv'):
+                saved_files.append(f"📊 agent_diary.csv ({len(all_diary_critical)} entries)")
+        
+        # Save consolidated extras diary
+        if all_diary_extras:
+            extras_df = pd.DataFrame(all_diary_extras)
+            extras_df.to_csv('extras_diary.csv', index=False)
+            if os.path.exists('extras_diary.csv'):
+                saved_files.append(f"📊 extras_diary.csv ({len(all_diary_extras)} entries)")
+                
+    except Exception as e:
+        timestamp_print(f"⚠️ Error saving diary/event data: {e}")
+    
+    try:
+        # Save main v3 dataset
+        main_file = 'v3_streamlined_simulation_results.csv'
+
+
+
     
     try:
         # Save main v3 dataset
