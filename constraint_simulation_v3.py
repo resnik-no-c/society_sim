@@ -1908,6 +1908,8 @@ class EnhancedMassSimulation:
                         self._collect_round_data()
                         self._update_recovery_dynamics()  # SIGNIFICANT FIX #8
                     except Exception as e:
+                        import traceback, sys
+                        traceback.print_stack(file=sys.stderr)
                         timestamp_print(f"⚠️ Error in population updates round {self.round}: {e}")
                     
                     # Decay system stress
