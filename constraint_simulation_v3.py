@@ -629,7 +629,7 @@ class OptimizedPerson:
                  'cooperation_threshold', 'stress_recovery_rate','network_neighbors',
                  'out_group_penalty_accumulator', 'initial_maslow_needs', 'trust_in_group', 
                  'trust_out_group','last_behaviour','cumulative_payoff', 'cum_coop', 'cum_defect',
-                 'last_shock_round', 'is_dead', 'sim_ref']
+                 'last_shock_round', 'is_dead', 'sim_ref', 'round_switched']
     
     def __init__(self, person_id: int, params: SimulationConfig, 
                  parent_a: Optional['OptimizedPerson'] = None, 
@@ -645,8 +645,14 @@ class OptimizedPerson:
         self.recovery_threshold = self.constraint_threshold * recovery_factor
         self.is_constrained = False
         self.is_dead = False
-        # back‑pointer is filled in by the simulation after the agent is created
+
         self.sim_ref = None
+        self.round_switched = -1             # not switched yet
+
+    # ── utility used by diary code ─────────────────────────────────────
+    def lately_forced(self, sim_round: int) -> bool:
+        """True if this agent was forced to switch *this* round."""
+        return self.round_switched == sim_round
 
         self.is_born = (parent_a is not None and parent_b is not None)
         
@@ -1301,6 +1307,10 @@ class EnhancedMassSimulation:
             person.sim_ref = self                    # back‑pointer for event hooks
             self.people.append(person)
 
+    def _add_newborn(self, parent: OptimizedPerson):
+        child = OptimizedPerson(self.next_id(), self.params)
+        child.sim_ref = self           # ← give newborn a back‑pointer
+        self.people.append(child)
 
     #   EVENT & DIARY HELPERS
     # ──────────────────────────────────────────────────────────────────
@@ -1331,7 +1341,13 @@ class EnhancedMassSimulation:
             behaviour_last_encounter=getattr(agent, "last_behaviour", None),
             constraint_level=agent.constraint_level,
             constraint_threshold=agent.constraint_threshold,
-            forced_switch_flag=int(getattr(agent, "round_switched", -1) == self.round),
+
+            forced_switch_flag=int(
+                getattr(agent, "round_switched", -1) == self.round
+            ),
+            # if, for any reason, sim_ref is missing, record -1
+            sim_round = agent.sim_ref.round if getattr(agent, "sim_ref", None) else -1,
+
             trust_in_group_mean=getattr(agent, "trust_in_group", 0.5),
             trust_out_group_mean=getattr(agent, "trust_out_group", 0.5),
             trust_out_group_penalty=self.params.out_group_penalty,
