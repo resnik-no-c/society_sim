@@ -629,7 +629,7 @@ class OptimizedPerson:
                  'cooperation_threshold', 'stress_recovery_rate','network_neighbors',
                  'out_group_penalty_accumulator', 'initial_maslow_needs', 'trust_in_group', 
                  'trust_out_group','last_behaviour','cumulative_payoff', 'cum_coop', 'cum_defect',
-                 'last_shock_round', 'is_dead', 'sim_ref', 'round_switched']
+                 'last_shock_round', 'is_dead', 'sim_ref', 'round_switched','maslow_needs']
     
     def __init__(self, person_id: int, params: SimulationConfig, 
                  parent_a: Optional['OptimizedPerson'] = None, 
@@ -648,6 +648,14 @@ class OptimizedPerson:
 
         self.sim_ref = None
         self.round_switched = -1             # not switched yet
+
+        self.maslow_needs = types.SimpleNamespace(
+            physiological=0.5,
+            safety=0.5,
+            love=0.5,
+            esteem=0.5,
+            self_actualization=0.5,
+        )
 
     # ── utility used by diary code ─────────────────────────────────────
     def lately_forced(self, sim_round: int) -> bool:
