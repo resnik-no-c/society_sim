@@ -60,6 +60,14 @@ DEFAULT_MAX_ROUNDS = 300  # 75 years simulation time (was 200 in legacy)
 DEFAULT_INITIAL_POPULATION = 200
 DEFAULT_MAX_POPULATION = 800
 
+# Payoff matrix for interactions (Prisoner's Dilemma style)
+PAYOFF = {
+    (True,  True):  (3, 3),   # R,R  – mutual cooperation
+    (True,  False): (0, 5),   # S,T  – sucker vs. temptation
+    (False, True):  (5, 0),   # T,S  – temptation vs. sucker
+    (False, False): (1, 1),   # P,P  – mutual defection
+}
+
 def timestamp_print(message: str):
     """Print message with timestamp"""
     timestamp = datetime.now().strftime('%H:%M:%S')
@@ -704,6 +712,10 @@ class OptimizedPerson:
         self.in_group_interactions = 0
         self.out_group_interactions = 0
         self.mixing_event_participations = 0
+
+        # Payoff tracking
+        self.cumulative_payoff: float = 0.0
+        self.last_payoff: float | None = None
         
         # Initialize Maslow needs
         if parent_a and parent_b:
@@ -1252,6 +1264,13 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
             else:
                 partner.cum_defect += 1
 
+
+            # -------- PAYOFF BOOK-KEEPING --------
+            person_payoff, partner_payoff = PAYOFF[(person_coop, partner_coop)]
+            person.cumulative_payoff += person_payoff
+            partner.cumulative_payoff += partner_payoff
+            sim_ref.total_payoff += (person_payoff + partner_payoff)
+
             # CRITICAL FIX #1: Count each interaction exactly once
             sim_ref.total_encounters += 1
             
@@ -1369,6 +1388,7 @@ class EnhancedMassSimulation:
         self.total_mixed_outcomes = 0     # CRITICAL FIX #1: Proper mixed outcome tracking
         self.total_mutual_coop = 0  # Legacy (deprecated, kept for compatibility)
         self._initialize_institutional_memory()
+        self.total_payoff = 0.0  # Track total payoffs across all interactions
         
         # v3 logging counters
         self.maslow_log_counter = 0
