@@ -3233,6 +3233,7 @@ def save_v3_results(df: pd.DataFrame):
     timestamp_print(f"💾 Saving v3 results to: {current_dir}")
     
     saved_files = []
+    
     # Save consolidated diary and event data
     try:
         # Consolidate event logs from all simulations
@@ -3280,13 +3281,6 @@ def save_v3_results(df: pd.DataFrame):
                 
     except Exception as e:
         timestamp_print(f"⚠️ Error saving diary/event data: {e}")
-    
-    try:
-        # Save main v3 dataset
-        main_file = 'v3_streamlined_simulation_results.csv'
-
-
-
     
     try:
         # Save main v3 dataset
