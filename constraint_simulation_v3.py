@@ -627,10 +627,10 @@ class OptimizedPerson:
                  'group_id', 'in_group_interactions', 'out_group_interactions', 
                  'mixing_event_participations', 'acute_stress', 'chronic_queue', 
                  'base_coop', 'society_trust', 'resilience_threshold', 'resilience_noise', 
-                 'cooperation_threshold', 'stress_recovery_rate','network_neighbors',
+                 'cooperation_threshold', 'stress_recovery_rate', 'network_neighbors',
                  'out_group_penalty_accumulator', 'initial_maslow_needs', 'trust_in_group', 
-                 'trust_out_group','last_behaviour','cumulative_payoff', 'cum_coop', 'cum_defect',
-                 'last_shock_round', 'is_dead', 'sim_ref', 'round_switched','initial_maslow_needs']
+                 'trust_out_group', 'last_behaviour', 'cumulative_payoff', 'cum_coop', 'cum_defect',
+                 'last_shock_round', 'sim_ref', 'round_switched']
     
     def __init__(self, person_id: int, params: SimulationConfig, 
                  parent_a: Optional['OptimizedPerson'] = None, 
@@ -640,25 +640,93 @@ class OptimizedPerson:
         self.strategy = 'cooperative'
         self.constraint_level = 0.0
         self.constraint_threshold = random.uniform(*params.constraint_threshold_range)
-
-        recovery_factor = random.uniform(0.5,0.8)
-
+        
+        recovery_factor = random.uniform(0.5, 0.8)
         self.recovery_threshold = self.constraint_threshold * recovery_factor
         self.is_constrained = False
         self.is_dead = False
-
+        self.is_born = (parent_a is not None and parent_b is not None)
+        
+        # Event tracking
         self.sim_ref = None
-        self.round_switched = -1             # not switched yet
-
-        self.maslow_needs = types.SimpleNamespace(
-            physiological=0.5,
-            safety=0.5,
-            love=0.5,
-            esteem=0.5,
-            self_actualization=0.5,
+        self.round_switched = -1  # not switched yet
+        
+        # Initialize tracking variables
+        self.last_behaviour = None
+        self.cumulative_payoff = 0.0
+        self.cum_coop = 0
+        self.cum_defect = 0
+        self.last_shock_round = 0
+        self.trust_in_group = 0.5
+        self.trust_out_group = 0.5
+        
+        # MAJOR FIX #5: Separate cooperation decisions from stress recovery
+        self.cooperation_threshold = random.uniform(0.2, 0.35)  # For cooperation decisions only
+        
+        # Resilience now controls stress recovery, not cooperation
+        base_threshold = params.resilience_profile['threshold']
+        noise_range = params.resilience_profile['noise']
+        self.stress_recovery_rate = base_threshold + random.uniform(-noise_range, noise_range)
+        self.stress_recovery_rate = max(0.01, min(0.99, self.stress_recovery_rate))
+        self.resilience_noise = noise_range
+        self.resilience_threshold = self.stress_recovery_rate  # For stress recovery only
+        
+        self.acute_stress = 0.0
+        self.chronic_queue = deque(maxlen=16)  # 4-year window
+        for _ in range(16):
+            self.chronic_queue.append(0.0)
+        
+        self.base_coop = 0.4 + (random.random() - 0.5) * 0.4
+        self.base_coop = max(0.1, min(0.9, self.base_coop))
+        
+        self.relationships: Dict[int, FastRelationship] = {}
+        self.society_trust = 0.5
+        
+        self.max_lifespan = int((200 + random.random() * 300) * (params.max_rounds / 500))
+        self.age = 0
+        
+        # Network neighbors for diffusion
+        self.network_neighbors: Set['OptimizedPerson'] = set()
+        self.out_group_penalty_accumulator = 0.0  # Persistent out-group penalty
+        
+        self.strategy_changes = 0
+        self.rounds_as_selfish = 0
+        self.rounds_as_cooperative = 0
+        
+        # SIGNIFICANT FIX #9: Standardized group assignment logic
+        self.group_id = self._assign_group(params, group_id, parent_a, parent_b)
+        
+        self.in_group_interactions = 0
+        self.out_group_interactions = 0
+        self.mixing_event_participations = 0
+        
+        # Initialize Maslow needs
+        if parent_a and parent_b:
+            self.maslow_needs = self._inherit_traits(
+                parent_a.maslow_needs, parent_b.maslow_needs, 
+                params.maslow_variation, parent_a, parent_b
+            )
+        else:
+            self.maslow_needs = MaslowNeeds(
+                physiological=random.random() * 10,
+                safety=random.random() * 10,
+                love=random.random() * 10,
+                esteem=random.random() * 10,
+                self_actualization=random.random() * 10
+            )
+        
+        # MASLOW FIX: Store initial values for individual change tracking
+        self.initial_maslow_needs = MaslowNeeds(
+            physiological=self.maslow_needs.physiological,
+            safety=self.maslow_needs.safety,
+            love=self.maslow_needs.love,
+            esteem=self.maslow_needs.esteem,
+            self_actualization=self.maslow_needs.self_actualization
         )
-
-    # ── utility used by diary code ─────────────────────────────────────
+        
+        self.maslow_pressure = 0.0
+        self._calculate_maslow_pressure_fast()
+    
     def lately_forced(self, sim_round: int) -> bool:
         """True if this agent was forced to switch *this* round."""
         return self.round_switched == sim_round
@@ -965,27 +1033,25 @@ class OptimizedPerson:
         return False
     
     def force_switch(self):
-        """Force switch to selfish strategy"""
-        self.strategy = "selfish"
+    """Force switch to selfish strategy"""
+    self.strategy = "selfish"
+    self.is_constrained = True
+    self.strategy_changes += 1
+    
+    # Record the round when the switch happened
+    if self.sim_ref is not None:
         self.round_switched = self.sim_ref.round
-
-        # ─── Register forced‑switch event ──────────────────────────────
+        
+        # Register forced-switch event
         sim = self.sim_ref
         sim.event_counter += 1
         eid = sim.event_counter
         sim.event_round[eid] = sim.round
         sim._log_event_snapshot(eid, "during")
         sim.last_event_id = eid
-
-        self.is_constrained = True
-        self.strategy_changes += 1
-
-        # record the round when the switch happened
-        if self.sim_ref is not None:
-            self.round_switched = self.sim_ref.round
-
-        self.maslow_needs.love *= 0.8
-        self.maslow_needs.esteem *= 0.7
+    
+    self.maslow_needs.love *= 0.8
+    self.maslow_needs.esteem *= 0.7
     
     def switch_to_cooperative(self):
         """Recover to cooperative strategy"""
@@ -1166,6 +1232,21 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
             person_coop = person.calculate_cooperation_decision(partner, round_num, params)
             partner_coop = partner.calculate_cooperation_decision(person, round_num, params)
 
+            # Track last behavior for diary
+            person.last_behaviour = "cooperate" if person_coop else "defect"
+            partner.last_behaviour = "cooperate" if partner_coop else "defect"
+
+            # Update cumulative counters
+            if person_coop:
+                person.cum_coop += 1
+            else:
+                person.cum_defect += 1
+                
+            if partner_coop:
+                partner.cum_coop += 1
+            else:
+                partner.cum_defect += 1
+
             # CRITICAL FIX #1: Count each interaction exactly once
             sim_ref.total_encounters += 1
             
@@ -1299,8 +1380,13 @@ class EnhancedMassSimulation:
         self.diary_extras       = []        # random crowd sample
         
         self._initialize_population()
+        # Select critical agents for diary tracking
         pop = len(self.people)
-        n_crit = min(pop, max(1, int(pop*0.02)))
+        n_crit = min(pop, max(1, int(pop * self.params.critical_sample_rate)))
+        if n_crit > 0 and self.people:
+            self.critical_agent_ids = {p.id for p in random.sample(self.people, n_crit)}
+        else:
+            self.critical_agent_ids = set()
 
  
         # ─── pick focal agents once the population exists ──────────────
@@ -1323,13 +1409,8 @@ class EnhancedMassSimulation:
         """Initialize population with group distribution"""
         for i in range(1, self.params.initial_population + 1):
             person = OptimizedPerson(i, self.params)
-            person.sim_ref = self                    # back‑pointer for event hooks
+            person.sim_ref = self  # Set back-pointer to simulation
             self.people.append(person)
-
-    def _add_newborn(self, parent: OptimizedPerson):
-        child = OptimizedPerson(self.next_id(), self.params)
-        child.sim_ref = self           # ← give newborn a back‑pointer
-        self.people.append(child)
 
     #   EVENT & DIARY HELPERS
     # ──────────────────────────────────────────────────────────────────
@@ -1348,6 +1429,24 @@ class EnhancedMassSimulation:
 
     def _capture_diary(self, diary_type: str, agent: "OptimizedPerson", event_id: int | None):
         """Write one diary entry (critical or extras)."""
+        # Get trust averages safely
+        in_group_trusts = []
+        out_group_trusts = []
+        for rel in agent.relationships.values():
+            if hasattr(rel, 'is_same_group'):
+                if rel.is_same_group:
+                    in_group_trusts.append(rel.trust)
+                else:
+                    out_group_trusts.append(rel.trust)
+        
+        agent.trust_in_group = sum(in_group_trusts) / len(in_group_trusts) if in_group_trusts else 0.5
+        agent.trust_out_group = sum(out_group_trusts) / len(out_group_trusts) if out_group_trusts else 0.5
+        
+        # Get top 5 trust relationships
+        trust_values = sorted([(other_id, rel.trust) for other_id, rel in agent.relationships.items()], 
+                             key=lambda x: x[1], reverse=True)[:5]
+        top5_ids = [str(other_id) for other_id, _ in trust_values]
+        
         row = dict(
             run_id=self.run_id,
             round=self.round,
@@ -1360,24 +1459,22 @@ class EnhancedMassSimulation:
             behaviour_last_encounter=getattr(agent, "last_behaviour", None),
             constraint_level=agent.constraint_level,
             constraint_threshold=agent.constraint_threshold,
-
-            forced_switch_flag=int(
-                getattr(agent, "round_switched", -1) == self.round
-            ),
-            # if, for any reason, sim_ref is missing, record -1
-            sim_round = agent.sim_ref.round if getattr(agent, "sim_ref", None) else -1,
-
-            trust_in_group_mean=getattr(agent, "trust_in_group", 0.5),
-            trust_out_group_mean=getattr(agent, "trust_out_group", 0.5),
+            forced_switch_flag=int(agent.lately_forced(self.round)),
+            trust_in_group_mean=agent.trust_in_group,
+            trust_out_group_mean=agent.trust_out_group,
             trust_out_group_penalty=self.params.out_group_penalty,
-            top5_trust_ids=";".join(map(str, agent.get_top5_trust())),
+            top5_trust_ids=";".join(top5_ids),
             cum_payoff=getattr(agent, "cumulative_payoff", 0.0),
             cum_coop_actions=getattr(agent, "cum_coop", 0),
             cum_defect_actions=getattr(agent, "cum_defect", 0),
             last_shock_exposure=self.round - getattr(agent, "last_shock_round", self.round),
             alive_flag=int(not agent.is_dead),
         )
-        (self.diary_critical if diary_type == "critical" else self.diary_extras).append(row)
+        
+        if diary_type == "critical":
+            self.diary_critical.append(row)
+        else:
+            self.diary_extras.append(row)
 
     def _check_threshold_events(self):
         """Emit an event when stress / trust / cooperation crosses a critical line."""
@@ -1507,19 +1604,14 @@ class EnhancedMassSimulation:
         
         # Apply shock to all people with institutional benefits
         alive_people = [p for p in self.people if not p.is_dead]
-        learning_factor = self.institutional_memory['collective_learning_factor']       
+        learning_factor = self.institutional_memory['collective_learning_factor']
         for person in alive_people:
             try:
-                alive_people = [p for p in self.people if not p.is_dead]
-                for person in alive_people:
-                    try:
-                        # Apply collective learning to reduce individual impact
-                        individual_shock = effective_severity * 0.5 / learning_factor
-                        person.acute_stress += individual_shock
-                        person.chronic_queue.append(person.acute_stress)
-                    except Exception as e_inner:
-                      timestamp_print(f"⚠️ Error applying shock to person {person.id}: {e_inner}")
-                      continue
+                # Apply collective learning to reduce individual impact
+                individual_shock = effective_severity * 0.5 / learning_factor
+                person.acute_stress += individual_shock
+                person.chronic_queue.append(person.acute_stress)
+                person.last_shock_round = self.round  # Track when person experienced shock
             except Exception as e:
                 timestamp_print(f"⚠️ Error applying shock to person {person.id}: {e}")
                 continue
