@@ -1271,6 +1271,12 @@ class EnhancedMassSimulation:
         self.diary_extras       = []        # random crowd sample
         
         self._initialize_population()
+
+ 
+        # ─── pick focal agents once the population exists ──────────────
+        sample_size = max(1, int(len(self.people) * self.params.critical_sample_rate))
+        self.critical_agent_ids = {p.id for p in random.sample(self.people, sample_size)}
+
         # Store initial state for results generation
         self.initial_trait_avg = self._get_average_traits()
         self.initial_group_populations = self._get_group_populations()
@@ -1290,13 +1296,6 @@ class EnhancedMassSimulation:
             person.sim_ref = self                    # back‑pointer for event hooks
             self.people.append(person)
 
-    # pick focal agents once
-    self.critical_agent_ids = {
-        p.id for p in random.sample(
-            self.people,
-            max(1, int(len(self.people) * self.params.critical_sample_rate))
-        )
-    }
 
     #   EVENT & DIARY HELPERS
     # ──────────────────────────────────────────────────────────────────
