@@ -1033,25 +1033,25 @@ class OptimizedPerson:
         return False
     
     def force_switch(self):
-    """Force switch to selfish strategy"""
-    self.strategy = "selfish"
-    self.is_constrained = True
-    self.strategy_changes += 1
-    
-    # Record the round when the switch happened
-    if self.sim_ref is not None:
-        self.round_switched = self.sim_ref.round
+        """Force switch to selfish strategy"""
+        self.strategy = "selfish"
+        self.is_constrained = True
+        self.strategy_changes += 1
         
-        # Register forced-switch event
-        sim = self.sim_ref
-        sim.event_counter += 1
-        eid = sim.event_counter
-        sim.event_round[eid] = sim.round
-        sim._log_event_snapshot(eid, "during")
-        sim.last_event_id = eid
-    
-    self.maslow_needs.love *= 0.8
-    self.maslow_needs.esteem *= 0.7
+        # Record the round when the switch happened
+        if self.sim_ref is not None:
+            self.round_switched = self.sim_ref.round
+            
+            # Register forced-switch event
+            sim = self.sim_ref
+            sim.event_counter += 1
+            eid = sim.event_counter
+            sim.event_round[eid] = sim.round
+            sim._log_event_snapshot(eid, "during")
+            sim.last_event_id = eid
+        
+        self.maslow_needs.love *= 0.8
+        self.maslow_needs.esteem *= 0.7
     
     def switch_to_cooperative(self):
         """Recover to cooperative strategy"""
