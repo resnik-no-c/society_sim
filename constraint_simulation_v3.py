@@ -475,7 +475,7 @@ class FastRelationship:
         else:
             self.betrayal_count += 1
             asymmetry_factor = 2.2  # Was 1.1 - now matches empirical loss aversion research
-            delta = -asymmetry_factor * base_delta * (group_bias if self.is_same_group else out_group_bias)
+            delta = -asymmetry_factor * base_delta * (group_bias if self.is_same_group else out_group_bias) * 2.3 #Make defection impact 2.3x stronger (empirically validated ratio)
             self.trust = max(0.0, self.trust + delta)
 
 @dataclass
@@ -523,7 +523,7 @@ class SimulationConfig:
         assert 0.0 <= self.homophily_bias <= 0.8, f"Invalid homophily_bias: {self.homophily_bias}"
         assert self.num_groups in [1, 2, 3], f"Invalid num_groups: {self.num_groups}"
         assert 0.8 <= self.out_group_trust_bias <= 1.2, f"Invalid out_group_trust_bias: {self.out_group_trust_bias}"
-        assert 1.1 <= self.out_group_penalty <= 1.5, f"Invalid out_group_penalty: {self.out_group_penalty}"
+        assert 1.1 <= self.out_group_penalty <= 2.3, f"Invalid out_group_penalty: {self.out_group_penalty}"
         
         # SIGNIFICANT FIX #9: Standardized group assignment logic
         if self.num_groups == 1:
@@ -536,7 +536,7 @@ class SimulationConfig:
         assert 1.5 <= self.event_bonus <= 2.5, f"Invalid event_bonus: {self.event_bonus}"
         assert 0.05 <= self.base_trust_delta <= 0.20, f"Invalid base_trust_delta: {self.base_trust_delta}"
         assert 1.2 <= self.group_trust_bias <= 2.0, f"Invalid group_trust_bias: {self.group_trust_bias}"
-        assert 0.02 <= self.turnover_rate <= 0.05, f"Invalid turnover_rate: {self.turnover_rate}"
+        assert 0.0003 <= self.turnover_rate <= 0.0075, f"Invalid turnover_rate: {self.turnover_rate}"
         assert 0.0 <= self.social_diffusion <= 0.10, f"Invalid social_diffusion: {self.social_diffusion}"
         
         # Validate resilience profile
@@ -1038,7 +1038,7 @@ def sample_config() -> SimulationConfig:
             homophily_bias=homophily_bias,
             num_groups=num_groups,
             out_group_trust_bias=random.uniform(0.8, 1.2),
-            out_group_penalty=random.uniform(1.1, 1.5),
+            out_group_penalty=random.uniform(1.1, 2.3), # Up to 2.3x penalty based on empirical data
             intervention_interval=intervention_interval,
             intervention_scale=random.uniform(0.05, 0.30),
             event_bonus=random.uniform(1.5, 2.5),
@@ -1048,7 +1048,7 @@ def sample_config() -> SimulationConfig:
                 'threshold': random.uniform(0.1, 0.4),
                 'noise': random.uniform(0.0, 0.15)
             },
-            turnover_rate=random.uniform(0.02, 0.05),
+            turnover_rate=random.uniform(0.0003, 0.0075), #0.1-3% annual growth (quarterly rates)
             social_diffusion=random.uniform(0.0, 0.10),
             max_rounds=DEFAULT_MAX_ROUNDS
         )
@@ -1064,14 +1064,14 @@ def sample_config() -> SimulationConfig:
             homophily_bias=0.0 if safe_num_groups == 1 else 0.5,
             num_groups=safe_num_groups,
             out_group_trust_bias=1.0,
-            out_group_penalty=1.2,  # Valid minimum
+            out_group_penalty=1.5,  # Valid minimum
             intervention_interval=0 if safe_num_groups == 1 else 15,
             intervention_scale=0.15,
             event_bonus=2.0,
             base_trust_delta=0.2,
             group_trust_bias=1.6,
             resilience_profile={'threshold': 0.25, 'noise': 0.075},
-            turnover_rate=0.035,
+            turnover_rate=0.002,
             social_diffusion=0.05,
             max_rounds=DEFAULT_MAX_ROUNDS
         )
@@ -1084,14 +1084,14 @@ def sample_config() -> SimulationConfig:
             homophily_bias=0.0,
             num_groups=1,
             out_group_trust_bias=1.0,
-            out_group_penalty=1.2,  # Valid minimum
+            out_group_penalty=1.5,  # Valid minimum
             intervention_interval=0,
             intervention_scale=0.1,
             event_bonus=2.0,
             base_trust_delta=0.2,
             group_trust_bias=1.5,
             resilience_profile={'threshold': 0.25, 'noise': 0.05},
-            turnover_rate=0.03,
+            turnover_rate=0.002,
             social_diffusion=0.05,
             max_rounds=DEFAULT_MAX_ROUNDS
         )

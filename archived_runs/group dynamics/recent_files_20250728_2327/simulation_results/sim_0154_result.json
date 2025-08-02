@@ -1,0 +1,109 @@
+{
+  "run_id": 154,
+  "parameters": {
+    "shock_interval_years": 5,
+    "homophily_bias": 0.6535450209315671,
+    "num_groups": 3,
+    "out_group_trust_bias": 1.165344258116611,
+    "out_group_penalty": 1.3819555478686447,
+    "intervention_interval": 10,
+    "intervention_scale": 0.11340026839381227,
+    "event_bonus": 1.793517397092077,
+    "base_trust_delta": 0.06518481224384115,
+    "group_trust_bias": 1.6666141262589815,
+    "resilience_profile": {
+      "threshold": 0.21542638994159,
+      "noise": 0.08050024903082646
+    },
+    "turnover_rate": 0.049282647525052486,
+    "social_diffusion": 0.021242268111281916,
+    "max_rounds": 300,
+    "initial_population": 200,
+    "max_population": 800,
+    "maslow_variation": 0.5,
+    "constraint_threshold_range": [
+      0.2,
+      0.8
+    ],
+    "recovery_threshold": 0.15,
+    "cooperation_bonus": 0.2,
+    "trust_threshold": 0.6,
+    "max_relationships_per_person": 150
+  },
+  "outcomes": {
+    "final_cooperation_rate": 0.9479034307496823,
+    "behavioral_cooperation_rate": 0.5069572393176145,
+    "final_constrained_rate": 0.052096569250317665,
+    "final_population": 787,
+    "extinction_occurred": false,
+    "rounds_completed": 300,
+    "first_cascade_round": null,
+    "total_cascade_events": 0,
+    "total_shock_events": 7,
+    "total_defections": 249805,
+    "total_redemptions": 1244,
+    "net_strategy_change": 248561,
+    "total_births": 969,
+    "total_deaths": 379,
+    "max_population_reached": 800,
+    "population_stability": 0.003660481768809707,
+    "population_growth": 4.0,
+    "avg_system_stress": 0.49192559870957536,
+    "max_system_stress": 1.3942407113886892,
+    "avg_maslow_pressure": 0.03744602007226553,
+    "avg_basic_needs_crisis_rate": 0.1588310038119441,
+    "avg_trust_level": 0.64905997249988,
+    "cooperation_benefit_total": 0,
+    "cooperation_resilience": 0.9479034307496823
+  },
+  "maslow_hierarchy": {
+    "initial_needs_avg": {
+      "physiological": 5.272689748100742,
+      "safety": 4.9278653723120325,
+      "love": 4.970340737689894,
+      "esteem": 4.802011194806914,
+      "self_actualization": 4.7923718344869455
+    },
+    "final_needs_avg": {
+      "physiological": 6.143546386991753,
+      "safety": 5.751225697464912,
+      "love": 9.56454578003256,
+      "esteem": 5.0092313013557686,
+      "self_actualization": 5.413840783286434
+    },
+    "needs_improvement": {
+      "physiological": 0.8708566388910111,
+      "safety": 0.8233603251528798,
+      "love": 4.594205042342666,
+      "esteem": 0.2072201065488546,
+      "self_actualization": 0.6214689487994889
+    }
+  },
+  "inter_group_metrics": {
+    "final_group_populations": {
+      "B": 283,
+      "C": 323,
+      "A": 181
+    },
+    "final_group_cooperation_rates": {
+      "B": 0.9399293286219081,
+      "C": 0.9597523219814241,
+      "A": 0.9392265193370166
+    },
+    "in_group_interaction_rate": 0.7709794111388489,
+    "out_group_interaction_rate": 0.22902058886115104,
+    "avg_in_group_trust": 0.6663514448378997,
+    "avg_out_group_trust": 0.6317685001618605,
+    "trust_asymmetry": 0.03458294467603917,
+    "group_segregation_index": 0.7709794111388489,
+    "total_mixing_events": 30,
+    "mixing_event_success_rate": 1.0,
+    "reputational_spillover_events": 0,
+    "out_group_constraint_amplifications": 0,
+    "group_extinction_events": 0
+  },
+  "interaction_metrics": {
+    "total_interactions": 385354,
+    "avg_interaction_processing_time": 0.0
+  }
+}

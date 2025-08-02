@@ -1,0 +1,1615 @@
+nohup: ignoring input
+[20:17:01] 🔬 Enhanced Constraint Cascade Simulation v3
+[20:17:01] ================================================================================
+[20:17:01] 🎯 Streamlined 13-parameter interface
+[20:17:01] ⚡ Improved interpretability and performance
+[20:17:01] 📊 Enhanced logging frequencies
+[20:17:01] 📈 Aggregate progress reporting
+[20:17:01] ✅ All original functionality preserved
+[20:17:01] 🎯 Running 500 v3 simulations...
+[20:17:01] ✅ Generated 500 v3 parameter sets
+[20:17:01] 🚀 Starting v3 mass experiment with 500 simulations...
+[20:17:01] 🔧 Using v3 streamlined 13-parameter configuration
+[20:17:01] 🔧 Using 8 CPU cores for multiprocessing...
+[20:17:01] 📁 Setting up v3 scheduler with results directory: simulation_results
+[20:17:01] ⚙️  Initializing v3 LoadBalancedScheduler with 500 simulations...
+[20:17:01] 📁 Setting up results directory: simulation_results
+[20:17:01] 🔄 Generating work queue for 500 simulations...
+[20:17:01]    📋 Processing simulation 1/500 for work queue...
+[20:17:01]    📋 Processing simulation 26/500 for work queue...
+[20:17:01]    📋 Processing simulation 51/500 for work queue...
+[20:17:01]    📋 Processing simulation 76/500 for work queue...
+[20:17:01]    📋 Processing simulation 101/500 for work queue...
+[20:17:01]    📋 Processing simulation 126/500 for work queue...
+[20:17:01]    📋 Processing simulation 151/500 for work queue...
+[20:17:01]    📋 Processing simulation 176/500 for work queue...
+[20:17:01]    📋 Processing simulation 201/500 for work queue...
+[20:17:01]    📋 Processing simulation 226/500 for work queue...
+[20:17:01]    📋 Processing simulation 251/500 for work queue...
+[20:17:01]    📋 Processing simulation 276/500 for work queue...
+[20:17:01]    📋 Processing simulation 301/500 for work queue...
+[20:17:01]    📋 Processing simulation 326/500 for work queue...
+[20:17:01]    📋 Processing simulation 351/500 for work queue...
+[20:17:01]    📋 Processing simulation 376/500 for work queue...
+[20:17:01]    📋 Processing simulation 401/500 for work queue...
+[20:17:01]    📋 Processing simulation 426/500 for work queue...
+[20:17:01]    📋 Processing simulation 451/500 for work queue...
+[20:17:01]    📋 Processing simulation 476/500 for work queue...
+[20:17:01] ✅ v3 LoadBalancedScheduler initialized with 500 work items
+[20:17:01] 🏭 Starting ProcessPoolExecutor with 8 workers...
+[20:17:01] 📤 Submitting initial batch of 16 work items...
+[20:17:01] ✅ Initial batch submitted, 16 futures active
+[20:18:01] 📊 PROGRESS: 11880/150000 rounds (  7.9% of total work) ...
+[20:19:01] 📊 PROGRESS: 18180/150000 rounds ( 12.1% of total work) ...
+[20:20:01] 📊 PROGRESS: 22740/150000 rounds ( 15.2% of total work) ...
+[20:21:01] 📊 PROGRESS: 27180/150000 rounds ( 18.1% of total work) ...
+[20:22:01] 📊 PROGRESS: 30840/150000 rounds ( 20.6% of total work) ...
+[20:23:02] 📊 PROGRESS: 33660/150000 rounds ( 22.4% of total work) ...
+[20:24:02] 📊 PROGRESS: 36600/150000 rounds ( 24.4% of total work) ...
+[20:25:04] 📊 PROGRESS: 39480/150000 rounds ( 26.3% of total work) ...
+[20:26:04] 📊 PROGRESS: 42360/150000 rounds ( 28.2% of total work) ...
+[20:27:05] 📊 PROGRESS: 45030/150000 rounds ( 30.0% of total work) ...
+[20:28:05] 📊 PROGRESS: 46740/150000 rounds ( 31.2% of total work) ...
+[20:29:05] 📊 PROGRESS: 48630/150000 rounds ( 32.4% of total work) ...
+[20:30:06] 📊 PROGRESS: 50550/150000 rounds ( 33.7% of total work) ...
+[20:31:06] 📊 PROGRESS: 52410/150000 rounds ( 34.9% of total work) ...
+[20:32:07] 📊 PROGRESS: 54300/150000 rounds ( 36.2% of total work) ...
+[20:33:08] 📊 PROGRESS: 56070/150000 rounds ( 37.4% of total work) ...
+[20:34:08] 📊 PROGRESS: 57990/150000 rounds ( 38.7% of total work) ...
+[20:35:09] 📊 PROGRESS: 59670/150000 rounds ( 39.8% of total work) ...
+[20:36:11] 📊 PROGRESS: 60990/150000 rounds ( 40.7% of total work) ...
+[20:37:12] 📊 PROGRESS: 62370/150000 rounds ( 41.6% of total work) ...
+[20:38:13] 📊 PROGRESS: 63750/150000 rounds ( 42.5% of total work) ...
+[20:39:14] 📊 PROGRESS: 65160/150000 rounds ( 43.4% of total work) ...
+[20:40:15] 📊 PROGRESS: 66570/150000 rounds ( 44.4% of total work) ...
+[20:41:16] 📊 PROGRESS: 67950/150000 rounds ( 45.3% of total work) ...
+[20:42:16] 📊 PROGRESS: 69300/150000 rounds ( 46.2% of total work) ...
+[20:43:16] 📊 PROGRESS: 70590/150000 rounds ( 47.1% of total work) ...
+[20:44:20] 📊 PROGRESS: 71970/150000 rounds ( 48.0% of total work) ...
+[20:45:24] 📊 PROGRESS: 73230/150000 rounds ( 48.8% of total work) ...
+[20:46:25] 📊 PROGRESS: 74580/150000 rounds ( 49.7% of total work) ...
+[20:47:28] 📊 PROGRESS: 75630/150000 rounds ( 50.4% of total work) ...
+[20:48:28] 📊 PROGRESS: 76800/150000 rounds ( 51.2% of total work) ...
+[20:49:30] 📊 PROGRESS: 77880/150000 rounds ( 51.9% of total work) ...
+[20:50:30] 📊 PROGRESS: 79050/150000 rounds ( 52.7% of total work) ...
+[20:51:30] 📊 PROGRESS: 80220/150000 rounds ( 53.5% of total work) ...
+[20:52:31] 📊 PROGRESS: 81360/150000 rounds ( 54.2% of total work) ...
+[20:53:32] 📊 PROGRESS: 82350/150000 rounds ( 54.9% of total work) ...
+[20:54:33] 📊 PROGRESS: 83460/150000 rounds ( 55.6% of total work) ...
+[20:55:35] 📊 PROGRESS: 84570/150000 rounds ( 56.4% of total work) ...
+[20:56:36] 📊 PROGRESS: 85590/150000 rounds ( 57.1% of total work) ...
+[20:57:37] 📊 PROGRESS: 86760/150000 rounds ( 57.8% of total work) ...
+[20:58:39] 📊 PROGRESS: 87780/150000 rounds ( 58.5% of total work) ...
+[20:59:39] 📊 PROGRESS: 88890/150000 rounds ( 59.3% of total work) ...
+[21:00:40] 📊 PROGRESS: 89910/150000 rounds ( 59.9% of total work) ...
+[21:01:43] 📊 PROGRESS: 90870/150000 rounds ( 60.6% of total work) ...
+[21:02:43] 📊 PROGRESS: 91950/150000 rounds ( 61.3% of total work) ...
+[21:03:45] 📊 PROGRESS: 92940/150000 rounds ( 62.0% of total work) ...
+[21:04:46] 📊 PROGRESS: 93930/150000 rounds ( 62.6% of total work) ...
+[21:05:48] 📊 PROGRESS: 95010/150000 rounds ( 63.3% of total work) ...
+[21:06:49] 📊 PROGRESS: 96060/150000 rounds ( 64.0% of total work) ...
+[21:07:54] 📊 PROGRESS: 97020/150000 rounds ( 64.7% of total work) ...
+[21:08:54] 📊 PROGRESS: 97980/150000 rounds ( 65.3% of total work) ...
+[21:09:54] 📊 PROGRESS: 98940/150000 rounds ( 66.0% of total work) ...
+[21:10:56] 📊 PROGRESS: 99900/150000 rounds ( 66.6% of total work) ...
+[21:11:57] 📊 PROGRESS: 100860/150000 rounds ( 67.2% of total work) ...
+[21:12:57] 📊 PROGRESS: 101790/150000 rounds ( 67.9% of total work) ...
+[21:13:58] 📊 PROGRESS: 102780/150000 rounds ( 68.5% of total work) ...
+[21:14:58] 📊 PROGRESS: 103680/150000 rounds ( 69.1% of total work) ...
+[21:15:59] 📊 PROGRESS: 104730/150000 rounds ( 69.8% of total work) ...
+[21:17:03] 📊 PROGRESS: 105630/150000 rounds ( 70.4% of total work) ...
+[21:18:05] 📊 PROGRESS: 106560/150000 rounds ( 71.0% of total work) ...
+[21:19:07] 📊 PROGRESS: 107580/150000 rounds ( 71.7% of total work) ...
+[21:20:07] 📊 PROGRESS: 108330/150000 rounds ( 72.2% of total work) ...
+[21:21:12] 📊 PROGRESS: 109200/150000 rounds ( 72.8% of total work) ...
+[21:22:12] 📊 PROGRESS: 110250/150000 rounds ( 73.5% of total work) ...
+[21:23:14] 📊 PROGRESS: 111180/150000 rounds ( 74.1% of total work) ...
+[21:24:15] 📊 PROGRESS: 112050/150000 rounds ( 74.7% of total work) ...
+[21:25:16] 📊 PROGRESS: 112950/150000 rounds ( 75.3% of total work) ...
+[21:26:16] 📊 PROGRESS: 113880/150000 rounds ( 75.9% of total work) ...
+[21:27:17] 📊 PROGRESS: 114780/150000 rounds ( 76.5% of total work) ...
+[21:28:17] 📊 PROGRESS: 115680/150000 rounds ( 77.1% of total work) ...
+[21:29:19] 📊 PROGRESS: 116610/150000 rounds ( 77.7% of total work) ...
+[21:30:20] 📊 PROGRESS: 117270/150000 rounds ( 78.2% of total work) ...
+[21:31:22] 📊 PROGRESS: 118080/150000 rounds ( 78.7% of total work) ...
+[21:32:23] 📊 PROGRESS: 118950/150000 rounds ( 79.3% of total work) ...
+[21:33:28] 📊 PROGRESS: 119880/150000 rounds ( 79.9% of total work) ...
+[21:34:29] 📊 PROGRESS: 120870/150000 rounds ( 80.6% of total work) ...
+[21:35:30] 📊 PROGRESS: 121920/150000 rounds ( 81.3% of total work) ...
+[21:36:33] 📊 PROGRESS: 122910/150000 rounds ( 81.9% of total work) ...
+[21:37:34] 📊 PROGRESS: 123960/150000 rounds ( 82.6% of total work) ...
+[21:38:35] 📊 PROGRESS: 124980/150000 rounds ( 83.3% of total work) ...
+[21:39:40] 📊 PROGRESS: 126030/150000 rounds ( 84.0% of total work) ...
+[21:40:40] 📊 PROGRESS: 127020/150000 rounds ( 84.7% of total work) ...
+[21:41:42] 📊 PROGRESS: 128010/150000 rounds ( 85.3% of total work) ...
+[21:42:42] 📊 PROGRESS: 129060/150000 rounds ( 86.0% of total work) ...
+[21:43:45] 📊 PROGRESS: 130050/150000 rounds ( 86.7% of total work) ...
+[21:44:45] 📊 PROGRESS: 131040/150000 rounds ( 87.4% of total work) ...
+[21:45:47] 📊 PROGRESS: 132060/150000 rounds ( 88.0% of total work) ...
+[21:46:49] 📊 PROGRESS: 133020/150000 rounds ( 88.7% of total work) ...
+[21:47:50] 📊 PROGRESS: 133980/150000 rounds ( 89.3% of total work) ...
+[21:48:39] 📊 Sim 7: Large cooperation gap - Strategy: 0.812, Behavioral: 0.557
+[21:48:39] 💾 Saved complete simulation 7 to simulation_results/sim_0007_result.pkl
+[21:48:39] 📄 Saved JSON version for simulation 7 to simulation_results/sim_0007_result.json
+[21:48:45] 📊 Sim 0: Large cooperation gap - Strategy: 0.984, Behavioral: 0.729
+[21:48:45] 💾 Saved complete simulation 0 to simulation_results/sim_0000_result.pkl
+[21:48:45] 📄 Saved JSON version for simulation 0 to simulation_results/sim_0000_result.json
+[21:48:51] 📊 PROGRESS: 134940/150000 rounds ( 90.0% of total work) ...
+[21:48:53] 📊 Sim 3: Large cooperation gap - Strategy: 0.578, Behavioral: 0.149
+[21:48:53] 💾 Saved complete simulation 3 to simulation_results/sim_0003_result.pkl
+[21:48:53] 📄 Saved JSON version for simulation 3 to simulation_results/sim_0003_result.json
+[21:48:54] 📊 Sim 1: Large cooperation gap - Strategy: 0.449, Behavioral: 0.054
+[21:48:54] 💾 Saved complete simulation 1 to simulation_results/sim_0001_result.pkl
+[21:48:54] 📄 Saved JSON version for simulation 1 to simulation_results/sim_0001_result.json
+[21:48:56] 📊 Sim 39: Large cooperation gap - Strategy: 1.000, Behavioral: 0.752
+[21:48:56] 💾 Saved complete simulation 39 to simulation_results/sim_0039_result.pkl
+[21:48:56] 📄 Saved JSON version for simulation 39 to simulation_results/sim_0039_result.json
+[21:48:58] 📊 Sim 2: Large cooperation gap - Strategy: 0.636, Behavioral: 0.120
+[21:48:58] 💾 Saved complete simulation 2 to simulation_results/sim_0002_result.pkl
+[21:48:58] 📄 Saved JSON version for simulation 2 to simulation_results/sim_0002_result.json
+[21:49:06] 📊 Sim 13: Large cooperation gap - Strategy: 0.914, Behavioral: 0.686
+[21:49:07] 💾 Saved complete simulation 13 to simulation_results/sim_0013_result.pkl
+[21:49:07] 📄 Saved JSON version for simulation 13 to simulation_results/sim_0013_result.json
+[21:49:08] 📊 Sim 6: Large cooperation gap - Strategy: 0.424, Behavioral: 0.034
+[21:49:08] 📊 Sim 9: Large cooperation gap - Strategy: 1.000, Behavioral: 0.554
+[21:49:08] 💾 Saved complete simulation 6 to simulation_results/sim_0006_result.pkl
+[21:49:08] 📄 Saved JSON version for simulation 6 to simulation_results/sim_0006_result.json
+[21:49:08] 💾 Saved complete simulation 9 to simulation_results/sim_0009_result.pkl
+[21:49:08] 📄 Saved JSON version for simulation 9 to simulation_results/sim_0009_result.json
+[21:49:11] 📊 Sim 15: Large cooperation gap - Strategy: 0.516, Behavioral: 0.061
+[21:49:11] 💾 Saved complete simulation 15 to simulation_results/sim_0015_result.pkl
+[21:49:11] 📄 Saved JSON version for simulation 15 to simulation_results/sim_0015_result.json
+[21:49:11] 📊 Sim 20: Large cooperation gap - Strategy: 0.851, Behavioral: 0.333
+[21:49:12] 💾 Saved complete simulation 20 to simulation_results/sim_0020_result.pkl
+[21:49:12] 📄 Saved JSON version for simulation 20 to simulation_results/sim_0020_result.json
+[21:49:12] 💾 Saved complete simulation 17 to simulation_results/sim_0017_result.pkl
+[21:49:12] 📄 Saved JSON version for simulation 17 to simulation_results/sim_0017_result.json
+[21:49:14] 📊 Sim 16: Large cooperation gap - Strategy: 0.256, Behavioral: 0.029
+[21:49:15] 💾 Saved complete simulation 16 to simulation_results/sim_0016_result.pkl
+[21:49:15] 📄 Saved JSON version for simulation 16 to simulation_results/sim_0016_result.json
+[21:49:21] 📊 Sim 4: Large cooperation gap - Strategy: 0.956, Behavioral: 0.373
+[21:49:21] 💾 Saved complete simulation 4 to simulation_results/sim_0004_result.pkl
+[21:49:21] 📄 Saved JSON version for simulation 4 to simulation_results/sim_0004_result.json
+[21:49:21] 📊 Sim 22: Large cooperation gap - Strategy: 0.967, Behavioral: 0.671
+[21:49:21] 💾 Saved complete simulation 22 to simulation_results/sim_0022_result.pkl
+[21:49:21] 📄 Saved JSON version for simulation 22 to simulation_results/sim_0022_result.json
+[21:49:23] 💾 Saved complete simulation 27 to simulation_results/sim_0027_result.pkl
+[21:49:23] 📄 Saved JSON version for simulation 27 to simulation_results/sim_0027_result.json
+[21:49:23] 📊 Sim 5: Large cooperation gap - Strategy: 0.945, Behavioral: 0.406
+[21:49:23] 💾 Saved complete simulation 5 to simulation_results/sim_0005_result.pkl
+[21:49:23] 📄 Saved JSON version for simulation 5 to simulation_results/sim_0005_result.json
+[21:49:24] 📊 Sim 34: Large cooperation gap - Strategy: 0.558, Behavioral: 0.130
+[21:49:24] 💾 Saved complete simulation 34 to simulation_results/sim_0034_result.pkl
+[21:49:24] 📄 Saved JSON version for simulation 34 to simulation_results/sim_0034_result.json
+[21:49:24] 💾 Saved complete simulation 18 to simulation_results/sim_0018_result.pkl
+[21:49:24] 📄 Saved JSON version for simulation 18 to simulation_results/sim_0018_result.json
+[21:49:27] 💾 Saved complete simulation 26 to simulation_results/sim_0026_result.pkl
+[21:49:27] 📄 Saved JSON version for simulation 26 to simulation_results/sim_0026_result.json
+[21:49:29] 💾 Saved complete simulation 12 to simulation_results/sim_0012_result.pkl
+[21:49:29] 📄 Saved JSON version for simulation 12 to simulation_results/sim_0012_result.json
+[21:49:32] 📊 Sim 50: Large cooperation gap - Strategy: 0.964, Behavioral: 0.648
+[21:49:32] 💾 Saved complete simulation 50 to simulation_results/sim_0050_result.pkl
+[21:49:32] 📄 Saved JSON version for simulation 50 to simulation_results/sim_0050_result.json
+[21:49:36] 📊 Sim 33: Large cooperation gap - Strategy: 0.906, Behavioral: 0.606
+[21:49:36] 💾 Saved complete simulation 33 to simulation_results/sim_0033_result.pkl
+[21:49:36] 📄 Saved JSON version for simulation 33 to simulation_results/sim_0033_result.json
+[21:49:37] 📊 Sim 8: Large cooperation gap - Strategy: 0.540, Behavioral: 0.084
+[21:49:37] 💾 Saved complete simulation 8 to simulation_results/sim_0008_result.pkl
+[21:49:37] 📄 Saved JSON version for simulation 8 to simulation_results/sim_0008_result.json
+[21:49:38] 💾 Saved complete simulation 10 to simulation_results/sim_0010_result.pkl
+[21:49:38] 📄 Saved JSON version for simulation 10 to simulation_results/sim_0010_result.json
+[21:49:39] 📊 Sim 19: Large cooperation gap - Strategy: 0.853, Behavioral: 0.416
+[21:49:39] 💾 Saved complete simulation 19 to simulation_results/sim_0019_result.pkl
+[21:49:39] 📄 Saved JSON version for simulation 19 to simulation_results/sim_0019_result.json
+[21:49:40] 📊 Sim 23: Large cooperation gap - Strategy: 0.987, Behavioral: 0.607
+[21:49:40] 💾 Saved complete simulation 23 to simulation_results/sim_0023_result.pkl
+[21:49:40] 📄 Saved JSON version for simulation 23 to simulation_results/sim_0023_result.json
+[21:49:43] 📊 Sim 36: Large cooperation gap - Strategy: 0.966, Behavioral: 0.584
+[21:49:43] 💾 Saved complete simulation 36 to simulation_results/sim_0036_result.pkl
+[21:49:43] 📄 Saved JSON version for simulation 36 to simulation_results/sim_0036_result.json
+[21:49:44] 📊 Sim 14: Large cooperation gap - Strategy: 0.503, Behavioral: 0.121
+[21:49:44] 💾 Saved complete simulation 14 to simulation_results/sim_0014_result.pkl
+[21:49:44] 📄 Saved JSON version for simulation 14 to simulation_results/sim_0014_result.json
+[21:49:50] 📊 Sim 29: Large cooperation gap - Strategy: 0.860, Behavioral: 0.585
+[21:49:50] 💾 Saved complete simulation 29 to simulation_results/sim_0029_result.pkl
+[21:49:50] 📄 Saved JSON version for simulation 29 to simulation_results/sim_0029_result.json
+[21:49:52] 💾 Saved complete simulation 67 to simulation_results/sim_0067_result.pkl
+[21:49:52] 📄 Saved JSON version for simulation 67 to simulation_results/sim_0067_result.json
+[21:49:52] 📊 PROGRESS: 135930/150000 rounds ( 90.6% of total work) ...
+[21:49:53] 📊 Sim 38: Large cooperation gap - Strategy: 0.851, Behavioral: 0.147
+[21:49:53] 📊 Sim 45: Large cooperation gap - Strategy: 0.894, Behavioral: 0.369
+[21:49:53] 💾 Saved complete simulation 38 to simulation_results/sim_0038_result.pkl
+[21:49:53] 📄 Saved JSON version for simulation 38 to simulation_results/sim_0038_result.json
+[21:49:53] 💾 Saved complete simulation 45 to simulation_results/sim_0045_result.pkl
+[21:49:53] 📄 Saved JSON version for simulation 45 to simulation_results/sim_0045_result.json
+[21:49:54] 📊 Sim 53: Large cooperation gap - Strategy: 0.999, Behavioral: 0.748
+[21:49:54] 💾 Saved complete simulation 53 to simulation_results/sim_0053_result.pkl
+[21:49:54] 📄 Saved JSON version for simulation 53 to simulation_results/sim_0053_result.json
+[21:49:56] 📊 Sim 24: Large cooperation gap - Strategy: 0.981, Behavioral: 0.603
+[21:49:56] 💾 Saved complete simulation 24 to simulation_results/sim_0024_result.pkl
+[21:49:56] 📄 Saved JSON version for simulation 24 to simulation_results/sim_0024_result.json
+[21:49:57] 💾 Saved complete simulation 35 to simulation_results/sim_0035_result.pkl
+[21:49:57] 📄 Saved JSON version for simulation 35 to simulation_results/sim_0035_result.json
+[21:50:00] 📊 Sim 73: Large cooperation gap - Strategy: 0.984, Behavioral: 0.593
+[21:50:00] 💾 Saved complete simulation 73 to simulation_results/sim_0073_result.pkl
+[21:50:00] 📄 Saved JSON version for simulation 73 to simulation_results/sim_0073_result.json
+[21:50:04] 📊 Sim 42: Large cooperation gap - Strategy: 0.981, Behavioral: 0.712
+[21:50:04] 💾 Saved complete simulation 42 to simulation_results/sim_0042_result.pkl
+[21:50:04] 📄 Saved JSON version for simulation 42 to simulation_results/sim_0042_result.json
+[21:50:05] 📊 Sim 48: Large cooperation gap - Strategy: 0.702, Behavioral: 0.143
+[21:50:05] 💾 Saved complete simulation 48 to simulation_results/sim_0048_result.pkl
+[21:50:05] 📄 Saved JSON version for simulation 48 to simulation_results/sim_0048_result.json
+[21:50:05] 📊 Sim 21: Large cooperation gap - Strategy: 0.277, Behavioral: 0.027
+[21:50:06] 💾 Saved complete simulation 21 to simulation_results/sim_0021_result.pkl
+[21:50:06] 📄 Saved JSON version for simulation 21 to simulation_results/sim_0021_result.json
+[21:50:07] 📊 Sim 32: Large cooperation gap - Strategy: 0.286, Behavioral: 0.014
+[21:50:07] 💾 Saved complete simulation 32 to simulation_results/sim_0032_result.pkl
+[21:50:07] 📄 Saved JSON version for simulation 32 to simulation_results/sim_0032_result.json
+[21:50:08] 📊 Sim 30: Large cooperation gap - Strategy: 0.564, Behavioral: 0.150
+[21:50:08] 💾 Saved complete simulation 30 to simulation_results/sim_0030_result.pkl
+[21:50:08] 📄 Saved JSON version for simulation 30 to simulation_results/sim_0030_result.json
+[21:50:08] 📊 Sim 60: Large cooperation gap - Strategy: 0.993, Behavioral: 0.594
+[21:50:08] 💾 Saved complete simulation 60 to simulation_results/sim_0060_result.pkl
+[21:50:08] 📄 Saved JSON version for simulation 60 to simulation_results/sim_0060_result.json
+[21:50:09] 📊 Sim 47: Large cooperation gap - Strategy: 0.991, Behavioral: 0.645
+[21:50:09] 💾 Saved complete simulation 47 to simulation_results/sim_0047_result.pkl
+[21:50:09] 📄 Saved JSON version for simulation 47 to simulation_results/sim_0047_result.json
+[21:50:14] 📊 Sim 49: Large cooperation gap - Strategy: 1.000, Behavioral: 0.706
+[21:50:14] 💾 Saved complete simulation 49 to simulation_results/sim_0049_result.pkl
+[21:50:14] 📄 Saved JSON version for simulation 49 to simulation_results/sim_0049_result.json
+[21:50:20] 📊 Sim 56: Large cooperation gap - Strategy: 0.932, Behavioral: 0.450
+[21:50:20] 💾 Saved complete simulation 56 to simulation_results/sim_0056_result.pkl
+[21:50:20] 📄 Saved JSON version for simulation 56 to simulation_results/sim_0056_result.json
+[21:50:20] 📊 Sim 25: Large cooperation gap - Strategy: 0.830, Behavioral: 0.297
+[21:50:20] 💾 Saved complete simulation 25 to simulation_results/sim_0025_result.pkl
+[21:50:20] 📄 Saved JSON version for simulation 25 to simulation_results/sim_0025_result.json
+[21:50:22] 📊 Sim 44: Large cooperation gap - Strategy: 0.259, Behavioral: 0.059
+[21:50:22] 💾 Saved complete simulation 44 to simulation_results/sim_0044_result.pkl
+[21:50:22] 📄 Saved JSON version for simulation 44 to simulation_results/sim_0044_result.json
+[21:50:22] 📊 Sim 57: Large cooperation gap - Strategy: 0.926, Behavioral: 0.423
+[21:50:23] 💾 Saved complete simulation 57 to simulation_results/sim_0057_result.pkl
+[21:50:23] 📄 Saved JSON version for simulation 57 to simulation_results/sim_0057_result.json
+[21:50:24] 📊 Sim 31: Large cooperation gap - Strategy: 0.580, Behavioral: 0.080
+[21:50:24] 📊 Sim 41: Large cooperation gap - Strategy: 0.863, Behavioral: 0.328
+[21:50:24] 💾 Saved complete simulation 31 to simulation_results/sim_0031_result.pkl
+[21:50:24] 📄 Saved JSON version for simulation 31 to simulation_results/sim_0031_result.json
+[21:50:24] 💾 Saved complete simulation 41 to simulation_results/sim_0041_result.pkl
+[21:50:24] 📄 Saved JSON version for simulation 41 to simulation_results/sim_0041_result.json
+[21:50:26] 📊 Sim 28: Large cooperation gap - Strategy: 0.579, Behavioral: 0.198
+[21:50:26] 💾 Saved complete simulation 28 to simulation_results/sim_0028_result.pkl
+[21:50:26] 📄 Saved JSON version for simulation 28 to simulation_results/sim_0028_result.json
+[21:50:30] 📊 Sim 43: Large cooperation gap - Strategy: 0.933, Behavioral: 0.318
+[21:50:30] 💾 Saved complete simulation 43 to simulation_results/sim_0043_result.pkl
+[21:50:30] 📄 Saved JSON version for simulation 43 to simulation_results/sim_0043_result.json
+[21:50:36] 💾 Saved complete simulation 68 to simulation_results/sim_0068_result.pkl
+[21:50:36] 📄 Saved JSON version for simulation 68 to simulation_results/sim_0068_result.json
+[21:50:36] 📊 Sim 11: Large cooperation gap - Strategy: 0.726, Behavioral: 0.258
+[21:50:36] 💾 Saved complete simulation 11 to simulation_results/sim_0011_result.pkl
+[21:50:36] 📄 Saved JSON version for simulation 11 to simulation_results/sim_0011_result.json
+[21:50:37] 📊 Sim 78: Large cooperation gap - Strategy: 0.976, Behavioral: 0.756
+[21:50:37] 💾 Saved complete simulation 78 to simulation_results/sim_0078_result.pkl
+[21:50:37] 📄 Saved JSON version for simulation 78 to simulation_results/sim_0078_result.json
+[21:50:39] 📊 Sim 46: Large cooperation gap - Strategy: 0.915, Behavioral: 0.598
+[21:50:39] 💾 Saved complete simulation 46 to simulation_results/sim_0046_result.pkl
+[21:50:39] 📄 Saved JSON version for simulation 46 to simulation_results/sim_0046_result.json
+[21:50:40] 📊 Sim 91: Large cooperation gap - Strategy: 0.973, Behavioral: 0.660
+[21:50:40] 💾 Saved complete simulation 91 to simulation_results/sim_0091_result.pkl
+[21:50:40] 📄 Saved JSON version for simulation 91 to simulation_results/sim_0091_result.json
+[21:50:40] 📊 Sim 37: Large cooperation gap - Strategy: 0.408, Behavioral: 0.054
+[21:50:40] 💾 Saved complete simulation 37 to simulation_results/sim_0037_result.pkl
+[21:50:40] 📄 Saved JSON version for simulation 37 to simulation_results/sim_0037_result.json
+[21:50:41] 📊 Sim 51: Large cooperation gap - Strategy: 0.471, Behavioral: 0.027
+[21:50:41] 💾 Saved complete simulation 51 to simulation_results/sim_0051_result.pkl
+[21:50:41] 📄 Saved JSON version for simulation 51 to simulation_results/sim_0051_result.json
+[21:50:44] 📊 Sim 58: Large cooperation gap - Strategy: 0.951, Behavioral: 0.608
+[21:50:44] 💾 Saved complete simulation 58 to simulation_results/sim_0058_result.pkl
+[21:50:44] 📄 Saved JSON version for simulation 58 to simulation_results/sim_0058_result.json
+[21:50:48] 💾 Saved complete simulation 77 to simulation_results/sim_0077_result.pkl
+[21:50:48] 📄 Saved JSON version for simulation 77 to simulation_results/sim_0077_result.json
+[21:50:52] 📊 Sim 69: Large cooperation gap - Strategy: 0.992, Behavioral: 0.655
+[21:50:52] 💾 Saved complete simulation 69 to simulation_results/sim_0069_result.pkl
+[21:50:52] 📄 Saved JSON version for simulation 69 to simulation_results/sim_0069_result.json
+[21:50:52] 📊 Sim 62: Large cooperation gap - Strategy: 0.966, Behavioral: 0.590
+[21:50:52] 💾 Saved complete simulation 62 to simulation_results/sim_0062_result.pkl
+[21:50:52] 📄 Saved JSON version for simulation 62 to simulation_results/sim_0062_result.json
+[21:50:52] 📊 Sim 65: Large cooperation gap - Strategy: 0.847, Behavioral: 0.235
+[21:50:52] 💾 Saved complete simulation 65 to simulation_results/sim_0065_result.pkl
+[21:50:52] 📄 Saved JSON version for simulation 65 to simulation_results/sim_0065_result.json
+[21:50:53] 📊 Sim 72: Large cooperation gap - Strategy: 0.967, Behavioral: 0.450
+[21:50:54] 💾 Saved complete simulation 72 to simulation_results/sim_0072_result.pkl
+[21:50:54] 📄 Saved JSON version for simulation 72 to simulation_results/sim_0072_result.json
+[21:50:54] 📊 PROGRESS: 136980/150000 rounds ( 91.3% of total work) ...
+[21:50:54] 📊 Sim 83: Large cooperation gap - Strategy: 0.640, Behavioral: 0.079
+[21:50:54] 💾 Saved complete simulation 83 to simulation_results/sim_0083_result.pkl
+[21:50:54] 📄 Saved JSON version for simulation 83 to simulation_results/sim_0083_result.json
+[21:50:56] 📊 Sim 54: Large cooperation gap - Strategy: 0.943, Behavioral: 0.336
+[21:50:56] 💾 Saved complete simulation 54 to simulation_results/sim_0054_result.pkl
+[21:50:56] 📄 Saved JSON version for simulation 54 to simulation_results/sim_0054_result.json
+[21:51:00] 📊 Sim 76: Large cooperation gap - Strategy: 0.864, Behavioral: 0.495
+[21:51:00] 💾 Saved complete simulation 76 to simulation_results/sim_0076_result.pkl
+[21:51:00] 📄 Saved JSON version for simulation 76 to simulation_results/sim_0076_result.json
+[21:51:03] 📊 Sim 64: Large cooperation gap - Strategy: 0.273, Behavioral: 0.011
+[21:51:03] 💾 Saved complete simulation 64 to simulation_results/sim_0064_result.pkl
+[21:51:03] 📄 Saved JSON version for simulation 64 to simulation_results/sim_0064_result.json
+[21:51:08] 📊 Sim 61: Large cooperation gap - Strategy: 0.919, Behavioral: 0.248
+[21:51:08] 💾 Saved complete simulation 61 to simulation_results/sim_0061_result.pkl
+[21:51:08] 📄 Saved JSON version for simulation 61 to simulation_results/sim_0061_result.json
+[21:51:08] 📊 Sim 90: Large cooperation gap - Strategy: 0.979, Behavioral: 0.690
+[21:51:08] 💾 Saved complete simulation 90 to simulation_results/sim_0090_result.pkl
+[21:51:08] 📄 Saved JSON version for simulation 90 to simulation_results/sim_0090_result.json
+[21:51:08] 📊 Sim 82: Large cooperation gap - Strategy: 0.896, Behavioral: 0.232
+[21:51:09] 📊 Sim 55: Large cooperation gap - Strategy: 0.271, Behavioral: 0.013
+[21:51:09] 💾 Saved complete simulation 75 to simulation_results/sim_0075_result.pkl
+[21:51:09] 📄 Saved JSON version for simulation 75 to simulation_results/sim_0075_result.json
+[21:51:09] 💾 Saved complete simulation 82 to simulation_results/sim_0082_result.pkl
+[21:51:09] 📄 Saved JSON version for simulation 82 to simulation_results/sim_0082_result.json
+[21:51:09] 💾 Saved complete simulation 55 to simulation_results/sim_0055_result.pkl
+[21:51:09] 📄 Saved JSON version for simulation 55 to simulation_results/sim_0055_result.json
+[21:51:11] 📊 Sim 74: Large cooperation gap - Strategy: 0.242, Behavioral: 0.017
+[21:51:11] 💾 Saved complete simulation 74 to simulation_results/sim_0074_result.pkl
+[21:51:11] 📄 Saved JSON version for simulation 74 to simulation_results/sim_0074_result.json
+[21:51:16] 📊 Sim 70: Large cooperation gap - Strategy: 0.347, Behavioral: 0.037
+[21:51:16] 💾 Saved complete simulation 70 to simulation_results/sim_0070_result.pkl
+[21:51:16] 📄 Saved JSON version for simulation 70 to simulation_results/sim_0070_result.json
+[21:51:19] 📊 Sim 59: Large cooperation gap - Strategy: 0.915, Behavioral: 0.365
+[21:51:19] 💾 Saved complete simulation 59 to simulation_results/sim_0059_result.pkl
+[21:51:19] 📄 Saved JSON version for simulation 59 to simulation_results/sim_0059_result.json
+[21:51:19] 📊 Sim 95: Large cooperation gap - Strategy: 0.884, Behavioral: 0.229
+[21:51:19] 💾 Saved complete simulation 95 to simulation_results/sim_0095_result.pkl
+[21:51:19] 📄 Saved JSON version for simulation 95 to simulation_results/sim_0095_result.json
+[21:51:20] 📊 Sim 106: Large cooperation gap - Strategy: 0.954, Behavioral: 0.557
+[21:51:21] 💾 Saved complete simulation 106 to simulation_results/sim_0106_result.pkl
+[21:51:21] 📄 Saved JSON version for simulation 106 to simulation_results/sim_0106_result.json
+[21:51:22] 📊 Sim 85: Large cooperation gap - Strategy: 0.641, Behavioral: 0.072
+[21:51:22] 💾 Saved complete simulation 85 to simulation_results/sim_0085_result.pkl
+[21:51:22] 📄 Saved JSON version for simulation 85 to simulation_results/sim_0085_result.json
+[21:51:23] 📊 Sim 84: Large cooperation gap - Strategy: 1.000, Behavioral: 0.766
+[21:51:23] 💾 Saved complete simulation 84 to simulation_results/sim_0084_result.pkl
+[21:51:23] 📄 Saved JSON version for simulation 84 to simulation_results/sim_0084_result.json
+[21:51:24] 📊 Sim 71: Large cooperation gap - Strategy: 0.565, Behavioral: 0.057
+[21:51:24] 💾 Saved complete simulation 71 to simulation_results/sim_0071_result.pkl
+[21:51:24] 📄 Saved JSON version for simulation 71 to simulation_results/sim_0071_result.json
+[21:51:26] 📊 Sim 92: Large cooperation gap - Strategy: 0.928, Behavioral: 0.565
+[21:51:26] 💾 Saved complete simulation 92 to simulation_results/sim_0092_result.pkl
+[21:51:26] 📄 Saved JSON version for simulation 92 to simulation_results/sim_0092_result.json
+[21:51:32] 📊 Sim 52: Large cooperation gap - Strategy: 0.450, Behavioral: 0.159
+[21:51:33] 💾 Saved complete simulation 52 to simulation_results/sim_0052_result.pkl
+[21:51:33] 📄 Saved JSON version for simulation 52 to simulation_results/sim_0052_result.json
+[21:51:33] 📊 Sim 94: Large cooperation gap - Strategy: 0.940, Behavioral: 0.478
+[21:51:33] 💾 Saved complete simulation 94 to simulation_results/sim_0094_result.pkl
+[21:51:33] 📄 Saved JSON version for simulation 94 to simulation_results/sim_0094_result.json
+[21:51:35] 📊 Sim 79: Large cooperation gap - Strategy: 0.994, Behavioral: 0.654
+[21:51:35] 💾 Saved complete simulation 79 to simulation_results/sim_0079_result.pkl
+[21:51:35] 📄 Saved JSON version for simulation 79 to simulation_results/sim_0079_result.json
+[21:51:36] 💾 Saved complete simulation 66 to simulation_results/sim_0066_result.pkl
+[21:51:36] 📄 Saved JSON version for simulation 66 to simulation_results/sim_0066_result.json
+[21:51:36] 📊 Sim 87: Large cooperation gap - Strategy: 0.249, Behavioral: 0.019
+[21:51:36] 💾 Saved complete simulation 87 to simulation_results/sim_0087_result.pkl
+[21:51:36] 📄 Saved JSON version for simulation 87 to simulation_results/sim_0087_result.json
+[21:51:36] 📊 Sim 86: Large cooperation gap - Strategy: 0.928, Behavioral: 0.680
+[21:51:36] 💾 Saved complete simulation 86 to simulation_results/sim_0086_result.pkl
+[21:51:36] 📄 Saved JSON version for simulation 86 to simulation_results/sim_0086_result.json
+[21:51:40] 💾 Saved complete simulation 129 to simulation_results/sim_0129_result.pkl
+[21:51:40] 📄 Saved JSON version for simulation 129 to simulation_results/sim_0129_result.json
+[21:51:41] 💾 Saved complete simulation 81 to simulation_results/sim_0081_result.pkl
+[21:51:41] 📄 Saved JSON version for simulation 81 to simulation_results/sim_0081_result.json
+[21:51:42] 📊 Sim 93: Large cooperation gap - Strategy: 0.371, Behavioral: 0.061
+[21:51:42] 💾 Saved complete simulation 93 to simulation_results/sim_0093_result.pkl
+[21:51:42] 📄 Saved JSON version for simulation 93 to simulation_results/sim_0093_result.json
+[21:51:49] 📊 Sim 101: Large cooperation gap - Strategy: 0.905, Behavioral: 0.638
+[21:51:49] 💾 Saved complete simulation 101 to simulation_results/sim_0101_result.pkl
+[21:51:49] 📄 Saved JSON version for simulation 101 to simulation_results/sim_0101_result.json
+[21:51:50] 📊 Sim 96: Large cooperation gap - Strategy: 1.000, Behavioral: 0.760
+[21:51:50] 💾 Saved complete simulation 96 to simulation_results/sim_0096_result.pkl
+[21:51:50] 📄 Saved JSON version for simulation 96 to simulation_results/sim_0096_result.json
+[21:51:50] 📊 Sim 99: Large cooperation gap - Strategy: 1.000, Behavioral: 0.680
+[21:51:50] 💾 Saved complete simulation 99 to simulation_results/sim_0099_result.pkl
+[21:51:50] 📄 Saved JSON version for simulation 99 to simulation_results/sim_0099_result.json
+[21:51:51] 📊 Sim 88: Large cooperation gap - Strategy: 0.840, Behavioral: 0.605
+[21:51:52] 💾 Saved complete simulation 88 to simulation_results/sim_0088_result.pkl
+[21:51:52] 📄 Saved JSON version for simulation 88 to simulation_results/sim_0088_result.json
+[21:51:52] 📊 Sim 100: Large cooperation gap - Strategy: 0.958, Behavioral: 0.653
+[21:51:52] 💾 Saved complete simulation 100 to simulation_results/sim_0100_result.pkl
+[21:51:52] 📄 Saved JSON version for simulation 100 to simulation_results/sim_0100_result.json
+[21:51:56] 📊 Sim 107: Large cooperation gap - Strategy: 0.886, Behavioral: 0.534
+[21:51:56] 💾 Saved complete simulation 107 to simulation_results/sim_0107_result.pkl
+[21:51:56] 📄 Saved JSON version for simulation 107 to simulation_results/sim_0107_result.json
+[21:51:56] 📊 PROGRESS: 137970/150000 rounds ( 92.0% of total work) ...
+[21:51:57] 📊 Sim 108: Large cooperation gap - Strategy: 0.933, Behavioral: 0.481
+[21:51:57] 💾 Saved complete simulation 108 to simulation_results/sim_0108_result.pkl
+[21:51:57] 📄 Saved JSON version for simulation 108 to simulation_results/sim_0108_result.json
+[21:51:58] 📊 Sim 63: Large cooperation gap - Strategy: 0.626, Behavioral: 0.268
+[21:51:58] 💾 Saved complete simulation 63 to simulation_results/sim_0063_result.pkl
+[21:51:58] 📄 Saved JSON version for simulation 63 to simulation_results/sim_0063_result.json
+[21:52:03] 📊 Sim 115: Large cooperation gap - Strategy: 0.922, Behavioral: 0.290
+[21:52:03] 💾 Saved complete simulation 115 to simulation_results/sim_0115_result.pkl
+[21:52:03] 📄 Saved JSON version for simulation 115 to simulation_results/sim_0115_result.json
+[21:52:04] 📊 Sim 80: Large cooperation gap - Strategy: 0.773, Behavioral: 0.345
+[21:52:04] 💾 Saved complete simulation 80 to simulation_results/sim_0080_result.pkl
+[21:52:04] 📄 Saved JSON version for simulation 80 to simulation_results/sim_0080_result.json
+[21:52:05] 📊 Sim 98: Large cooperation gap - Strategy: 0.779, Behavioral: 0.226
+[21:52:05] 💾 Saved complete simulation 98 to simulation_results/sim_0098_result.pkl
+[21:52:05] 📄 Saved JSON version for simulation 98 to simulation_results/sim_0098_result.json
+[21:52:06] 📊 Sim 117: Large cooperation gap - Strategy: 0.974, Behavioral: 0.499
+[21:52:06] 💾 Saved complete simulation 117 to simulation_results/sim_0117_result.pkl
+[21:52:06] 📄 Saved JSON version for simulation 117 to simulation_results/sim_0117_result.json
+[21:52:08] 💾 Saved complete simulation 40 to simulation_results/sim_0040_result.pkl
+[21:52:08] 📄 Saved JSON version for simulation 40 to simulation_results/sim_0040_result.json
+[21:52:12] 📊 Sim 109: Large cooperation gap - Strategy: 0.611, Behavioral: 0.278
+[21:52:12] 📊 Sim 103: Large cooperation gap - Strategy: 0.972, Behavioral: 0.473
+[21:52:12] 💾 Saved complete simulation 109 to simulation_results/sim_0109_result.pkl
+[21:52:12] 📄 Saved JSON version for simulation 109 to simulation_results/sim_0109_result.json
+[21:52:12] 💾 Saved complete simulation 103 to simulation_results/sim_0103_result.pkl
+[21:52:12] 📄 Saved JSON version for simulation 103 to simulation_results/sim_0103_result.json
+[21:52:12] 📊 Sim 116: Large cooperation gap - Strategy: 0.920, Behavioral: 0.634
+[21:52:12] 💾 Saved complete simulation 116 to simulation_results/sim_0116_result.pkl
+[21:52:12] 📄 Saved JSON version for simulation 116 to simulation_results/sim_0116_result.json
+[21:52:15] 💾 Saved complete simulation 124 to simulation_results/sim_0124_result.pkl
+[21:52:15] 📄 Saved JSON version for simulation 124 to simulation_results/sim_0124_result.json
+[21:52:17] 📊 Sim 102: Large cooperation gap - Strategy: 1.000, Behavioral: 0.643
+[21:52:17] 💾 Saved complete simulation 102 to simulation_results/sim_0102_result.pkl
+[21:52:17] 📄 Saved JSON version for simulation 102 to simulation_results/sim_0102_result.json
+[21:52:17] 📊 Sim 112: Large cooperation gap - Strategy: 1.000, Behavioral: 0.733
+[21:52:18] 💾 Saved complete simulation 112 to simulation_results/sim_0112_result.pkl
+[21:52:18] 📄 Saved JSON version for simulation 112 to simulation_results/sim_0112_result.json
+[21:52:22] 📊 Sim 120: Large cooperation gap - Strategy: 0.976, Behavioral: 0.676
+[21:52:22] 💾 Saved complete simulation 120 to simulation_results/sim_0120_result.pkl
+[21:52:22] 📄 Saved JSON version for simulation 120 to simulation_results/sim_0120_result.json
+[21:52:22] 📊 Sim 123: Large cooperation gap - Strategy: 1.000, Behavioral: 0.747
+[21:52:22] 💾 Saved complete simulation 123 to simulation_results/sim_0123_result.pkl
+[21:52:22] 📄 Saved JSON version for simulation 123 to simulation_results/sim_0123_result.json
+[21:52:26] 📊 Sim 132: Large cooperation gap - Strategy: 0.437, Behavioral: 0.043
+[21:52:26] 💾 Saved complete simulation 132 to simulation_results/sim_0132_result.pkl
+[21:52:26] 📄 Saved JSON version for simulation 132 to simulation_results/sim_0132_result.json
+[21:52:26] 📊 Sim 113: Large cooperation gap - Strategy: 0.278, Behavioral: 0.012
+[21:52:26] 💾 Saved complete simulation 113 to simulation_results/sim_0113_result.pkl
+[21:52:26] 📄 Saved JSON version for simulation 113 to simulation_results/sim_0113_result.json
+[21:52:27] 📊 Sim 104: Large cooperation gap - Strategy: 0.685, Behavioral: 0.085
+[21:52:27] 💾 Saved complete simulation 104 to simulation_results/sim_0104_result.pkl
+[21:52:27] 📄 Saved JSON version for simulation 104 to simulation_results/sim_0104_result.json
+[21:52:27] 📊 Sim 122: Large cooperation gap - Strategy: 0.707, Behavioral: 0.093
+[21:52:28] 💾 Saved complete simulation 122 to simulation_results/sim_0122_result.pkl
+[21:52:28] 📄 Saved JSON version for simulation 122 to simulation_results/sim_0122_result.json
+[21:52:29] 📊 Sim 125: Large cooperation gap - Strategy: 0.991, Behavioral: 0.775
+[21:52:29] 💾 Saved complete simulation 125 to simulation_results/sim_0125_result.pkl
+[21:52:29] 📄 Saved JSON version for simulation 125 to simulation_results/sim_0125_result.json
+[21:52:30] 📊 Sim 144: Large cooperation gap - Strategy: 1.000, Behavioral: 0.735
+[21:52:30] 💾 Saved complete simulation 144 to simulation_results/sim_0144_result.pkl
+[21:52:30] 📄 Saved JSON version for simulation 144 to simulation_results/sim_0144_result.json
+[21:52:35] 📊 Sim 89: Large cooperation gap - Strategy: 0.872, Behavioral: 0.283
+[21:52:35] 💾 Saved complete simulation 89 to simulation_results/sim_0089_result.pkl
+[21:52:35] 📄 Saved JSON version for simulation 89 to simulation_results/sim_0089_result.json
+[21:52:38] 📊 Sim 105: Large cooperation gap - Strategy: 0.535, Behavioral: 0.056
+[21:52:38] 💾 Saved complete simulation 105 to simulation_results/sim_0105_result.pkl
+[21:52:38] 📄 Saved JSON version for simulation 105 to simulation_results/sim_0105_result.json
+[21:52:39] 📊 Sim 133: Large cooperation gap - Strategy: 0.486, Behavioral: 0.158
+[21:52:39] 💾 Saved complete simulation 133 to simulation_results/sim_0133_result.pkl
+[21:52:39] 📄 Saved JSON version for simulation 133 to simulation_results/sim_0133_result.json
+[21:52:42] 💾 Saved complete simulation 128 to simulation_results/sim_0128_result.pkl
+[21:52:42] 📄 Saved JSON version for simulation 128 to simulation_results/sim_0128_result.json
+[21:52:42] 📊 Sim 139: Large cooperation gap - Strategy: 1.000, Behavioral: 0.717
+[21:52:42] 💾 Saved complete simulation 139 to simulation_results/sim_0139_result.pkl
+[21:52:42] 📄 Saved JSON version for simulation 139 to simulation_results/sim_0139_result.json
+[21:52:43] 📊 Sim 110: Large cooperation gap - Strategy: 0.288, Behavioral: 0.014
+[21:52:43] 💾 Saved complete simulation 110 to simulation_results/sim_0110_result.pkl
+[21:52:43] 📄 Saved JSON version for simulation 110 to simulation_results/sim_0110_result.json
+[21:52:43] 📊 Sim 114: Large cooperation gap - Strategy: 0.695, Behavioral: 0.425
+[21:52:43] 💾 Saved complete simulation 114 to simulation_results/sim_0114_result.pkl
+[21:52:43] 📄 Saved JSON version for simulation 114 to simulation_results/sim_0114_result.json
+[21:52:46] 💾 Saved complete simulation 97 to simulation_results/sim_0097_result.pkl
+[21:52:46] 📄 Saved JSON version for simulation 97 to simulation_results/sim_0097_result.json
+[21:52:46] 💾 Saved complete simulation 141 to simulation_results/sim_0141_result.pkl
+[21:52:46] 📄 Saved JSON version for simulation 141 to simulation_results/sim_0141_result.json
+[21:52:51] 📊 Sim 111: Large cooperation gap - Strategy: 0.773, Behavioral: 0.074
+[21:52:51] 💾 Saved complete simulation 111 to simulation_results/sim_0111_result.pkl
+[21:52:51] 📄 Saved JSON version for simulation 111 to simulation_results/sim_0111_result.json
+[21:52:55] 📊 Sim 118: Large cooperation gap - Strategy: 0.991, Behavioral: 0.610
+[21:52:55] 💾 Saved complete simulation 118 to simulation_results/sim_0118_result.pkl
+[21:52:55] 📄 Saved JSON version for simulation 118 to simulation_results/sim_0118_result.json
+[21:52:56] 📊 Sim 131: Large cooperation gap - Strategy: 0.371, Behavioral: 0.157
+[21:52:56] 💾 Saved complete simulation 131 to simulation_results/sim_0131_result.pkl
+[21:52:56] 📄 Saved JSON version for simulation 131 to simulation_results/sim_0131_result.json
+[21:52:57] 📊 Sim 159: Large cooperation gap - Strategy: 0.989, Behavioral: 0.751
+[21:52:57] 💾 Saved complete simulation 159 to simulation_results/sim_0159_result.pkl
+[21:52:57] 📄 Saved JSON version for simulation 159 to simulation_results/sim_0159_result.json
+[21:52:57] 📊 PROGRESS: 138990/150000 rounds ( 92.7% of total work) ...
+[21:52:57] 📊 Sim 143: Large cooperation gap - Strategy: 0.989, Behavioral: 0.565
+[21:52:57] 💾 Saved complete simulation 143 to simulation_results/sim_0143_result.pkl
+[21:52:57] 📄 Saved JSON version for simulation 143 to simulation_results/sim_0143_result.json
+[21:52:57] 💾 Saved complete simulation 127 to simulation_results/sim_0127_result.pkl
+[21:52:57] 📄 Saved JSON version for simulation 127 to simulation_results/sim_0127_result.json
+[21:52:58] 💾 Saved complete simulation 135 to simulation_results/sim_0135_result.pkl
+[21:52:58] 📄 Saved JSON version for simulation 135 to simulation_results/sim_0135_result.json
+[21:53:01] 📊 Sim 134: Large cooperation gap - Strategy: 0.353, Behavioral: 0.047
+[21:53:01] 💾 Saved complete simulation 134 to simulation_results/sim_0134_result.pkl
+[21:53:01] 📄 Saved JSON version for simulation 134 to simulation_results/sim_0134_result.json
+[21:53:03] 📊 Sim 156: Large cooperation gap - Strategy: 0.814, Behavioral: 0.333
+[21:53:04] 💾 Saved complete simulation 156 to simulation_results/sim_0156_result.pkl
+[21:53:04] 📄 Saved JSON version for simulation 156 to simulation_results/sim_0156_result.json
+[21:53:06] 📊 Sim 145: Large cooperation gap - Strategy: 0.947, Behavioral: 0.542
+[21:53:07] 💾 Saved complete simulation 145 to simulation_results/sim_0145_result.pkl
+[21:53:07] 📄 Saved JSON version for simulation 145 to simulation_results/sim_0145_result.json
+[21:53:09] ⚠️ Result validation warnings for simulation 130:
+[21:53:09]    - Behavioral cooperation (0.306) exceeds strategy cooperation (0.193) by large margin
+[21:53:10] ⚠️ Validation warnings for simulation 130:
+[21:53:10]    - Behavioral cooperation (0.306) exceeds strategy cooperation (0.193) by large margin
+[21:53:10] 💾 Saved complete simulation 130 to simulation_results/sim_0130_result.pkl
+[21:53:10] 📄 Saved JSON version for simulation 130 to simulation_results/sim_0130_result.json
+[21:53:11] 📊 Sim 164: Large cooperation gap - Strategy: 1.000, Behavioral: 0.757
+[21:53:11] 💾 Saved complete simulation 164 to simulation_results/sim_0164_result.pkl
+[21:53:11] 📄 Saved JSON version for simulation 164 to simulation_results/sim_0164_result.json
+[21:53:11] 📊 Sim 119: Large cooperation gap - Strategy: 0.306, Behavioral: 0.015
+[21:53:11] 💾 Saved complete simulation 119 to simulation_results/sim_0119_result.pkl
+[21:53:11] 📄 Saved JSON version for simulation 119 to simulation_results/sim_0119_result.json
+[21:53:13] 📊 Sim 136: Large cooperation gap - Strategy: 0.388, Behavioral: 0.026
+[21:53:13] 💾 Saved complete simulation 136 to simulation_results/sim_0136_result.pkl
+[21:53:13] 📄 Saved JSON version for simulation 136 to simulation_results/sim_0136_result.json
+[21:53:13] 📊 Sim 174: Large cooperation gap - Strategy: 0.982, Behavioral: 0.679
+[21:53:13] 💾 Saved complete simulation 174 to simulation_results/sim_0174_result.pkl
+[21:53:13] 📄 Saved JSON version for simulation 174 to simulation_results/sim_0174_result.json
+[21:53:13] 📊 Sim 137: Large cooperation gap - Strategy: 0.997, Behavioral: 0.651
+[21:53:13] 💾 Saved complete simulation 137 to simulation_results/sim_0137_result.pkl
+[21:53:13] 📄 Saved JSON version for simulation 137 to simulation_results/sim_0137_result.json
+[21:53:19] 📊 Sim 121: Large cooperation gap - Strategy: 0.939, Behavioral: 0.387
+[21:53:19] 💾 Saved complete simulation 121 to simulation_results/sim_0121_result.pkl
+[21:53:19] 📄 Saved JSON version for simulation 121 to simulation_results/sim_0121_result.json
+[21:53:20] 📊 Sim 167: Large cooperation gap - Strategy: 0.922, Behavioral: 0.646
+[21:53:20] 💾 Saved complete simulation 167 to simulation_results/sim_0167_result.pkl
+[21:53:20] 📄 Saved JSON version for simulation 167 to simulation_results/sim_0167_result.json
+[21:53:25] 📊 Sim 148: Large cooperation gap - Strategy: 0.382, Behavioral: 0.039
+[21:53:25] 💾 Saved complete simulation 148 to simulation_results/sim_0148_result.pkl
+[21:53:25] 📄 Saved JSON version for simulation 148 to simulation_results/sim_0148_result.json
+[21:53:26] 📊 Sim 168: Large cooperation gap - Strategy: 0.995, Behavioral: 0.635
+[21:53:26] 💾 Saved complete simulation 168 to simulation_results/sim_0168_result.pkl
+[21:53:26] 📄 Saved JSON version for simulation 168 to simulation_results/sim_0168_result.json
+[21:53:27] 📊 Sim 140: Large cooperation gap - Strategy: 0.675, Behavioral: 0.068
+[21:53:27] 📊 Sim 151: Large cooperation gap - Strategy: 0.996, Behavioral: 0.661
+[21:53:27] 💾 Saved complete simulation 140 to simulation_results/sim_0140_result.pkl
+[21:53:27] 📄 Saved JSON version for simulation 140 to simulation_results/sim_0140_result.json
+[21:53:27] 💾 Saved complete simulation 151 to simulation_results/sim_0151_result.pkl
+[21:53:27] 📄 Saved JSON version for simulation 151 to simulation_results/sim_0151_result.json
+[21:53:27] 💾 Saved complete simulation 149 to simulation_results/sim_0149_result.pkl
+[21:53:27] 📄 Saved JSON version for simulation 149 to simulation_results/sim_0149_result.json
+[21:53:28] 📊 Sim 155: Large cooperation gap - Strategy: 0.951, Behavioral: 0.450
+[21:53:29] 💾 Saved complete simulation 155 to simulation_results/sim_0155_result.pkl
+[21:53:29] 📄 Saved JSON version for simulation 155 to simulation_results/sim_0155_result.json
+[21:53:32] 📊 Sim 160: Large cooperation gap - Strategy: 0.999, Behavioral: 0.716
+[21:53:33] 💾 Saved complete simulation 160 to simulation_results/sim_0160_result.pkl
+[21:53:33] 📄 Saved JSON version for simulation 160 to simulation_results/sim_0160_result.json
+[21:53:34] 📊 Sim 146: Large cooperation gap - Strategy: 0.985, Behavioral: 0.594
+[21:53:34] 💾 Saved complete simulation 146 to simulation_results/sim_0146_result.pkl
+[21:53:34] 📄 Saved JSON version for simulation 146 to simulation_results/sim_0146_result.json
+[21:53:38] 📊 Sim 177: Large cooperation gap - Strategy: 1.000, Behavioral: 0.787
+[21:53:38] 💾 Saved complete simulation 177 to simulation_results/sim_0177_result.pkl
+[21:53:38] 📄 Saved JSON version for simulation 177 to simulation_results/sim_0177_result.json
+[21:53:41] 📊 Sim 142: Large cooperation gap - Strategy: 0.381, Behavioral: 0.027
+[21:53:41] 💾 Saved complete simulation 142 to simulation_results/sim_0142_result.pkl
+[21:53:41] 📄 Saved JSON version for simulation 142 to simulation_results/sim_0142_result.json
+[21:53:42] 📊 Sim 169: Large cooperation gap - Strategy: 0.511, Behavioral: 0.107
+[21:53:42] 💾 Saved complete simulation 169 to simulation_results/sim_0169_result.pkl
+[21:53:42] 📄 Saved JSON version for simulation 169 to simulation_results/sim_0169_result.json
+[21:53:43] 📊 Sim 154: Large cooperation gap - Strategy: 0.948, Behavioral: 0.507
+[21:53:43] 💾 Saved complete simulation 154 to simulation_results/sim_0154_result.pkl
+[21:53:43] 📄 Saved JSON version for simulation 154 to simulation_results/sim_0154_result.json
+[21:53:43] 📊 Sim 126: Large cooperation gap - Strategy: 0.854, Behavioral: 0.352
+[21:53:43] 💾 Saved complete simulation 126 to simulation_results/sim_0126_result.pkl
+[21:53:43] 📄 Saved JSON version for simulation 126 to simulation_results/sim_0126_result.json
+[21:53:44] 📊 Sim 147: Large cooperation gap - Strategy: 0.945, Behavioral: 0.354
+[21:53:44] 💾 Saved complete simulation 147 to simulation_results/sim_0147_result.pkl
+[21:53:44] 📄 Saved JSON version for simulation 147 to simulation_results/sim_0147_result.json
+[21:53:47] 📊 Sim 161: Large cooperation gap - Strategy: 0.977, Behavioral: 0.669
+[21:53:47] 💾 Saved complete simulation 161 to simulation_results/sim_0161_result.pkl
+[21:53:47] 📄 Saved JSON version for simulation 161 to simulation_results/sim_0161_result.json
+[21:53:51] 📊 Sim 138: Large cooperation gap - Strategy: 0.893, Behavioral: 0.430
+[21:53:51] 💾 Saved complete simulation 138 to simulation_results/sim_0138_result.pkl
+[21:53:51] 📄 Saved JSON version for simulation 138 to simulation_results/sim_0138_result.json
+[21:53:51] 📊 Sim 184: Large cooperation gap - Strategy: 1.000, Behavioral: 0.731
+[21:53:51] 💾 Saved complete simulation 184 to simulation_results/sim_0184_result.pkl
+[21:53:51] 📄 Saved JSON version for simulation 184 to simulation_results/sim_0184_result.json
+[21:53:52] 📊 Sim 176: Large cooperation gap - Strategy: 0.388, Behavioral: 0.038
+[21:53:52] 💾 Saved complete simulation 176 to simulation_results/sim_0176_result.pkl
+[21:53:52] 📄 Saved JSON version for simulation 176 to simulation_results/sim_0176_result.json
+[21:53:54] 📊 Sim 150: Large cooperation gap - Strategy: 0.938, Behavioral: 0.411
+[21:53:54] 💾 Saved complete simulation 150 to simulation_results/sim_0150_result.pkl
+[21:53:54] 📄 Saved JSON version for simulation 150 to simulation_results/sim_0150_result.json
+[21:53:56] 📊 Sim 172: Large cooperation gap - Strategy: 0.569, Behavioral: 0.044
+[21:53:56] 💾 Saved complete simulation 172 to simulation_results/sim_0172_result.pkl
+[21:53:56] 📄 Saved JSON version for simulation 172 to simulation_results/sim_0172_result.json
+[21:53:56] 📊 Sim 171: Large cooperation gap - Strategy: 0.987, Behavioral: 0.621
+[21:53:57] 💾 Saved complete simulation 171 to simulation_results/sim_0171_result.pkl
+[21:53:57] 📄 Saved JSON version for simulation 171 to simulation_results/sim_0171_result.json
+[21:53:58] 📊 Sim 179: Large cooperation gap - Strategy: 1.000, Behavioral: 0.752
+[21:53:58] 💾 Saved complete simulation 179 to simulation_results/sim_0179_result.pkl
+[21:53:58] 📄 Saved JSON version for simulation 179 to simulation_results/sim_0179_result.json
+[21:53:58] 📊 PROGRESS: 140070/150000 rounds ( 93.4% of total work) ...
+[21:54:00] 📊 Sim 185: Large cooperation gap - Strategy: 0.973, Behavioral: 0.702
+[21:54:00] 💾 Saved complete simulation 185 to simulation_results/sim_0185_result.pkl
+[21:54:00] 📄 Saved JSON version for simulation 185 to simulation_results/sim_0185_result.json
+[21:54:02] 📊 Sim 186: Large cooperation gap - Strategy: 1.000, Behavioral: 0.769
+[21:54:02] 📊 Sim 199: Large cooperation gap - Strategy: 0.960, Behavioral: 0.566
+[21:54:02] 💾 Saved complete simulation 186 to simulation_results/sim_0186_result.pkl
+[21:54:02] 📄 Saved JSON version for simulation 186 to simulation_results/sim_0186_result.json
+[21:54:02] 💾 Saved complete simulation 199 to simulation_results/sim_0199_result.pkl
+[21:54:02] 📄 Saved JSON version for simulation 199 to simulation_results/sim_0199_result.json
+[21:54:03] 📊 Sim 203: Large cooperation gap - Strategy: 0.959, Behavioral: 0.510
+[21:54:03] 💾 Saved complete simulation 203 to simulation_results/sim_0203_result.pkl
+[21:54:03] 📄 Saved JSON version for simulation 203 to simulation_results/sim_0203_result.json
+[21:54:03] 📊 Sim 188: Large cooperation gap - Strategy: 1.000, Behavioral: 0.764
+[21:54:04] 💾 Saved complete simulation 188 to simulation_results/sim_0188_result.pkl
+[21:54:04] 📄 Saved JSON version for simulation 188 to simulation_results/sim_0188_result.json
+[21:54:07] 📊 Sim 152: Large cooperation gap - Strategy: 0.661, Behavioral: 0.111
+[21:54:07] 💾 Saved complete simulation 152 to simulation_results/sim_0152_result.pkl
+[21:54:07] 📄 Saved JSON version for simulation 152 to simulation_results/sim_0152_result.json
+[21:54:10] 📊 Sim 157: Large cooperation gap - Strategy: 0.992, Behavioral: 0.541
+[21:54:11] 💾 Saved complete simulation 157 to simulation_results/sim_0157_result.pkl
+[21:54:11] 📄 Saved JSON version for simulation 157 to simulation_results/sim_0157_result.json
+[21:54:12] 📊 Sim 197: Large cooperation gap - Strategy: 0.981, Behavioral: 0.597
+[21:54:12] 💾 Saved complete simulation 197 to simulation_results/sim_0197_result.pkl
+[21:54:12] 📄 Saved JSON version for simulation 197 to simulation_results/sim_0197_result.json
+[21:54:13] 📊 Sim 190: Large cooperation gap - Strategy: 0.990, Behavioral: 0.666
+[21:54:14] 💾 Saved complete simulation 190 to simulation_results/sim_0190_result.pkl
+[21:54:14] 📄 Saved JSON version for simulation 190 to simulation_results/sim_0190_result.json
+[21:54:16] 📊 Sim 175: Large cooperation gap - Strategy: 0.991, Behavioral: 0.509
+[21:54:16] 💾 Saved complete simulation 175 to simulation_results/sim_0175_result.pkl
+[21:54:16] 📄 Saved JSON version for simulation 175 to simulation_results/sim_0175_result.json
+[21:54:17] 📊 Sim 178: Large cooperation gap - Strategy: 0.978, Behavioral: 0.710
+[21:54:17] 💾 Saved complete simulation 178 to simulation_results/sim_0178_result.pkl
+[21:54:17] 📄 Saved JSON version for simulation 178 to simulation_results/sim_0178_result.json
+[21:54:18] 📊 Sim 166: Large cooperation gap - Strategy: 0.559, Behavioral: 0.072
+[21:54:18] 💾 Saved complete simulation 166 to simulation_results/sim_0166_result.pkl
+[21:54:18] 📄 Saved JSON version for simulation 166 to simulation_results/sim_0166_result.json
+[21:54:20] 📊 Sim 165: Large cooperation gap - Strategy: 0.402, Behavioral: 0.045
+[21:54:20] 💾 Saved complete simulation 165 to simulation_results/sim_0165_result.pkl
+[21:54:20] 📄 Saved JSON version for simulation 165 to simulation_results/sim_0165_result.json
+[21:54:23] 📊 Sim 162: Large cooperation gap - Strategy: 0.293, Behavioral: 0.071
+[21:54:24] 💾 Saved complete simulation 162 to simulation_results/sim_0162_result.pkl
+[21:54:24] 📄 Saved JSON version for simulation 162 to simulation_results/sim_0162_result.json
+[21:54:27] 📊 Sim 191: Large cooperation gap - Strategy: 0.829, Behavioral: 0.259
+[21:54:27] 💾 Saved complete simulation 191 to simulation_results/sim_0191_result.pkl
+[21:54:27] 📄 Saved JSON version for simulation 191 to simulation_results/sim_0191_result.json
+[21:54:27] 📊 Sim 158: Large cooperation gap - Strategy: 0.434, Behavioral: 0.154
+[21:54:28] 💾 Saved complete simulation 158 to simulation_results/sim_0158_result.pkl
+[21:54:28] 📄 Saved JSON version for simulation 158 to simulation_results/sim_0158_result.json
+[21:54:29] 📊 Sim 153: Large cooperation gap - Strategy: 0.539, Behavioral: 0.081
+[21:54:29] 📊 Sim 202: Large cooperation gap - Strategy: 0.950, Behavioral: 0.442
+[21:54:29] 💾 Saved complete simulation 153 to simulation_results/sim_0153_result.pkl
+[21:54:29] 📄 Saved JSON version for simulation 153 to simulation_results/sim_0153_result.json
+[21:54:29] 💾 Saved complete simulation 202 to simulation_results/sim_0202_result.pkl
+[21:54:29] 📄 Saved JSON version for simulation 202 to simulation_results/sim_0202_result.json
+[21:54:30] 📊 Sim 205: Large cooperation gap - Strategy: 0.793, Behavioral: 0.157
+[21:54:30] 💾 Saved complete simulation 205 to simulation_results/sim_0205_result.pkl
+[21:54:30] 📄 Saved JSON version for simulation 205 to simulation_results/sim_0205_result.json
+[21:54:31] 📊 Sim 170: Large cooperation gap - Strategy: 0.438, Behavioral: 0.041
+[21:54:32] 💾 Saved complete simulation 170 to simulation_results/sim_0170_result.pkl
+[21:54:32] 📄 Saved JSON version for simulation 170 to simulation_results/sim_0170_result.json
+[21:54:34] 📊 Sim 182: Large cooperation gap - Strategy: 0.984, Behavioral: 0.616
+[21:54:34] 💾 Saved complete simulation 182 to simulation_results/sim_0182_result.pkl
+[21:54:34] 📄 Saved JSON version for simulation 182 to simulation_results/sim_0182_result.json
+[21:54:39] 💾 Saved complete simulation 183 to simulation_results/sim_0183_result.pkl
+[21:54:39] 📄 Saved JSON version for simulation 183 to simulation_results/sim_0183_result.json
+[21:54:43] 📊 Sim 209: Large cooperation gap - Strategy: 0.882, Behavioral: 0.464
+[21:54:43] 💾 Saved complete simulation 209 to simulation_results/sim_0209_result.pkl
+[21:54:43] 📄 Saved JSON version for simulation 209 to simulation_results/sim_0209_result.json
+[21:54:43] 📊 Sim 187: Large cooperation gap - Strategy: 0.862, Behavioral: 0.252
+[21:54:43] 💾 Saved complete simulation 187 to simulation_results/sim_0187_result.pkl
+[21:54:43] 📄 Saved JSON version for simulation 187 to simulation_results/sim_0187_result.json
+[21:54:44] 📊 Sim 189: Large cooperation gap - Strategy: 0.995, Behavioral: 0.743
+[21:54:44] 💾 Saved complete simulation 189 to simulation_results/sim_0189_result.pkl
+[21:54:44] 📄 Saved JSON version for simulation 189 to simulation_results/sim_0189_result.json
+[21:54:44] 📊 Sim 163: Large cooperation gap - Strategy: 0.332, Behavioral: 0.114
+[21:54:44] 💾 Saved complete simulation 163 to simulation_results/sim_0163_result.pkl
+[21:54:44] 📄 Saved JSON version for simulation 163 to simulation_results/sim_0163_result.json
+[21:54:45] 📊 Sim 173: Large cooperation gap - Strategy: 0.246, Behavioral: 0.018
+[21:54:45] 💾 Saved complete simulation 173 to simulation_results/sim_0173_result.pkl
+[21:54:45] 📄 Saved JSON version for simulation 173 to simulation_results/sim_0173_result.json
+[21:54:46] 📊 Sim 180: Large cooperation gap - Strategy: 0.922, Behavioral: 0.596
+[21:54:46] 💾 Saved complete simulation 180 to simulation_results/sim_0180_result.pkl
+[21:54:46] 📄 Saved JSON version for simulation 180 to simulation_results/sim_0180_result.json
+[21:54:49] 📊 Sim 198: Large cooperation gap - Strategy: 0.788, Behavioral: 0.154
+[21:54:49] 💾 Saved complete simulation 198 to simulation_results/sim_0198_result.pkl
+[21:54:49] 📄 Saved JSON version for simulation 198 to simulation_results/sim_0198_result.json
+[21:54:53] 📊 Sim 224: Large cooperation gap - Strategy: 0.920, Behavioral: 0.555
+[21:54:53] 💾 Saved complete simulation 224 to simulation_results/sim_0224_result.pkl
+[21:54:53] 📄 Saved JSON version for simulation 224 to simulation_results/sim_0224_result.json
+[21:54:54] 📊 Sim 192: Large cooperation gap - Strategy: 0.962, Behavioral: 0.529
+[21:54:54] 💾 Saved complete simulation 192 to simulation_results/sim_0192_result.pkl
+[21:54:54] 📄 Saved JSON version for simulation 192 to simulation_results/sim_0192_result.json
+[21:54:56] 📊 Sim 213: Large cooperation gap - Strategy: 0.975, Behavioral: 0.721
+[21:54:56] 💾 Saved complete simulation 213 to simulation_results/sim_0213_result.pkl
+[21:54:56] 📄 Saved JSON version for simulation 213 to simulation_results/sim_0213_result.json
+[21:54:57] 📊 Sim 220: Large cooperation gap - Strategy: 0.746, Behavioral: 0.357
+[21:54:57] 💾 Saved complete simulation 220 to simulation_results/sim_0220_result.pkl
+[21:54:57] 📄 Saved JSON version for simulation 220 to simulation_results/sim_0220_result.json
+[21:55:00] 📊 Sim 201: Large cooperation gap - Strategy: 0.853, Behavioral: 0.331
+[21:55:00] 💾 Saved complete simulation 201 to simulation_results/sim_0201_result.pkl
+[21:55:00] 📄 Saved JSON version for simulation 201 to simulation_results/sim_0201_result.json
+[21:55:00] 📊 PROGRESS: 141090/150000 rounds ( 94.1% of total work) ...
+[21:55:01] 📊 Sim 194: Large cooperation gap - Strategy: 0.807, Behavioral: 0.286
+[21:55:01] 💾 Saved complete simulation 194 to simulation_results/sim_0194_result.pkl
+[21:55:01] 📄 Saved JSON version for simulation 194 to simulation_results/sim_0194_result.json
+[21:55:02] 📊 Sim 195: Large cooperation gap - Strategy: 0.295, Behavioral: 0.057
+[21:55:03] 💾 Saved complete simulation 195 to simulation_results/sim_0195_result.pkl
+[21:55:03] 📄 Saved JSON version for simulation 195 to simulation_results/sim_0195_result.json
+[21:55:03] 📊 Sim 211: Large cooperation gap - Strategy: 0.777, Behavioral: 0.125
+[21:55:04] 💾 Saved complete simulation 211 to simulation_results/sim_0211_result.pkl
+[21:55:04] 📄 Saved JSON version for simulation 211 to simulation_results/sim_0211_result.json
+[21:55:08] 📊 Sim 181: Large cooperation gap - Strategy: 0.701, Behavioral: 0.141
+[21:55:08] 💾 Saved complete simulation 181 to simulation_results/sim_0181_result.pkl
+[21:55:08] 📄 Saved JSON version for simulation 181 to simulation_results/sim_0181_result.json
+[21:55:10] 📊 Sim 226: Large cooperation gap - Strategy: 0.990, Behavioral: 0.713
+[21:55:10] 💾 Saved complete simulation 226 to simulation_results/sim_0226_result.pkl
+[21:55:10] 📄 Saved JSON version for simulation 226 to simulation_results/sim_0226_result.json
+[21:55:11] 💾 Saved complete simulation 196 to simulation_results/sim_0196_result.pkl
+[21:55:11] 📄 Saved JSON version for simulation 196 to simulation_results/sim_0196_result.json
+[21:55:12] 📊 Sim 214: Large cooperation gap - Strategy: 0.505, Behavioral: 0.051
+[21:55:12] 💾 Saved complete simulation 214 to simulation_results/sim_0214_result.pkl
+[21:55:12] 📄 Saved JSON version for simulation 214 to simulation_results/sim_0214_result.json
+[21:55:13] 💾 Saved complete simulation 232 to simulation_results/sim_0232_result.pkl
+[21:55:13] 📄 Saved JSON version for simulation 232 to simulation_results/sim_0232_result.json
+[21:55:16] 📊 Sim 200: Large cooperation gap - Strategy: 0.921, Behavioral: 0.410
+[21:55:16] 💾 Saved complete simulation 200 to simulation_results/sim_0200_result.pkl
+[21:55:16] 📄 Saved JSON version for simulation 200 to simulation_results/sim_0200_result.json
+[21:55:17] 📊 Sim 207: Large cooperation gap - Strategy: 0.314, Behavioral: 0.022
+[21:55:17] 💾 Saved complete simulation 207 to simulation_results/sim_0207_result.pkl
+[21:55:17] 📄 Saved JSON version for simulation 207 to simulation_results/sim_0207_result.json
+[21:55:17] 📊 Sim 217: Large cooperation gap - Strategy: 0.310, Behavioral: 0.039
+[21:55:18] 💾 Saved complete simulation 217 to simulation_results/sim_0217_result.pkl
+[21:55:18] 📄 Saved JSON version for simulation 217 to simulation_results/sim_0217_result.json
+[21:55:24] 📊 Sim 208: Large cooperation gap - Strategy: 0.675, Behavioral: 0.210
+[21:55:25] 💾 Saved complete simulation 208 to simulation_results/sim_0208_result.pkl
+[21:55:25] 📄 Saved JSON version for simulation 208 to simulation_results/sim_0208_result.json
+[21:55:25] 📊 Sim 228: Large cooperation gap - Strategy: 0.845, Behavioral: 0.304
+[21:55:25] 💾 Saved complete simulation 228 to simulation_results/sim_0228_result.pkl
+[21:55:25] 📄 Saved JSON version for simulation 228 to simulation_results/sim_0228_result.json
+[21:55:25] 📊 Sim 206: Large cooperation gap - Strategy: 0.897, Behavioral: 0.270
+[21:55:25] 💾 Saved complete simulation 206 to simulation_results/sim_0206_result.pkl
+[21:55:25] 📄 Saved JSON version for simulation 206 to simulation_results/sim_0206_result.json
+[21:55:26] 📊 Sim 227: Large cooperation gap - Strategy: 0.999, Behavioral: 0.781
+[21:55:26] 💾 Saved complete simulation 227 to simulation_results/sim_0227_result.pkl
+[21:55:26] 📄 Saved JSON version for simulation 227 to simulation_results/sim_0227_result.json
+[21:55:30] 📊 Sim 216: Large cooperation gap - Strategy: 0.534, Behavioral: 0.041
+[21:55:30] 💾 Saved complete simulation 216 to simulation_results/sim_0216_result.pkl
+[21:55:30] 📄 Saved JSON version for simulation 216 to simulation_results/sim_0216_result.json
+[21:55:33] 📊 Sim 219: Large cooperation gap - Strategy: 0.894, Behavioral: 0.406
+[21:55:33] 📊 Sim 210: Large cooperation gap - Strategy: 0.833, Behavioral: 0.398
+[21:55:33] 💾 Saved complete simulation 219 to simulation_results/sim_0219_result.pkl
+[21:55:33] 📄 Saved JSON version for simulation 219 to simulation_results/sim_0219_result.json
+[21:55:33] 💾 Saved complete simulation 210 to simulation_results/sim_0210_result.pkl
+[21:55:33] 📄 Saved JSON version for simulation 210 to simulation_results/sim_0210_result.json
+[21:55:34] 📊 Sim 218: Large cooperation gap - Strategy: 0.744, Behavioral: 0.508
+[21:55:34] 💾 Saved complete simulation 218 to simulation_results/sim_0218_result.pkl
+[21:55:34] 📄 Saved JSON version for simulation 218 to simulation_results/sim_0218_result.json
+[21:55:40] 📊 Sim 221: Large cooperation gap - Strategy: 0.846, Behavioral: 0.198
+[21:55:40] 📊 Sim 223: Large cooperation gap - Strategy: 0.634, Behavioral: 0.065
+[21:55:40] 💾 Saved complete simulation 221 to simulation_results/sim_0221_result.pkl
+[21:55:40] 📄 Saved JSON version for simulation 221 to simulation_results/sim_0221_result.json
+[21:55:41] 💾 Saved complete simulation 223 to simulation_results/sim_0223_result.pkl
+[21:55:41] 📄 Saved JSON version for simulation 223 to simulation_results/sim_0223_result.json
+[21:55:41] 📊 Sim 204: Large cooperation gap - Strategy: 0.855, Behavioral: 0.211
+[21:55:41] 💾 Saved complete simulation 204 to simulation_results/sim_0204_result.pkl
+[21:55:41] 📄 Saved JSON version for simulation 204 to simulation_results/sim_0204_result.json
+[21:55:42] 📊 Sim 229: Large cooperation gap - Strategy: 0.994, Behavioral: 0.628
+[21:55:42] 💾 Saved complete simulation 229 to simulation_results/sim_0229_result.pkl
+[21:55:42] 📄 Saved JSON version for simulation 229 to simulation_results/sim_0229_result.json
+[21:55:46] 📊 Sim 212: Large cooperation gap - Strategy: 0.576, Behavioral: 0.170
+[21:55:46] 💾 Saved complete simulation 212 to simulation_results/sim_0212_result.pkl
+[21:55:46] 📄 Saved JSON version for simulation 212 to simulation_results/sim_0212_result.json
+[21:55:47] 📊 Sim 234: Large cooperation gap - Strategy: 0.603, Behavioral: 0.115
+[21:55:48] 💾 Saved complete simulation 234 to simulation_results/sim_0234_result.pkl
+[21:55:48] 📄 Saved JSON version for simulation 234 to simulation_results/sim_0234_result.json
+[21:55:48] 📊 Sim 245: Large cooperation gap - Strategy: 1.000, Behavioral: 0.750
+[21:55:48] 💾 Saved complete simulation 245 to simulation_results/sim_0245_result.pkl
+[21:55:48] 📄 Saved JSON version for simulation 245 to simulation_results/sim_0245_result.json
+[21:55:48] 📊 Sim 238: Large cooperation gap - Strategy: 0.950, Behavioral: 0.565
+[21:55:48] 💾 Saved complete simulation 238 to simulation_results/sim_0238_result.pkl
+[21:55:48] 📄 Saved JSON version for simulation 238 to simulation_results/sim_0238_result.json
+[21:55:53] 💾 Saved complete simulation 249 to simulation_results/sim_0249_result.pkl
+[21:55:53] 📄 Saved JSON version for simulation 249 to simulation_results/sim_0249_result.json
+[21:55:55] 📊 Sim 242: Large cooperation gap - Strategy: 0.956, Behavioral: 0.626
+[21:55:55] 💾 Saved complete simulation 242 to simulation_results/sim_0242_result.pkl
+[21:55:55] 📄 Saved JSON version for simulation 242 to simulation_results/sim_0242_result.json
+[21:55:56] 📊 Sim 230: Large cooperation gap - Strategy: 0.961, Behavioral: 0.458
+[21:55:56] 💾 Saved complete simulation 230 to simulation_results/sim_0230_result.pkl
+[21:55:56] 📄 Saved JSON version for simulation 230 to simulation_results/sim_0230_result.json
+[21:55:57] 📊 Sim 237: Large cooperation gap - Strategy: 0.818, Behavioral: 0.192
+[21:55:57] 📊 Sim 258: Large cooperation gap - Strategy: 0.947, Behavioral: 0.524
+[21:55:57] 💾 Saved complete simulation 237 to simulation_results/sim_0237_result.pkl
+[21:55:57] 📄 Saved JSON version for simulation 237 to simulation_results/sim_0237_result.json
+[21:55:57] 💾 Saved complete simulation 258 to simulation_results/sim_0258_result.pkl
+[21:55:57] 📄 Saved JSON version for simulation 258 to simulation_results/sim_0258_result.json
+[21:56:01] 📊 Sim 251: Large cooperation gap - Strategy: 0.991, Behavioral: 0.700
+[21:56:01] 💾 Saved complete simulation 251 to simulation_results/sim_0251_result.pkl
+[21:56:01] 📄 Saved JSON version for simulation 251 to simulation_results/sim_0251_result.json
+[21:56:01] 📊 PROGRESS: 142080/150000 rounds ( 94.7% of total work) ...
+[21:56:02] 📊 Sim 239: Large cooperation gap - Strategy: 0.399, Behavioral: 0.054
+[21:56:02] 💾 Saved complete simulation 239 to simulation_results/sim_0239_result.pkl
+[21:56:02] 📄 Saved JSON version for simulation 239 to simulation_results/sim_0239_result.json
+[21:56:05] 📊 Sim 193: Large cooperation gap - Strategy: 0.777, Behavioral: 0.217
+[21:56:05] 💾 Saved complete simulation 193 to simulation_results/sim_0193_result.pkl
+[21:56:05] 📄 Saved JSON version for simulation 193 to simulation_results/sim_0193_result.json
+[21:56:06] 📊 Sim 263: Large cooperation gap - Strategy: 0.987, Behavioral: 0.775
+[21:56:06] 💾 Saved complete simulation 263 to simulation_results/sim_0263_result.pkl
+[21:56:06] 📄 Saved JSON version for simulation 263 to simulation_results/sim_0263_result.json
+[21:56:10] 📊 Sim 231: Large cooperation gap - Strategy: 0.956, Behavioral: 0.493
+[21:56:10] 💾 Saved complete simulation 231 to simulation_results/sim_0231_result.pkl
+[21:56:10] 📄 Saved JSON version for simulation 231 to simulation_results/sim_0231_result.json
+[21:56:11] 📊 Sim 233: Large cooperation gap - Strategy: 0.569, Behavioral: 0.081
+[21:56:12] 💾 Saved complete simulation 233 to simulation_results/sim_0233_result.pkl
+[21:56:12] 📄 Saved JSON version for simulation 233 to simulation_results/sim_0233_result.json
+[21:56:13] 📊 Sim 244: Large cooperation gap - Strategy: 0.783, Behavioral: 0.203
+[21:56:13] 💾 Saved complete simulation 244 to simulation_results/sim_0244_result.pkl
+[21:56:13] 📄 Saved JSON version for simulation 244 to simulation_results/sim_0244_result.json
+[21:56:13] 📊 Sim 222: Large cooperation gap - Strategy: 0.873, Behavioral: 0.395
+[21:56:13] 💾 Saved complete simulation 222 to simulation_results/sim_0222_result.pkl
+[21:56:13] 📄 Saved JSON version for simulation 222 to simulation_results/sim_0222_result.json
+[21:56:15] 📊 Sim 257: Large cooperation gap - Strategy: 1.000, Behavioral: 0.739
+[21:56:15] 💾 Saved complete simulation 257 to simulation_results/sim_0257_result.pkl
+[21:56:15] 📄 Saved JSON version for simulation 257 to simulation_results/sim_0257_result.json
+[21:56:19] 📊 Sim 215: Large cooperation gap - Strategy: 0.331, Behavioral: 0.084
+[21:56:19] 💾 Saved complete simulation 215 to simulation_results/sim_0215_result.pkl
+[21:56:19] 📄 Saved JSON version for simulation 215 to simulation_results/sim_0215_result.json
+[21:56:21] 📊 Sim 261: Large cooperation gap - Strategy: 0.848, Behavioral: 0.380
+[21:56:21] 💾 Saved complete simulation 261 to simulation_results/sim_0261_result.pkl
+[21:56:21] 📄 Saved JSON version for simulation 261 to simulation_results/sim_0261_result.json
+[21:56:21] 📊 Sim 243: Large cooperation gap - Strategy: 0.893, Behavioral: 0.340
+[21:56:21] 💾 Saved complete simulation 243 to simulation_results/sim_0243_result.pkl
+[21:56:21] 📄 Saved JSON version for simulation 243 to simulation_results/sim_0243_result.json
+[21:56:22] 📊 Sim 235: Large cooperation gap - Strategy: 0.643, Behavioral: 0.069
+[21:56:22] 💾 Saved complete simulation 235 to simulation_results/sim_0235_result.pkl
+[21:56:22] 📄 Saved JSON version for simulation 235 to simulation_results/sim_0235_result.json
+[21:56:25] 📊 Sim 252: Large cooperation gap - Strategy: 0.923, Behavioral: 0.420
+[21:56:25] 💾 Saved complete simulation 252 to simulation_results/sim_0252_result.pkl
+[21:56:25] 📄 Saved JSON version for simulation 252 to simulation_results/sim_0252_result.json
+[21:56:27] 📊 Sim 259: Large cooperation gap - Strategy: 0.975, Behavioral: 0.542
+[21:56:27] 💾 Saved complete simulation 259 to simulation_results/sim_0259_result.pkl
+[21:56:27] 📄 Saved JSON version for simulation 259 to simulation_results/sim_0259_result.json
+[21:56:29] 📊 Sim 256: Large cooperation gap - Strategy: 0.486, Behavioral: 0.248
+[21:56:29] 📊 Sim 247: Large cooperation gap - Strategy: 1.000, Behavioral: 0.749
+[21:56:29] 💾 Saved complete simulation 256 to simulation_results/sim_0256_result.pkl
+[21:56:29] 📄 Saved JSON version for simulation 256 to simulation_results/sim_0256_result.json
+[21:56:29] 💾 Saved complete simulation 247 to simulation_results/sim_0247_result.pkl
+[21:56:29] 📄 Saved JSON version for simulation 247 to simulation_results/sim_0247_result.json
+[21:56:35] 📊 Sim 254: Large cooperation gap - Strategy: 0.441, Behavioral: 0.034
+[21:56:35] 💾 Saved complete simulation 254 to simulation_results/sim_0254_result.pkl
+[21:56:35] 📄 Saved JSON version for simulation 254 to simulation_results/sim_0254_result.json
+[21:56:36] 📊 Sim 225: Large cooperation gap - Strategy: 0.640, Behavioral: 0.318
+[21:56:36] 💾 Saved complete simulation 225 to simulation_results/sim_0225_result.pkl
+[21:56:36] 📄 Saved JSON version for simulation 225 to simulation_results/sim_0225_result.json
+[21:56:37] 📊 Sim 255: Large cooperation gap - Strategy: 0.963, Behavioral: 0.496
+[21:56:37] 📊 Sim 236: Large cooperation gap - Strategy: 0.571, Behavioral: 0.190
+[21:56:37] 💾 Saved complete simulation 255 to simulation_results/sim_0255_result.pkl
+[21:56:37] 📄 Saved JSON version for simulation 255 to simulation_results/sim_0255_result.json
+[21:56:37] 💾 Saved complete simulation 236 to simulation_results/sim_0236_result.pkl
+[21:56:37] 📄 Saved JSON version for simulation 236 to simulation_results/sim_0236_result.json
+[21:56:39] 📊 Sim 264: Large cooperation gap - Strategy: 0.992, Behavioral: 0.563
+[21:56:40] 💾 Saved complete simulation 264 to simulation_results/sim_0264_result.pkl
+[21:56:40] 📄 Saved JSON version for simulation 264 to simulation_results/sim_0264_result.json
+[21:56:42] 💾 Saved complete simulation 272 to simulation_results/sim_0272_result.pkl
+[21:56:42] 📄 Saved JSON version for simulation 272 to simulation_results/sim_0272_result.json
+[21:56:44] 💾 Saved complete simulation 267 to simulation_results/sim_0267_result.pkl
+[21:56:44] 📄 Saved JSON version for simulation 267 to simulation_results/sim_0267_result.json
+[21:56:45] 📊 Sim 253: Large cooperation gap - Strategy: 0.438, Behavioral: 0.043
+[21:56:45] 💾 Saved complete simulation 253 to simulation_results/sim_0253_result.pkl
+[21:56:45] 📄 Saved JSON version for simulation 253 to simulation_results/sim_0253_result.json
+[21:56:50] 📊 Sim 262: Large cooperation gap - Strategy: 1.000, Behavioral: 0.777
+[21:56:50] 💾 Saved complete simulation 262 to simulation_results/sim_0262_result.pkl
+[21:56:50] 📄 Saved JSON version for simulation 262 to simulation_results/sim_0262_result.json
+[21:56:51] 📊 Sim 268: Large cooperation gap - Strategy: 0.601, Behavioral: 0.088
+[21:56:51] 💾 Saved complete simulation 268 to simulation_results/sim_0268_result.pkl
+[21:56:51] 📄 Saved JSON version for simulation 268 to simulation_results/sim_0268_result.json
+[21:56:52] 💾 Saved complete simulation 240 to simulation_results/sim_0240_result.pkl
+[21:56:52] 📄 Saved JSON version for simulation 240 to simulation_results/sim_0240_result.json
+[21:56:54] 📊 Sim 241: Large cooperation gap - Strategy: 0.830, Behavioral: 0.369
+[21:56:55] 💾 Saved complete simulation 241 to simulation_results/sim_0241_result.pkl
+[21:56:55] 📄 Saved JSON version for simulation 241 to simulation_results/sim_0241_result.json
+[21:56:56] 💾 Saved complete simulation 270 to simulation_results/sim_0270_result.pkl
+[21:56:56] 📄 Saved JSON version for simulation 270 to simulation_results/sim_0270_result.json
+[21:56:58] 📊 Sim 269: Large cooperation gap - Strategy: 0.303, Behavioral: 0.046
+[21:56:58] 💾 Saved complete simulation 269 to simulation_results/sim_0269_result.pkl
+[21:56:58] 📄 Saved JSON version for simulation 269 to simulation_results/sim_0269_result.json
+[21:56:59] 📊 Sim 250: Large cooperation gap - Strategy: 0.683, Behavioral: 0.455
+[21:56:59] 💾 Saved complete simulation 250 to simulation_results/sim_0250_result.pkl
+[21:56:59] 📄 Saved JSON version for simulation 250 to simulation_results/sim_0250_result.json
+[21:57:00] 📊 Sim 275: Large cooperation gap - Strategy: 0.977, Behavioral: 0.601
+[21:57:00] 💾 Saved complete simulation 275 to simulation_results/sim_0275_result.pkl
+[21:57:00] 📄 Saved JSON version for simulation 275 to simulation_results/sim_0275_result.json
+[21:57:03] 📊 Sim 281: Large cooperation gap - Strategy: 1.000, Behavioral: 0.746
+[21:57:03] 💾 Saved complete simulation 281 to simulation_results/sim_0281_result.pkl
+[21:57:03] 📄 Saved JSON version for simulation 281 to simulation_results/sim_0281_result.json
+[21:57:03] 📊 PROGRESS: 143070/150000 rounds ( 95.4% of total work) ...
+[21:57:03] 📊 Sim 299: Large cooperation gap - Strategy: 1.000, Behavioral: 0.785
+[21:57:03] 💾 Saved complete simulation 299 to simulation_results/sim_0299_result.pkl
+[21:57:03] 📄 Saved JSON version for simulation 299 to simulation_results/sim_0299_result.json
+[21:57:04] 📊 Sim 298: Large cooperation gap - Strategy: 0.971, Behavioral: 0.720
+[21:57:04] 💾 Saved complete simulation 298 to simulation_results/sim_0298_result.pkl
+[21:57:04] 📄 Saved JSON version for simulation 298 to simulation_results/sim_0298_result.json
+[21:57:06] 📊 Sim 277: Large cooperation gap - Strategy: 0.992, Behavioral: 0.662
+[21:57:06] 💾 Saved complete simulation 277 to simulation_results/sim_0277_result.pkl
+[21:57:06] 📄 Saved JSON version for simulation 277 to simulation_results/sim_0277_result.json
+[21:57:06] 📊 Sim 266: Large cooperation gap - Strategy: 0.628, Behavioral: 0.083
+[21:57:06] 💾 Saved complete simulation 266 to simulation_results/sim_0266_result.pkl
+[21:57:06] 📄 Saved JSON version for simulation 266 to simulation_results/sim_0266_result.json
+[21:57:13] 💾 Saved complete simulation 276 to simulation_results/sim_0276_result.pkl
+[21:57:13] 📄 Saved JSON version for simulation 276 to simulation_results/sim_0276_result.json
+[21:57:15] 💾 Saved complete simulation 265 to simulation_results/sim_0265_result.pkl
+[21:57:15] 📄 Saved JSON version for simulation 265 to simulation_results/sim_0265_result.json
+[21:57:15] 📊 Sim 246: Large cooperation gap - Strategy: 0.772, Behavioral: 0.297
+[21:57:15] 💾 Saved complete simulation 246 to simulation_results/sim_0246_result.pkl
+[21:57:15] 📄 Saved JSON version for simulation 246 to simulation_results/sim_0246_result.json
+[21:57:17] 📊 Sim 280: Large cooperation gap - Strategy: 0.675, Behavioral: 0.353
+[21:57:17] 💾 Saved complete simulation 280 to simulation_results/sim_0280_result.pkl
+[21:57:17] 📄 Saved JSON version for simulation 280 to simulation_results/sim_0280_result.json
+[21:57:19] 📊 Sim 278: Large cooperation gap - Strategy: 0.280, Behavioral: 0.013
+[21:57:19] 💾 Saved complete simulation 278 to simulation_results/sim_0278_result.pkl
+[21:57:19] 📄 Saved JSON version for simulation 278 to simulation_results/sim_0278_result.json
+[21:57:19] 📊 Sim 273: Large cooperation gap - Strategy: 0.744, Behavioral: 0.212
+[21:57:19] 💾 Saved complete simulation 273 to simulation_results/sim_0273_result.pkl
+[21:57:19] 📄 Saved JSON version for simulation 273 to simulation_results/sim_0273_result.json
+[21:57:20] 💾 Saved complete simulation 288 to simulation_results/sim_0288_result.pkl
+[21:57:20] 📄 Saved JSON version for simulation 288 to simulation_results/sim_0288_result.json
+[21:57:20] 📊 Sim 283: Large cooperation gap - Strategy: 0.920, Behavioral: 0.322
+[21:57:21] 💾 Saved complete simulation 283 to simulation_results/sim_0283_result.pkl
+[21:57:21] 📄 Saved JSON version for simulation 283 to simulation_results/sim_0283_result.json
+[21:57:27] 📊 Sim 292: Large cooperation gap - Strategy: 0.598, Behavioral: 0.079
+[21:57:27] 💾 Saved complete simulation 292 to simulation_results/sim_0292_result.pkl
+[21:57:27] 📄 Saved JSON version for simulation 292 to simulation_results/sim_0292_result.json
+[21:57:30] 📊 Sim 271: Large cooperation gap - Strategy: 0.796, Behavioral: 0.183
+[21:57:30] 💾 Saved complete simulation 271 to simulation_results/sim_0271_result.pkl
+[21:57:30] 📄 Saved JSON version for simulation 271 to simulation_results/sim_0271_result.json
+[21:57:30] 📊 Sim 286: Large cooperation gap - Strategy: 0.903, Behavioral: 0.698
+[21:57:30] 💾 Saved complete simulation 286 to simulation_results/sim_0286_result.pkl
+[21:57:30] 📄 Saved JSON version for simulation 286 to simulation_results/sim_0286_result.json
+[21:57:33] 📊 Sim 284: Large cooperation gap - Strategy: 0.856, Behavioral: 0.281
+[21:57:33] 💾 Saved complete simulation 284 to simulation_results/sim_0284_result.pkl
+[21:57:33] 📄 Saved JSON version for simulation 284 to simulation_results/sim_0284_result.json
+[21:57:35] 📊 Sim 279: Large cooperation gap - Strategy: 0.412, Behavioral: 0.106
+[21:57:35] 📊 Sim 291: Large cooperation gap - Strategy: 0.618, Behavioral: 0.169
+[21:57:35] 💾 Saved complete simulation 279 to simulation_results/sim_0279_result.pkl
+[21:57:35] 📄 Saved JSON version for simulation 279 to simulation_results/sim_0279_result.json
+[21:57:35] 💾 Saved complete simulation 291 to simulation_results/sim_0291_result.pkl
+[21:57:35] 📄 Saved JSON version for simulation 291 to simulation_results/sim_0291_result.json
+[21:57:35] 📊 Sim 274: Large cooperation gap - Strategy: 0.954, Behavioral: 0.552
+[21:57:36] 💾 Saved complete simulation 274 to simulation_results/sim_0274_result.pkl
+[21:57:36] 📄 Saved JSON version for simulation 274 to simulation_results/sim_0274_result.json
+[21:57:36] 📊 Sim 293: Large cooperation gap - Strategy: 0.934, Behavioral: 0.592
+[21:57:36] 💾 Saved complete simulation 293 to simulation_results/sim_0293_result.pkl
+[21:57:36] 📄 Saved JSON version for simulation 293 to simulation_results/sim_0293_result.json
+[21:57:41] 📊 Sim 297: Large cooperation gap - Strategy: 0.986, Behavioral: 0.753
+[21:57:41] 💾 Saved complete simulation 297 to simulation_results/sim_0297_result.pkl
+[21:57:41] 📄 Saved JSON version for simulation 297 to simulation_results/sim_0297_result.json
+[21:57:41] 📊 Sim 328: Large cooperation gap - Strategy: 0.994, Behavioral: 0.689
+[21:57:41] 💾 Saved complete simulation 328 to simulation_results/sim_0328_result.pkl
+[21:57:41] 📄 Saved JSON version for simulation 328 to simulation_results/sim_0328_result.json
+[21:57:41] 📊 Sim 307: Large cooperation gap - Strategy: 0.452, Behavioral: 0.062
+[21:57:42] 💾 Saved complete simulation 307 to simulation_results/sim_0307_result.pkl
+[21:57:42] 📄 Saved JSON version for simulation 307 to simulation_results/sim_0307_result.json
+[21:57:44] 📊 Sim 296: Large cooperation gap - Strategy: 1.000, Behavioral: 0.688
+[21:57:44] 💾 Saved complete simulation 296 to simulation_results/sim_0296_result.pkl
+[21:57:44] 📄 Saved JSON version for simulation 296 to simulation_results/sim_0296_result.json
+[21:57:46] 📊 Sim 260: Large cooperation gap - Strategy: 0.781, Behavioral: 0.129
+[21:57:46] 📊 Sim 310: Large cooperation gap - Strategy: 0.885, Behavioral: 0.275
+[21:57:46] 💾 Saved complete simulation 260 to simulation_results/sim_0260_result.pkl
+[21:57:46] 📄 Saved JSON version for simulation 260 to simulation_results/sim_0260_result.json
+[21:57:46] 💾 Saved complete simulation 310 to simulation_results/sim_0310_result.pkl
+[21:57:46] 📄 Saved JSON version for simulation 310 to simulation_results/sim_0310_result.json
+[21:57:50] 📊 Sim 305: Large cooperation gap - Strategy: 0.999, Behavioral: 0.753
+[21:57:50] 💾 Saved complete simulation 305 to simulation_results/sim_0305_result.pkl
+[21:57:50] 📄 Saved JSON version for simulation 305 to simulation_results/sim_0305_result.json
+[21:57:51] 📊 Sim 287: Large cooperation gap - Strategy: 0.869, Behavioral: 0.213
+[21:57:51] 💾 Saved complete simulation 287 to simulation_results/sim_0287_result.pkl
+[21:57:51] 📄 Saved JSON version for simulation 287 to simulation_results/sim_0287_result.json
+[21:57:55] 📊 Sim 300: Large cooperation gap - Strategy: 1.000, Behavioral: 0.770
+[21:57:55] 💾 Saved complete simulation 300 to simulation_results/sim_0300_result.pkl
+[21:57:55] 📄 Saved JSON version for simulation 300 to simulation_results/sim_0300_result.json
+[21:57:57] 📊 Sim 315: Large cooperation gap - Strategy: 0.991, Behavioral: 0.622
+[21:57:57] 💾 Saved complete simulation 315 to simulation_results/sim_0315_result.pkl
+[21:57:57] 📄 Saved JSON version for simulation 315 to simulation_results/sim_0315_result.json
+[21:57:58] 📊 Sim 289: Large cooperation gap - Strategy: 0.855, Behavioral: 0.446
+[21:57:58] 💾 Saved complete simulation 294 to simulation_results/sim_0294_result.pkl
+[21:57:58] 📄 Saved JSON version for simulation 294 to simulation_results/sim_0294_result.json
+[21:57:58] 💾 Saved complete simulation 289 to simulation_results/sim_0289_result.pkl
+[21:57:58] 📄 Saved JSON version for simulation 289 to simulation_results/sim_0289_result.json
+[21:57:59] 📊 Sim 319: Large cooperation gap - Strategy: 0.951, Behavioral: 0.490
+[21:57:59] 💾 Saved complete simulation 319 to simulation_results/sim_0319_result.pkl
+[21:57:59] 📄 Saved JSON version for simulation 319 to simulation_results/sim_0319_result.json
+[21:58:00] 📊 Sim 303: Large cooperation gap - Strategy: 0.973, Behavioral: 0.675
+[21:58:00] 💾 Saved complete simulation 303 to simulation_results/sim_0303_result.pkl
+[21:58:00] 📄 Saved JSON version for simulation 303 to simulation_results/sim_0303_result.json
+[21:58:01] 📊 Sim 306: Large cooperation gap - Strategy: 0.236, Behavioral: 0.015
+[21:58:01] 💾 Saved complete simulation 306 to simulation_results/sim_0306_result.pkl
+[21:58:01] 📄 Saved JSON version for simulation 306 to simulation_results/sim_0306_result.json
+[21:58:03] 📊 Sim 333: Large cooperation gap - Strategy: 0.990, Behavioral: 0.754
+[21:58:03] 💾 Saved complete simulation 333 to simulation_results/sim_0333_result.pkl
+[21:58:03] 📄 Saved JSON version for simulation 333 to simulation_results/sim_0333_result.json
+[21:58:03] 📊 PROGRESS: 144150/150000 rounds ( 96.1% of total work) ...
+[21:58:08] 💾 Saved complete simulation 314 to simulation_results/sim_0314_result.pkl
+[21:58:08] 📄 Saved JSON version for simulation 314 to simulation_results/sim_0314_result.json
+[21:58:11] 📊 Sim 290: Large cooperation gap - Strategy: 0.462, Behavioral: 0.039
+[21:58:11] 💾 Saved complete simulation 290 to simulation_results/sim_0290_result.pkl
+[21:58:11] 📄 Saved JSON version for simulation 290 to simulation_results/sim_0290_result.json
+[21:58:12] 📊 Sim 321: Large cooperation gap - Strategy: 0.985, Behavioral: 0.760
+[21:58:12] 💾 Saved complete simulation 321 to simulation_results/sim_0321_result.pkl
+[21:58:12] 📄 Saved JSON version for simulation 321 to simulation_results/sim_0321_result.json
+[21:58:14] 📊 Sim 248: Large cooperation gap - Strategy: 0.551, Behavioral: 0.245
+[21:58:14] 💾 Saved complete simulation 248 to simulation_results/sim_0248_result.pkl
+[21:58:14] 📄 Saved JSON version for simulation 248 to simulation_results/sim_0248_result.json
+[21:58:15] 📊 Sim 301: Large cooperation gap - Strategy: 0.943, Behavioral: 0.572
+[21:58:15] 📊 Sim 295: Large cooperation gap - Strategy: 0.732, Behavioral: 0.106
+[21:58:15] 💾 Saved complete simulation 301 to simulation_results/sim_0301_result.pkl
+[21:58:15] 📄 Saved JSON version for simulation 301 to simulation_results/sim_0301_result.json
+[21:58:15] 💾 Saved complete simulation 295 to simulation_results/sim_0295_result.pkl
+[21:58:15] 📄 Saved JSON version for simulation 295 to simulation_results/sim_0295_result.json
+[21:58:16] 📊 Sim 331: Large cooperation gap - Strategy: 0.897, Behavioral: 0.360
+[21:58:16] 💾 Saved complete simulation 331 to simulation_results/sim_0331_result.pkl
+[21:58:16] 📄 Saved JSON version for simulation 331 to simulation_results/sim_0331_result.json
+[21:58:17] 💾 Saved complete simulation 320 to simulation_results/sim_0320_result.pkl
+[21:58:17] 📄 Saved JSON version for simulation 320 to simulation_results/sim_0320_result.json
+[21:58:22] 📊 Sim 308: Large cooperation gap - Strategy: 0.524, Behavioral: 0.110
+[21:58:22] 💾 Saved complete simulation 308 to simulation_results/sim_0308_result.pkl
+[21:58:22] 📄 Saved JSON version for simulation 308 to simulation_results/sim_0308_result.json
+[21:58:25] 📊 Sim 304: Large cooperation gap - Strategy: 1.000, Behavioral: 0.680
+[21:58:25] 💾 Saved complete simulation 304 to simulation_results/sim_0304_result.pkl
+[21:58:25] 📄 Saved JSON version for simulation 304 to simulation_results/sim_0304_result.json
+[21:58:26] 📊 Sim 316: Large cooperation gap - Strategy: 0.922, Behavioral: 0.550
+[21:58:26] 💾 Saved complete simulation 316 to simulation_results/sim_0316_result.pkl
+[21:58:26] 📄 Saved JSON version for simulation 316 to simulation_results/sim_0316_result.json
+[21:58:28] 📊 Sim 334: Large cooperation gap - Strategy: 0.992, Behavioral: 0.720
+[21:58:28] 💾 Saved complete simulation 334 to simulation_results/sim_0334_result.pkl
+[21:58:28] 📄 Saved JSON version for simulation 334 to simulation_results/sim_0334_result.json
+[21:58:31] 📊 Sim 285: Large cooperation gap - Strategy: 0.463, Behavioral: 0.132
+[21:58:31] 💾 Saved complete simulation 285 to simulation_results/sim_0285_result.pkl
+[21:58:31] 📄 Saved JSON version for simulation 285 to simulation_results/sim_0285_result.json
+[21:58:31] 📊 Sim 313: Large cooperation gap - Strategy: 0.853, Behavioral: 0.379
+[21:58:31] 💾 Saved complete simulation 313 to simulation_results/sim_0313_result.pkl
+[21:58:31] 📄 Saved JSON version for simulation 313 to simulation_results/sim_0313_result.json
+[21:58:32] 📊 Sim 311: Large cooperation gap - Strategy: 0.650, Behavioral: 0.099
+[21:58:32] 💾 Saved complete simulation 311 to simulation_results/sim_0311_result.pkl
+[21:58:32] 📄 Saved JSON version for simulation 311 to simulation_results/sim_0311_result.json
+[21:58:33] 💾 Saved complete simulation 326 to simulation_results/sim_0326_result.pkl
+[21:58:33] 📄 Saved JSON version for simulation 326 to simulation_results/sim_0326_result.json
+[21:58:37] 📊 Sim 345: Large cooperation gap - Strategy: 1.000, Behavioral: 0.685
+[21:58:37] 💾 Saved complete simulation 345 to simulation_results/sim_0345_result.pkl
+[21:58:37] 📄 Saved JSON version for simulation 345 to simulation_results/sim_0345_result.json
+[21:58:37] 💾 Saved complete simulation 317 to simulation_results/sim_0317_result.pkl
+[21:58:37] 📄 Saved JSON version for simulation 317 to simulation_results/sim_0317_result.json
+[21:58:43] 📊 Sim 327: Large cooperation gap - Strategy: 0.448, Behavioral: 0.039
+[21:58:43] 📊 Sim 302: Large cooperation gap - Strategy: 0.846, Behavioral: 0.215
+[21:58:43] 💾 Saved complete simulation 327 to simulation_results/sim_0327_result.pkl
+[21:58:43] 📄 Saved JSON version for simulation 327 to simulation_results/sim_0327_result.json
+[21:58:43] 💾 Saved complete simulation 302 to simulation_results/sim_0302_result.pkl
+[21:58:43] 📄 Saved JSON version for simulation 302 to simulation_results/sim_0302_result.json
+[21:58:45] 📊 Sim 336: Large cooperation gap - Strategy: 1.000, Behavioral: 0.759
+[21:58:45] 💾 Saved complete simulation 336 to simulation_results/sim_0336_result.pkl
+[21:58:45] 📄 Saved JSON version for simulation 336 to simulation_results/sim_0336_result.json
+[21:58:49] 💾 Saved complete simulation 322 to simulation_results/sim_0322_result.pkl
+[21:58:49] 📄 Saved JSON version for simulation 322 to simulation_results/sim_0322_result.json
+[21:58:49] 📊 Sim 332: Large cooperation gap - Strategy: 0.904, Behavioral: 0.381
+[21:58:49] 💾 Saved complete simulation 332 to simulation_results/sim_0332_result.pkl
+[21:58:49] 📄 Saved JSON version for simulation 332 to simulation_results/sim_0332_result.json
+[21:58:50] 📊 Sim 282: Large cooperation gap - Strategy: 0.690, Behavioral: 0.236
+[21:58:50] 💾 Saved complete simulation 359 to simulation_results/sim_0359_result.pkl
+[21:58:50] 📄 Saved JSON version for simulation 359 to simulation_results/sim_0359_result.json
+[21:58:50] 💾 Saved complete simulation 282 to simulation_results/sim_0282_result.pkl
+[21:58:50] 📄 Saved JSON version for simulation 282 to simulation_results/sim_0282_result.json
+[21:58:53] 📊 Sim 342: Large cooperation gap - Strategy: 0.592, Behavioral: 0.182
+[21:58:53] 💾 Saved complete simulation 342 to simulation_results/sim_0342_result.pkl
+[21:58:53] 📄 Saved JSON version for simulation 342 to simulation_results/sim_0342_result.json
+[21:58:54] 💾 Saved complete simulation 329 to simulation_results/sim_0329_result.pkl
+[21:58:54] 📄 Saved JSON version for simulation 329 to simulation_results/sim_0329_result.json
+[21:58:57] 📊 Sim 346: Large cooperation gap - Strategy: 0.727, Behavioral: 0.260
+[21:58:58] 💾 Saved complete simulation 346 to simulation_results/sim_0346_result.pkl
+[21:58:58] 📄 Saved JSON version for simulation 346 to simulation_results/sim_0346_result.json
+[21:58:59] 📊 Sim 309: Large cooperation gap - Strategy: 0.833, Behavioral: 0.178
+[21:58:59] 💾 Saved complete simulation 309 to simulation_results/sim_0309_result.pkl
+[21:58:59] 📄 Saved JSON version for simulation 309 to simulation_results/sim_0309_result.json
+[21:58:59] 📊 Sim 341: Large cooperation gap - Strategy: 0.995, Behavioral: 0.766
+[21:58:59] 💾 Saved complete simulation 341 to simulation_results/sim_0341_result.pkl
+[21:58:59] 📄 Saved JSON version for simulation 341 to simulation_results/sim_0341_result.json
+[21:59:03] 📊 Sim 348: Large cooperation gap - Strategy: 1.000, Behavioral: 0.759
+[21:59:03] 💾 Saved complete simulation 348 to simulation_results/sim_0348_result.pkl
+[21:59:03] 📄 Saved JSON version for simulation 348 to simulation_results/sim_0348_result.json
+[21:59:04] 💾 Saved complete simulation 351 to simulation_results/sim_0351_result.pkl
+[21:59:04] 📄 Saved JSON version for simulation 351 to simulation_results/sim_0351_result.json
+[21:59:04] 📊 PROGRESS: 145110/150000 rounds ( 96.7% of total work) ...
+[21:59:04] 📊 Sim 344: Large cooperation gap - Strategy: 1.000, Behavioral: 0.757
+[21:59:04] 💾 Saved complete simulation 344 to simulation_results/sim_0344_result.pkl
+[21:59:04] 📄 Saved JSON version for simulation 344 to simulation_results/sim_0344_result.json
+[21:59:06] 📊 Sim 365: Large cooperation gap - Strategy: 1.000, Behavioral: 0.759
+[21:59:06] 💾 Saved complete simulation 365 to simulation_results/sim_0365_result.pkl
+[21:59:06] 📄 Saved JSON version for simulation 365 to simulation_results/sim_0365_result.json
+[21:59:09] 📊 Sim 355: Large cooperation gap - Strategy: 0.964, Behavioral: 0.524
+[21:59:09] 💾 Saved complete simulation 355 to simulation_results/sim_0355_result.pkl
+[21:59:09] 📄 Saved JSON version for simulation 355 to simulation_results/sim_0355_result.json
+[21:59:09] 📊 Sim 324: Large cooperation gap - Strategy: 0.316, Behavioral: 0.026
+[21:59:09] 💾 Saved complete simulation 324 to simulation_results/sim_0324_result.pkl
+[21:59:09] 📄 Saved JSON version for simulation 324 to simulation_results/sim_0324_result.json
+[21:59:12] 📊 Sim 339: Large cooperation gap - Strategy: 0.958, Behavioral: 0.323
+[21:59:12] 💾 Saved complete simulation 339 to simulation_results/sim_0339_result.pkl
+[21:59:12] 📄 Saved JSON version for simulation 339 to simulation_results/sim_0339_result.json
+[21:59:15] 📊 Sim 323: Large cooperation gap - Strategy: 0.668, Behavioral: 0.285
+[21:59:15] 💾 Saved complete simulation 323 to simulation_results/sim_0323_result.pkl
+[21:59:15] 📄 Saved JSON version for simulation 323 to simulation_results/sim_0323_result.json
+[21:59:17] 📊 Sim 349: Large cooperation gap - Strategy: 0.984, Behavioral: 0.589
+[21:59:17] 💾 Saved complete simulation 349 to simulation_results/sim_0349_result.pkl
+[21:59:17] 📄 Saved JSON version for simulation 349 to simulation_results/sim_0349_result.json
+[21:59:19] 📊 Sim 337: Large cooperation gap - Strategy: 0.412, Behavioral: 0.037
+[21:59:19] 💾 Saved complete simulation 337 to simulation_results/sim_0337_result.pkl
+[21:59:19] 📄 Saved JSON version for simulation 337 to simulation_results/sim_0337_result.json
+[21:59:20] 📊 Sim 354: Large cooperation gap - Strategy: 0.976, Behavioral: 0.571
+[21:59:20] 💾 Saved complete simulation 354 to simulation_results/sim_0354_result.pkl
+[21:59:20] 📄 Saved JSON version for simulation 354 to simulation_results/sim_0354_result.json
+[21:59:20] 📊 Sim 367: Large cooperation gap - Strategy: 0.818, Behavioral: 0.283
+[21:59:20] 💾 Saved complete simulation 367 to simulation_results/sim_0367_result.pkl
+[21:59:20] 📄 Saved JSON version for simulation 367 to simulation_results/sim_0367_result.json
+[21:59:21] 💾 Saved complete simulation 325 to simulation_results/sim_0325_result.pkl
+[21:59:21] 📄 Saved JSON version for simulation 325 to simulation_results/sim_0325_result.json
+[21:59:24] 💾 Saved complete simulation 352 to simulation_results/sim_0352_result.pkl
+[21:59:24] 📄 Saved JSON version for simulation 352 to simulation_results/sim_0352_result.json
+[21:59:25] 📊 Sim 382: Large cooperation gap - Strategy: 0.958, Behavioral: 0.611
+[21:59:25] 💾 Saved complete simulation 382 to simulation_results/sim_0382_result.pkl
+[21:59:25] 📄 Saved JSON version for simulation 382 to simulation_results/sim_0382_result.json
+[21:59:27] 📊 Sim 312: Large cooperation gap - Strategy: 0.527, Behavioral: 0.317
+[21:59:27] 💾 Saved complete simulation 312 to simulation_results/sim_0312_result.pkl
+[21:59:27] 📄 Saved JSON version for simulation 312 to simulation_results/sim_0312_result.json
+[21:59:30] 📊 Sim 350: Large cooperation gap - Strategy: 0.766, Behavioral: 0.292
+[21:59:30] 💾 Saved complete simulation 350 to simulation_results/sim_0350_result.pkl
+[21:59:30] 📄 Saved JSON version for simulation 350 to simulation_results/sim_0350_result.json
+[21:59:33] 📊 Sim 366: Large cooperation gap - Strategy: 1.000, Behavioral: 0.759
+[21:59:33] 💾 Saved complete simulation 366 to simulation_results/sim_0366_result.pkl
+[21:59:33] 📄 Saved JSON version for simulation 366 to simulation_results/sim_0366_result.json
+[21:59:34] 📊 Sim 373: Large cooperation gap - Strategy: 0.963, Behavioral: 0.573
+[21:59:34] 💾 Saved complete simulation 373 to simulation_results/sim_0373_result.pkl
+[21:59:34] 📄 Saved JSON version for simulation 373 to simulation_results/sim_0373_result.json
+[21:59:34] 📊 Sim 343: Large cooperation gap - Strategy: 0.795, Behavioral: 0.447
+[21:59:34] 💾 Saved complete simulation 343 to simulation_results/sim_0343_result.pkl
+[21:59:34] 📄 Saved JSON version for simulation 343 to simulation_results/sim_0343_result.json
+[21:59:35] 📊 Sim 338: Large cooperation gap - Strategy: 0.382, Behavioral: 0.027
+[21:59:36] 💾 Saved complete simulation 338 to simulation_results/sim_0338_result.pkl
+[21:59:36] 📄 Saved JSON version for simulation 338 to simulation_results/sim_0338_result.json
+[21:59:39] 📊 Sim 360: Large cooperation gap - Strategy: 0.939, Behavioral: 0.386
+[21:59:39] 💾 Saved complete simulation 360 to simulation_results/sim_0360_result.pkl
+[21:59:39] 📄 Saved JSON version for simulation 360 to simulation_results/sim_0360_result.json
+[21:59:41] 📊 Sim 335: Large cooperation gap - Strategy: 0.504, Behavioral: 0.085
+[21:59:41] 💾 Saved complete simulation 335 to simulation_results/sim_0335_result.pkl
+[21:59:41] 📄 Saved JSON version for simulation 335 to simulation_results/sim_0335_result.json
+[21:59:43] 📊 Sim 358: Large cooperation gap - Strategy: 0.410, Behavioral: 0.031
+[21:59:43] 💾 Saved complete simulation 358 to simulation_results/sim_0358_result.pkl
+[21:59:43] 📄 Saved JSON version for simulation 358 to simulation_results/sim_0358_result.json
+[21:59:45] 📊 Sim 353: Large cooperation gap - Strategy: 0.332, Behavioral: 0.031
+[21:59:46] 💾 Saved complete simulation 353 to simulation_results/sim_0353_result.pkl
+[21:59:46] 📄 Saved JSON version for simulation 353 to simulation_results/sim_0353_result.json
+[21:59:48] 📊 Sim 377: Large cooperation gap - Strategy: 0.858, Behavioral: 0.366
+[21:59:48] 💾 Saved complete simulation 377 to simulation_results/sim_0377_result.pkl
+[21:59:48] 📄 Saved JSON version for simulation 377 to simulation_results/sim_0377_result.json
+[21:59:49] 📊 Sim 318: Large cooperation gap - Strategy: 0.560, Behavioral: 0.310
+[21:59:49] 💾 Saved complete simulation 318 to simulation_results/sim_0318_result.pkl
+[21:59:49] 📄 Saved JSON version for simulation 318 to simulation_results/sim_0318_result.json
+[21:59:49] 📊 Sim 357: Large cooperation gap - Strategy: 0.881, Behavioral: 0.324
+[21:59:50] 💾 Saved complete simulation 357 to simulation_results/sim_0357_result.pkl
+[21:59:50] 📄 Saved JSON version for simulation 357 to simulation_results/sim_0357_result.json
+[21:59:50] 📊 Sim 369: Large cooperation gap - Strategy: 0.717, Behavioral: 0.130
+[21:59:50] 💾 Saved complete simulation 369 to simulation_results/sim_0369_result.pkl
+[21:59:50] 📄 Saved JSON version for simulation 369 to simulation_results/sim_0369_result.json
+[21:59:53] 📊 Sim 392: Large cooperation gap - Strategy: 0.962, Behavioral: 0.613
+[21:59:53] 💾 Saved complete simulation 392 to simulation_results/sim_0392_result.pkl
+[21:59:53] 📄 Saved JSON version for simulation 392 to simulation_results/sim_0392_result.json
+[21:59:54] 📊 Sim 370: Large cooperation gap - Strategy: 0.889, Behavioral: 0.434
+[21:59:54] 💾 Saved complete simulation 370 to simulation_results/sim_0370_result.pkl
+[21:59:54] 📄 Saved JSON version for simulation 370 to simulation_results/sim_0370_result.json
+[21:59:56] 📊 Sim 361: Large cooperation gap - Strategy: 0.985, Behavioral: 0.632
+[21:59:57] 💾 Saved complete simulation 361 to simulation_results/sim_0361_result.pkl
+[21:59:57] 📄 Saved JSON version for simulation 361 to simulation_results/sim_0361_result.json
+[22:00:00] 📊 Sim 371: Large cooperation gap - Strategy: 0.744, Behavioral: 0.393
+[22:00:00] 💾 Saved complete simulation 371 to simulation_results/sim_0371_result.pkl
+[22:00:00] 📄 Saved JSON version for simulation 371 to simulation_results/sim_0371_result.json
+[22:00:03] 📊 Sim 380: Large cooperation gap - Strategy: 0.990, Behavioral: 0.641
+[22:00:03] 💾 Saved complete simulation 380 to simulation_results/sim_0380_result.pkl
+[22:00:03] 📄 Saved JSON version for simulation 380 to simulation_results/sim_0380_result.json
+[22:00:04] 📊 Sim 364: Large cooperation gap - Strategy: 0.975, Behavioral: 0.435
+[22:00:04] 💾 Saved complete simulation 364 to simulation_results/sim_0364_result.pkl
+[22:00:04] 📄 Saved JSON version for simulation 364 to simulation_results/sim_0364_result.json
+[22:00:04] 📊 PROGRESS: 146100/150000 rounds ( 97.4% of total work) ...
+[22:00:05] 📊 Sim 381: Large cooperation gap - Strategy: 0.996, Behavioral: 0.688
+[22:00:05] 💾 Saved complete simulation 381 to simulation_results/sim_0381_result.pkl
+[22:00:05] 📄 Saved JSON version for simulation 381 to simulation_results/sim_0381_result.json
+[22:00:07] 📊 Sim 340: Large cooperation gap - Strategy: 0.223, Behavioral: 0.016
+[22:00:07] 💾 Saved complete simulation 340 to simulation_results/sim_0340_result.pkl
+[22:00:07] 📄 Saved JSON version for simulation 340 to simulation_results/sim_0340_result.json
+[22:00:09] 📊 Sim 347: Large cooperation gap - Strategy: 0.241, Behavioral: 0.010
+[22:00:09] 💾 Saved complete simulation 347 to simulation_results/sim_0347_result.pkl
+[22:00:09] 📄 Saved JSON version for simulation 347 to simulation_results/sim_0347_result.json
+[22:00:10] 💾 Saved complete simulation 362 to simulation_results/sim_0362_result.pkl
+[22:00:10] 📄 Saved JSON version for simulation 362 to simulation_results/sim_0362_result.json
+[22:00:10] 📊 Sim 384: Large cooperation gap - Strategy: 0.927, Behavioral: 0.714
+[22:00:11] 💾 Saved complete simulation 384 to simulation_results/sim_0384_result.pkl
+[22:00:11] 📄 Saved JSON version for simulation 384 to simulation_results/sim_0384_result.json
+[22:00:12] 📊 Sim 396: Large cooperation gap - Strategy: 0.965, Behavioral: 0.606
+[22:00:12] 💾 Saved complete simulation 396 to simulation_results/sim_0396_result.pkl
+[22:00:12] 📄 Saved JSON version for simulation 396 to simulation_results/sim_0396_result.json
+[22:00:14] 📊 Sim 383: Large cooperation gap - Strategy: 0.985, Behavioral: 0.746
+[22:00:14] 💾 Saved complete simulation 383 to simulation_results/sim_0383_result.pkl
+[22:00:14] 📄 Saved JSON version for simulation 383 to simulation_results/sim_0383_result.json
+[22:00:18] 📊 Sim 374: Large cooperation gap - Strategy: 0.848, Behavioral: 0.627
+[22:00:18] 📊 Sim 404: Large cooperation gap - Strategy: 0.978, Behavioral: 0.672
+[22:00:18] 💾 Saved complete simulation 404 to simulation_results/sim_0404_result.pkl
+[22:00:18] 📄 Saved JSON version for simulation 404 to simulation_results/sim_0404_result.json
+[22:00:18] 📊 Sim 395: Large cooperation gap - Strategy: 1.000, Behavioral: 0.755[22:00:18] 💾 Saved complete simulation 374 to simulation_results/sim_0374_result.pkl
+
+[22:00:18] 📄 Saved JSON version for simulation 374 to simulation_results/sim_0374_result.json
+[22:00:18] 💾 Saved complete simulation 395 to simulation_results/sim_0395_result.pkl
+[22:00:18] 📄 Saved JSON version for simulation 395 to simulation_results/sim_0395_result.json
+[22:00:21] 📊 Sim 394: Large cooperation gap - Strategy: 0.966, Behavioral: 0.532
+[22:00:21] 💾 Saved complete simulation 394 to simulation_results/sim_0394_result.pkl
+[22:00:21] 📄 Saved JSON version for simulation 394 to simulation_results/sim_0394_result.json
+[22:00:21] 📊 Sim 387: Large cooperation gap - Strategy: 0.985, Behavioral: 0.584
+[22:00:21] 💾 Saved complete simulation 387 to simulation_results/sim_0387_result.pkl
+[22:00:21] 📄 Saved JSON version for simulation 387 to simulation_results/sim_0387_result.json
+[22:00:22] 📊 Sim 378: Large cooperation gap - Strategy: 0.840, Behavioral: 0.323
+[22:00:22] 💾 Saved complete simulation 378 to simulation_results/sim_0378_result.pkl
+[22:00:22] 📄 Saved JSON version for simulation 378 to simulation_results/sim_0378_result.json
+[22:00:24] 📊 Sim 407: Large cooperation gap - Strategy: 0.977, Behavioral: 0.740
+[22:00:24] 💾 Saved complete simulation 407 to simulation_results/sim_0407_result.pkl
+[22:00:24] 📄 Saved JSON version for simulation 407 to simulation_results/sim_0407_result.json
+[22:00:30] 📊 Sim 375: Large cooperation gap - Strategy: 0.773, Behavioral: 0.273
+[22:00:30] 💾 Saved complete simulation 375 to simulation_results/sim_0375_result.pkl
+[22:00:30] 📄 Saved JSON version for simulation 375 to simulation_results/sim_0375_result.json
+[22:00:33] 📊 Sim 406: Large cooperation gap - Strategy: 1.000, Behavioral: 0.788
+[22:00:33] 💾 Saved complete simulation 406 to simulation_results/sim_0406_result.pkl
+[22:00:33] 📄 Saved JSON version for simulation 406 to simulation_results/sim_0406_result.json
+[22:00:36] 📊 Sim 389: Large cooperation gap - Strategy: 0.990, Behavioral: 0.596
+[22:00:36] 💾 Saved complete simulation 389 to simulation_results/sim_0389_result.pkl
+[22:00:36] 📄 Saved JSON version for simulation 389 to simulation_results/sim_0389_result.json
+[22:00:36] 📊 Sim 390: Large cooperation gap - Strategy: 1.000, Behavioral: 0.789
+[22:00:36] 💾 Saved complete simulation 390 to simulation_results/sim_0390_result.pkl
+[22:00:36] 📄 Saved JSON version for simulation 390 to simulation_results/sim_0390_result.json
+[22:00:37] 📊 Sim 368: Large cooperation gap - Strategy: 0.353, Behavioral: 0.139
+[22:00:37] 💾 Saved complete simulation 368 to simulation_results/sim_0368_result.pkl
+[22:00:37] 📄 Saved JSON version for simulation 368 to simulation_results/sim_0368_result.json
+[22:00:39] 📊 Sim 391: Large cooperation gap - Strategy: 0.533, Behavioral: 0.050
+[22:00:40] 💾 Saved complete simulation 391 to simulation_results/sim_0391_result.pkl
+[22:00:40] 📄 Saved JSON version for simulation 391 to simulation_results/sim_0391_result.json
+[22:00:40] 💾 Saved complete simulation 356 to simulation_results/sim_0356_result.pkl
+[22:00:40] 📄 Saved JSON version for simulation 356 to simulation_results/sim_0356_result.json
+[22:00:41] 📊 Sim 399: Large cooperation gap - Strategy: 0.828, Behavioral: 0.584
+[22:00:41] 💾 Saved complete simulation 399 to simulation_results/sim_0399_result.pkl
+[22:00:41] 📄 Saved JSON version for simulation 399 to simulation_results/sim_0399_result.json
+[22:00:44] 📊 Sim 415: Large cooperation gap - Strategy: 0.278, Behavioral: 0.038
+[22:00:44] 💾 Saved complete simulation 415 to simulation_results/sim_0415_result.pkl
+[22:00:44] 📄 Saved JSON version for simulation 415 to simulation_results/sim_0415_result.json
+[22:00:47] 📊 Sim 376: Large cooperation gap - Strategy: 0.288, Behavioral: 0.022
+[22:00:48] 💾 Saved complete simulation 376 to simulation_results/sim_0376_result.pkl
+[22:00:48] 📄 Saved JSON version for simulation 376 to simulation_results/sim_0376_result.json
+[22:00:48] 📊 Sim 410: Large cooperation gap - Strategy: 0.311, Behavioral: 0.026
+[22:00:49] 💾 Saved complete simulation 410 to simulation_results/sim_0410_result.pkl
+[22:00:49] 📄 Saved JSON version for simulation 410 to simulation_results/sim_0410_result.json
+[22:00:53] 📊 Sim 372: Large cooperation gap - Strategy: 0.557, Behavioral: 0.348
+[22:00:53] 💾 Saved complete simulation 372 to simulation_results/sim_0372_result.pkl
+[22:00:53] 📄 Saved JSON version for simulation 372 to simulation_results/sim_0372_result.json
+[22:00:53] 📊 Sim 385: Large cooperation gap - Strategy: 0.471, Behavioral: 0.051
+[22:00:53] 💾 Saved complete simulation 385 to simulation_results/sim_0385_result.pkl
+[22:00:53] 📄 Saved JSON version for simulation 385 to simulation_results/sim_0385_result.json
+[22:00:55] 📊 Sim 398: Large cooperation gap - Strategy: 0.835, Behavioral: 0.159
+[22:00:55] 💾 Saved complete simulation 398 to simulation_results/sim_0398_result.pkl
+[22:00:55] 📄 Saved JSON version for simulation 398 to simulation_results/sim_0398_result.json
+[22:00:55] 📊 Sim 411: Large cooperation gap - Strategy: 0.807, Behavioral: 0.560
+[22:00:55] 💾 Saved complete simulation 411 to simulation_results/sim_0411_result.pkl
+[22:00:55] 📄 Saved JSON version for simulation 411 to simulation_results/sim_0411_result.json
+[22:00:56] 📊 Sim 397: Large cooperation gap - Strategy: 0.832, Behavioral: 0.377
+[22:00:57] 💾 Saved complete simulation 397 to simulation_results/sim_0397_result.pkl
+[22:00:57] 📄 Saved JSON version for simulation 397 to simulation_results/sim_0397_result.json
+[22:00:59] 📊 Sim 400: Large cooperation gap - Strategy: 0.960, Behavioral: 0.489
+[22:00:59] 💾 Saved complete simulation 400 to simulation_results/sim_0400_result.pkl
+[22:00:59] 📄 Saved JSON version for simulation 400 to simulation_results/sim_0400_result.json
+[22:01:01] 📊 Sim 408: Large cooperation gap - Strategy: 0.990, Behavioral: 0.628
+[22:01:01] 💾 Saved complete simulation 408 to simulation_results/sim_0408_result.pkl
+[22:01:01] 📄 Saved JSON version for simulation 408 to simulation_results/sim_0408_result.json
+[22:01:03] 📊 Sim 422: Large cooperation gap - Strategy: 0.270, Behavioral: 0.012
+[22:01:03] 💾 Saved complete simulation 422 to simulation_results/sim_0422_result.pkl
+[22:01:03] 📄 Saved JSON version for simulation 422 to simulation_results/sim_0422_result.json
+[22:01:04] ⚠️ Result validation warnings for simulation 403:
+[22:01:04]    - Behavioral cooperation (0.436) exceeds strategy cooperation (0.290) by large margin
+[22:01:04] ⚠️ Validation warnings for simulation 403:
+[22:01:04]    - Behavioral cooperation (0.436) exceeds strategy cooperation (0.290) by large margin
+[22:01:04] 💾 Saved complete simulation 403 to simulation_results/sim_0403_result.pkl
+[22:01:04] 📄 Saved JSON version for simulation 403 to simulation_results/sim_0403_result.json
+[22:01:09] 📊 Sim 393: Large cooperation gap - Strategy: 0.749, Behavioral: 0.472
+[22:01:09] 💾 Saved complete simulation 393 to simulation_results/sim_0393_result.pkl
+[22:01:09] 📄 Saved JSON version for simulation 393 to simulation_results/sim_0393_result.json
+[22:01:09] 📊 PROGRESS: 147150/150000 rounds ( 98.1% of total work) ...
+[22:01:10] 💾 Saved complete simulation 363 to simulation_results/sim_0363_result.pkl
+[22:01:10] 📄 Saved JSON version for simulation 363 to simulation_results/sim_0363_result.json
+[22:01:11] 💾 Saved complete simulation 416 to simulation_results/sim_0416_result.pkl
+[22:01:11] 📄 Saved JSON version for simulation 416 to simulation_results/sim_0416_result.json
+[22:01:12] 📊 Sim 401: Large cooperation gap - Strategy: 0.971, Behavioral: 0.510
+[22:01:12] 💾 Saved complete simulation 401 to simulation_results/sim_0401_result.pkl
+[22:01:12] 📄 Saved JSON version for simulation 401 to simulation_results/sim_0401_result.json
+[22:01:15] 📊 Sim 414: Large cooperation gap - Strategy: 0.739, Behavioral: 0.108
+[22:01:15] 💾 Saved complete simulation 414 to simulation_results/sim_0414_result.pkl
+[22:01:15] 📄 Saved JSON version for simulation 414 to simulation_results/sim_0414_result.json
+[22:01:16] 📊 Sim 430: Large cooperation gap - Strategy: 0.980, Behavioral: 0.656
+[22:01:16] 💾 Saved complete simulation 430 to simulation_results/sim_0430_result.pkl
+[22:01:16] 📄 Saved JSON version for simulation 430 to simulation_results/sim_0430_result.json
+[22:01:17] 📊 Sim 418: Large cooperation gap - Strategy: 0.938, Behavioral: 0.351
+[22:01:17] 💾 Saved complete simulation 418 to simulation_results/sim_0418_result.pkl
+[22:01:17] 📄 Saved JSON version for simulation 418 to simulation_results/sim_0418_result.json
+[22:01:19] 📊 Sim 330: Large cooperation gap - Strategy: 0.514, Behavioral: 0.244
+[22:01:19] 💾 Saved complete simulation 330 to simulation_results/sim_0330_result.pkl
+[22:01:19] 📄 Saved JSON version for simulation 330 to simulation_results/sim_0330_result.json
+[22:01:23] 📊 Sim 433: Large cooperation gap - Strategy: 0.925, Behavioral: 0.450
+[22:01:23] 💾 Saved complete simulation 433 to simulation_results/sim_0433_result.pkl
+[22:01:23] 📄 Saved JSON version for simulation 433 to simulation_results/sim_0433_result.json
+[22:01:25] 📊 Sim 405: Large cooperation gap - Strategy: 0.764, Behavioral: 0.153
+[22:01:26] 💾 Saved complete simulation 405 to simulation_results/sim_0405_result.pkl
+[22:01:26] 📄 Saved JSON version for simulation 405 to simulation_results/sim_0405_result.json
+[22:01:26] 📊 Sim 437: Large cooperation gap - Strategy: 0.979, Behavioral: 0.554
+[22:01:26] 💾 Saved complete simulation 437 to simulation_results/sim_0437_result.pkl
+[22:01:26] 📄 Saved JSON version for simulation 437 to simulation_results/sim_0437_result.json
+[22:01:27] 📊 Sim 412: Large cooperation gap - Strategy: 0.914, Behavioral: 0.448
+[22:01:27] 💾 Saved complete simulation 412 to simulation_results/sim_0412_result.pkl
+[22:01:27] 📄 Saved JSON version for simulation 412 to simulation_results/sim_0412_result.json
+[22:01:31] 📊 Sim 413: Large cooperation gap - Strategy: 0.482, Behavioral: 0.061
+[22:01:31] 💾 Saved complete simulation 413 to simulation_results/sim_0413_result.pkl
+[22:01:31] 📄 Saved JSON version for simulation 413 to simulation_results/sim_0413_result.json
+[22:01:33] 📊 Sim 379: Large cooperation gap - Strategy: 0.487, Behavioral: 0.287
+[22:01:33] 💾 Saved complete simulation 379 to simulation_results/sim_0379_result.pkl
+[22:01:33] 📄 Saved JSON version for simulation 379 to simulation_results/sim_0379_result.json
+[22:01:33] 📊 Sim 417: Large cooperation gap - Strategy: 0.435, Behavioral: 0.177
+[22:01:34] 💾 Saved complete simulation 417 to simulation_results/sim_0417_result.pkl
+[22:01:34] 📄 Saved JSON version for simulation 417 to simulation_results/sim_0417_result.json
+[22:01:35] 📊 Sim 421: Large cooperation gap - Strategy: 0.400, Behavioral: 0.032
+[22:01:35] 💾 Saved complete simulation 421 to simulation_results/sim_0421_result.pkl
+[22:01:35] 📄 Saved JSON version for simulation 421 to simulation_results/sim_0421_result.json
+[22:01:39] 📊 Sim 402: Large cooperation gap - Strategy: 0.860, Behavioral: 0.261
+[22:01:39] 💾 Saved complete simulation 402 to simulation_results/sim_0402_result.pkl
+[22:01:39] 📄 Saved JSON version for simulation 402 to simulation_results/sim_0402_result.json
+[22:01:40] 📊 Sim 427: Large cooperation gap - Strategy: 1.000, Behavioral: 0.773
+[22:01:40] 💾 Saved complete simulation 427 to simulation_results/sim_0427_result.pkl
+[22:01:40] 📄 Saved JSON version for simulation 427 to simulation_results/sim_0427_result.json
+[22:01:41] 💾 Saved complete simulation 424 to simulation_results/sim_0424_result.pkl
+[22:01:41] 📄 Saved JSON version for simulation 424 to simulation_results/sim_0424_result.json
+[22:01:43] 📊 Sim 388: Large cooperation gap - Strategy: 0.730, Behavioral: 0.265
+[22:01:44] 💾 Saved complete simulation 388 to simulation_results/sim_0388_result.pkl
+[22:01:44] 📄 Saved JSON version for simulation 388 to simulation_results/sim_0388_result.json
+[22:01:45] 📊 Sim 453: Large cooperation gap - Strategy: 0.951, Behavioral: 0.738
+[22:01:45] 💾 Saved complete simulation 453 to simulation_results/sim_0453_result.pkl
+[22:01:45] 📄 Saved JSON version for simulation 453 to simulation_results/sim_0453_result.json
+[22:01:47] 📊 Sim 426: Large cooperation gap - Strategy: 0.975, Behavioral: 0.609
+[22:01:47] 💾 Saved complete simulation 426 to simulation_results/sim_0426_result.pkl
+[22:01:47] 📄 Saved JSON version for simulation 426 to simulation_results/sim_0426_result.json
+[22:01:49] 📊 Sim 419: Large cooperation gap - Strategy: 0.557, Behavioral: 0.053
+[22:01:49] 💾 Saved complete simulation 419 to simulation_results/sim_0419_result.pkl
+[22:01:49] 📄 Saved JSON version for simulation 419 to simulation_results/sim_0419_result.json
+[22:01:51] 📊 Sim 420: Large cooperation gap - Strategy: 0.523, Behavioral: 0.124
+[22:01:51] 💾 Saved complete simulation 420 to simulation_results/sim_0420_result.pkl
+[22:01:51] 📄 Saved JSON version for simulation 420 to simulation_results/sim_0420_result.json
+[22:01:53] 📊 Sim 429: Large cooperation gap - Strategy: 0.982, Behavioral: 0.736
+[22:01:53] 💾 Saved complete simulation 429 to simulation_results/sim_0429_result.pkl
+[22:01:53] 📄 Saved JSON version for simulation 429 to simulation_results/sim_0429_result.json
+[22:01:53] 📊 Sim 439: Large cooperation gap - Strategy: 1.000, Behavioral: 0.673
+[22:01:53] 💾 Saved complete simulation 439 to simulation_results/sim_0439_result.pkl
+[22:01:53] 📄 Saved JSON version for simulation 439 to simulation_results/sim_0439_result.json
+[22:01:55] 📊 Sim 425: Large cooperation gap - Strategy: 1.000, Behavioral: 0.713
+[22:01:55] 💾 Saved complete simulation 425 to simulation_results/sim_0425_result.pkl
+[22:01:55] 📄 Saved JSON version for simulation 425 to simulation_results/sim_0425_result.json
+[22:02:00] 📊 Sim 434: Large cooperation gap - Strategy: 0.870, Behavioral: 0.582
+[22:02:00] 💾 Saved complete simulation 434 to simulation_results/sim_0434_result.pkl
+[22:02:00] 📄 Saved JSON version for simulation 434 to simulation_results/sim_0434_result.json
+[22:02:00] 📊 Sim 435: Large cooperation gap - Strategy: 0.922, Behavioral: 0.383
+[22:02:00] 💾 Saved complete simulation 435 to simulation_results/sim_0435_result.pkl
+[22:02:00] 📄 Saved JSON version for simulation 435 to simulation_results/sim_0435_result.json
+[22:02:01] 📊 Sim 423: Large cooperation gap - Strategy: 0.766, Behavioral: 0.498
+[22:02:01] 💾 Saved complete simulation 423 to simulation_results/sim_0423_result.pkl
+[22:02:01] 📄 Saved JSON version for simulation 423 to simulation_results/sim_0423_result.json
+[22:02:02] 📊 Sim 469: Large cooperation gap - Strategy: 0.989, Behavioral: 0.695
+[22:02:03] 💾 Saved complete simulation 469 to simulation_results/sim_0469_result.pkl
+[22:02:03] 📄 Saved JSON version for simulation 469 to simulation_results/sim_0469_result.json
+[22:02:05] 📊 Sim 432: Large cooperation gap - Strategy: 0.932, Behavioral: 0.556
+[22:02:05] 💾 Saved complete simulation 432 to simulation_results/sim_0432_result.pkl
+[22:02:05] 📄 Saved JSON version for simulation 432 to simulation_results/sim_0432_result.json
+[22:02:06] 📊 Sim 442: Large cooperation gap - Strategy: 0.811, Behavioral: 0.527
+[22:02:06] 💾 Saved complete simulation 442 to simulation_results/sim_0442_result.pkl
+[22:02:06] 📄 Saved JSON version for simulation 442 to simulation_results/sim_0442_result.json
+[22:02:09] 📊 Sim 438: Large cooperation gap - Strategy: 0.673, Behavioral: 0.233
+[22:02:09] 💾 Saved complete simulation 438 to simulation_results/sim_0438_result.pkl
+[22:02:09] 📄 Saved JSON version for simulation 438 to simulation_results/sim_0438_result.json
+[22:02:11] 📊 Sim 409: Large cooperation gap - Strategy: 0.748, Behavioral: 0.252
+[22:02:11] 💾 Saved complete simulation 409 to simulation_results/sim_0409_result.pkl
+[22:02:11] 📄 Saved JSON version for simulation 409 to simulation_results/sim_0409_result.json
+[22:02:11] 📊 PROGRESS: 148170/150000 rounds ( 98.8% of total work) ...
+[22:02:15] 📊 Sim 447: Large cooperation gap - Strategy: 0.637, Behavioral: 0.209
+[22:02:15] 💾 Saved complete simulation 447 to simulation_results/sim_0447_result.pkl
+[22:02:15] 📄 Saved JSON version for simulation 447 to simulation_results/sim_0447_result.json
+[22:02:16] 📊 Sim 386: Large cooperation gap - Strategy: 0.645, Behavioral: 0.329
+[22:02:16] 💾 Saved complete simulation 386 to simulation_results/sim_0386_result.pkl
+[22:02:16] 📄 Saved JSON version for simulation 386 to simulation_results/sim_0386_result.json
+[22:02:17] 📊 Sim 443: Large cooperation gap - Strategy: 0.757, Behavioral: 0.128
+[22:02:17] 💾 Saved complete simulation 443 to simulation_results/sim_0443_result.pkl
+[22:02:17] 📄 Saved JSON version for simulation 443 to simulation_results/sim_0443_result.json
+[22:02:18] 📊 Sim 444: Large cooperation gap - Strategy: 0.235, Behavioral: 0.020
+[22:02:18] 💾 Saved complete simulation 444 to simulation_results/sim_0444_result.pkl
+[22:02:18] 📄 Saved JSON version for simulation 444 to simulation_results/sim_0444_result.json
+[22:02:19] 📊 Sim 436: Large cooperation gap - Strategy: 0.995, Behavioral: 0.595
+[22:02:19] 💾 Saved complete simulation 436 to simulation_results/sim_0436_result.pkl
+[22:02:19] 📄 Saved JSON version for simulation 436 to simulation_results/sim_0436_result.json
+[22:02:20] 📊 Sim 440: Large cooperation gap - Strategy: 0.933, Behavioral: 0.414
+[22:02:21] 💾 Saved complete simulation 440 to simulation_results/sim_0440_result.pkl
+[22:02:21] 📄 Saved JSON version for simulation 440 to simulation_results/sim_0440_result.json
+[22:02:25] 📊 Sim 446: Large cooperation gap - Strategy: 0.976, Behavioral: 0.673
+[22:02:25] 💾 Saved complete simulation 446 to simulation_results/sim_0446_result.pkl
+[22:02:25] 📄 Saved JSON version for simulation 446 to simulation_results/sim_0446_result.json
+[22:02:25] 💾 Saved complete simulation 448 to simulation_results/sim_0448_result.pkl
+[22:02:25] 📄 Saved JSON version for simulation 448 to simulation_results/sim_0448_result.json
+[22:02:27] 📊 Sim 476: Large cooperation gap - Strategy: 0.819, Behavioral: 0.343
+[22:02:27] 💾 Saved complete simulation 476 to simulation_results/sim_0476_result.pkl
+[22:02:27] 📄 Saved JSON version for simulation 476 to simulation_results/sim_0476_result.json
+[22:02:29] 📊 Sim 441: Large cooperation gap - Strategy: 1.000, Behavioral: 0.706
+[22:02:29] 💾 Saved complete simulation 441 to simulation_results/sim_0441_result.pkl
+[22:02:29] 📄 Saved JSON version for simulation 441 to simulation_results/sim_0441_result.json
+[22:02:30] 📊 Sim 452: Large cooperation gap - Strategy: 1.000, Behavioral: 0.751
+[22:02:30] 💾 Saved complete simulation 452 to simulation_results/sim_0452_result.pkl
+[22:02:30] 📄 Saved JSON version for simulation 452 to simulation_results/sim_0452_result.json
+[22:02:31] 📊 Sim 454: Large cooperation gap - Strategy: 0.224, Behavioral: 0.011
+[22:02:31] 💾 Saved complete simulation 454 to simulation_results/sim_0454_result.pkl
+[22:02:31] 📄 Saved JSON version for simulation 454 to simulation_results/sim_0454_result.json
+[22:02:33] 📊 Sim 428: Large cooperation gap - Strategy: 0.747, Behavioral: 0.070
+[22:02:33] 📊 Sim 459: Large cooperation gap - Strategy: 0.613, Behavioral: 0.072
+[22:02:33] 💾 Saved complete simulation 428 to simulation_results/sim_0428_result.pkl
+[22:02:33] 📄 Saved JSON version for simulation 428 to simulation_results/sim_0428_result.json
+[22:02:33] 💾 Saved complete simulation 459 to simulation_results/sim_0459_result.pkl
+[22:02:33] 📄 Saved JSON version for simulation 459 to simulation_results/sim_0459_result.json
+[22:02:38] 📊 Sim 463: Large cooperation gap - Strategy: 0.932, Behavioral: 0.340
+[22:02:38] 💾 Saved complete simulation 463 to simulation_results/sim_0463_result.pkl
+[22:02:38] 📄 Saved JSON version for simulation 463 to simulation_results/sim_0463_result.json
+[22:02:40] 📊 Sim 450: Large cooperation gap - Strategy: 0.920, Behavioral: 0.371
+[22:02:40] 💾 Saved complete simulation 450 to simulation_results/sim_0450_result.pkl
+[22:02:40] 📄 Saved JSON version for simulation 450 to simulation_results/sim_0450_result.json
+[22:02:43] 📊 Sim 445: Large cooperation gap - Strategy: 0.552, Behavioral: 0.138
+[22:02:43] 💾 Saved complete simulation 445 to simulation_results/sim_0445_result.pkl
+[22:02:43] 📄 Saved JSON version for simulation 445 to simulation_results/sim_0445_result.json
+[22:02:44] 📊 Sim 464: Large cooperation gap - Strategy: 0.245, Behavioral: 0.022
+[22:02:44] 💾 Saved complete simulation 464 to simulation_results/sim_0464_result.pkl
+[22:02:44] 📄 Saved JSON version for simulation 464 to simulation_results/sim_0464_result.json
+[22:02:44] 📊 Sim 475: Large cooperation gap - Strategy: 0.385, Behavioral: 0.086
+[22:02:44] 💾 Saved complete simulation 475 to simulation_results/sim_0475_result.pkl
+[22:02:44] 📄 Saved JSON version for simulation 475 to simulation_results/sim_0475_result.json
+[22:02:44] 📊 Sim 457: Large cooperation gap - Strategy: 1.000, Behavioral: 0.586
+[22:02:44] 💾 Saved complete simulation 465 to simulation_results/sim_0465_result.pkl
+[22:02:44] 📄 Saved JSON version for simulation 465 to simulation_results/sim_0465_result.json
+[22:02:44] 💾 Saved complete simulation 457 to simulation_results/sim_0457_result.pkl
+[22:02:44] 📄 Saved JSON version for simulation 457 to simulation_results/sim_0457_result.json
+[22:02:46] 📊 Sim 455: Large cooperation gap - Strategy: 0.948, Behavioral: 0.368
+[22:02:46] 💾 Saved complete simulation 455 to simulation_results/sim_0455_result.pkl
+[22:02:46] 📄 Saved JSON version for simulation 455 to simulation_results/sim_0455_result.json
+[22:02:52] 📊 Sim 473: Large cooperation gap - Strategy: 0.985, Behavioral: 0.650
+[22:02:52] 💾 Saved complete simulation 473 to simulation_results/sim_0473_result.pkl
+[22:02:52] 📄 Saved JSON version for simulation 473 to simulation_results/sim_0473_result.json
+[22:02:56] 💾 Saved complete simulation 456 to simulation_results/sim_0456_result.pkl
+[22:02:56] 📄 Saved JSON version for simulation 456 to simulation_results/sim_0456_result.json
+[22:02:58] 📊 Sim 461: Large cooperation gap - Strategy: 1.000, Behavioral: 0.717
+[22:02:58] 💾 Saved complete simulation 461 to simulation_results/sim_0461_result.pkl
+[22:02:58] 📄 Saved JSON version for simulation 461 to simulation_results/sim_0461_result.json
+[22:02:58] 💾 Saved complete simulation 468 to simulation_results/sim_0468_result.pkl
+[22:02:58] 📄 Saved JSON version for simulation 468 to simulation_results/sim_0468_result.json
+[22:02:59] 📊 Sim 471: Large cooperation gap - Strategy: 0.954, Behavioral: 0.517
+[22:02:59] 💾 Saved complete simulation 471 to simulation_results/sim_0471_result.pkl
+[22:02:59] 📄 Saved JSON version for simulation 471 to simulation_results/sim_0471_result.json
+[22:02:59] 📊 Sim 431: Large cooperation gap - Strategy: 0.743, Behavioral: 0.327
+[22:02:59] 📊 Sim 470: Large cooperation gap - Strategy: 0.829, Behavioral: 0.190
+[22:02:59] 💾 Saved complete simulation 431 to simulation_results/sim_0431_result.pkl
+[22:02:59] 📄 Saved JSON version for simulation 431 to simulation_results/sim_0431_result.json
+[22:03:00] 💾 Saved complete simulation 470 to simulation_results/sim_0470_result.pkl
+[22:03:00] 📄 Saved JSON version for simulation 470 to simulation_results/sim_0470_result.json
+[22:03:01] 📊 Sim 467: Large cooperation gap - Strategy: 0.706, Behavioral: 0.053
+[22:03:01] 💾 Saved complete simulation 467 to simulation_results/sim_0467_result.pkl
+[22:03:01] 📄 Saved JSON version for simulation 467 to simulation_results/sim_0467_result.json
+[22:03:03] 📊 Sim 490: Large cooperation gap - Strategy: 0.911, Behavioral: 0.384
+[22:03:03] 💾 Saved complete simulation 490 to simulation_results/sim_0490_result.pkl
+[22:03:03] 📄 Saved JSON version for simulation 490 to simulation_results/sim_0490_result.json
+[22:03:10] 📊 Sim 478: Large cooperation gap - Strategy: 0.966, Behavioral: 0.651
+[22:03:10] 💾 Saved complete simulation 478 to simulation_results/sim_0478_result.pkl
+[22:03:10] 📄 Saved JSON version for simulation 478 to simulation_results/sim_0478_result.json
+[22:03:13] 📊 Sim 486: Large cooperation gap - Strategy: 0.966, Behavioral: 0.720
+[22:03:13] 💾 Saved complete simulation 451 to simulation_results/sim_0451_result.pkl
+[22:03:13] 📄 Saved JSON version for simulation 451 to simulation_results/sim_0451_result.json
+[22:03:13] 📊 PROGRESS: 149160/150000 rounds ( 99.4% of total work) ...
+[22:03:14] 💾 Saved complete simulation 486 to simulation_results/sim_0486_result.pkl
+[22:03:14] 📄 Saved JSON version for simulation 486 to simulation_results/sim_0486_result.json
+[22:03:14] 💾 Saved complete simulation 460 to simulation_results/sim_0460_result.pkl
+[22:03:14] 📄 Saved JSON version for simulation 460 to simulation_results/sim_0460_result.json
+[22:03:15] 📊 Sim 477: Large cooperation gap - Strategy: 0.923, Behavioral: 0.401
+[22:03:15] 💾 Saved complete simulation 477 to simulation_results/sim_0477_result.pkl
+[22:03:15] 📄 Saved JSON version for simulation 477 to simulation_results/sim_0477_result.json
+[22:03:15] 💾 Saved complete simulation 488 to simulation_results/sim_0488_result.pkl
+[22:03:15] 📄 Saved JSON version for simulation 488 to simulation_results/sim_0488_result.json
+[22:03:16] 📊 Sim 462: Large cooperation gap - Strategy: 0.865, Behavioral: 0.397
+[22:03:16] 💾 Saved complete simulation 462 to simulation_results/sim_0462_result.pkl
+[22:03:16] 📄 Saved JSON version for simulation 462 to simulation_results/sim_0462_result.json
+[22:03:19] 📊 Sim 484: Large cooperation gap - Strategy: 0.271, Behavioral: 0.062
+[22:03:19] 💾 Saved complete simulation 484 to simulation_results/sim_0484_result.pkl
+[22:03:19] 📄 Saved JSON version for simulation 484 to simulation_results/sim_0484_result.json
+[22:03:23] 📊 Sim 492: Large cooperation gap - Strategy: 0.964, Behavioral: 0.498
+[22:03:23] 💾 Saved complete simulation 492 to simulation_results/sim_0492_result.pkl
+[22:03:23] 📄 Saved JSON version for simulation 492 to simulation_results/sim_0492_result.json
+[22:03:29] 📊 Sim 485: Large cooperation gap - Strategy: 0.262, Behavioral: 0.012
+[22:03:29] 💾 Saved complete simulation 485 to simulation_results/sim_0485_result.pkl
+[22:03:29] 📄 Saved JSON version for simulation 485 to simulation_results/sim_0485_result.json
+[22:03:29] 📊 Sim 472: Large cooperation gap - Strategy: 0.464, Behavioral: 0.131
+[22:03:29] 💾 Saved complete simulation 472 to simulation_results/sim_0472_result.pkl
+[22:03:29] 📄 Saved JSON version for simulation 472 to simulation_results/sim_0472_result.json
+[22:03:29] 📊 Sim 458: Large cooperation gap - Strategy: 0.367, Behavioral: 0.041
+[22:03:29] 💾 Saved complete simulation 458 to simulation_results/sim_0458_result.pkl
+[22:03:29] 📄 Saved JSON version for simulation 458 to simulation_results/sim_0458_result.json
+[22:03:30] 📊 Sim 494: Large cooperation gap - Strategy: 0.996, Behavioral: 0.754
+[22:03:30] 💾 Saved complete simulation 494 to simulation_results/sim_0494_result.pkl
+[22:03:30] 📄 Saved JSON version for simulation 494 to simulation_results/sim_0494_result.json
+[22:03:30] 📊 Sim 482: Large cooperation gap - Strategy: 0.994, Behavioral: 0.700
+[22:03:30] 💾 Saved complete simulation 482 to simulation_results/sim_0482_result.pkl
+[22:03:30] 📄 Saved JSON version for simulation 482 to simulation_results/sim_0482_result.json
+[22:03:31] 📊 Sim 491: Large cooperation gap - Strategy: 0.927, Behavioral: 0.699
+[22:03:31] 💾 Saved complete simulation 491 to simulation_results/sim_0491_result.pkl
+[22:03:31] 📄 Saved JSON version for simulation 491 to simulation_results/sim_0491_result.json
+[22:03:35] 📊 Sim 466: Large cooperation gap - Strategy: 0.273, Behavioral: 0.011
+[22:03:35] 💾 Saved complete simulation 466 to simulation_results/sim_0466_result.pkl
+[22:03:35] 📄 Saved JSON version for simulation 466 to simulation_results/sim_0466_result.json
+[22:03:36] 📊 Sim 496: Large cooperation gap - Strategy: 0.987, Behavioral: 0.513
+[22:03:36] 💾 Saved complete simulation 496 to simulation_results/sim_0496_result.pkl
+[22:03:36] 📄 Saved JSON version for simulation 496 to simulation_results/sim_0496_result.json
+[22:03:43] 📊 Sim 480: Large cooperation gap - Strategy: 0.813, Behavioral: 0.299
+[22:03:43] 💾 Saved complete simulation 480 to simulation_results/sim_0480_result.pkl
+[22:03:43] 📄 Saved JSON version for simulation 480 to simulation_results/sim_0480_result.json
+[22:03:44] 📊 Sim 497: Large cooperation gap - Strategy: 0.997, Behavioral: 0.745
+[22:03:44] 💾 Saved complete simulation 497 to simulation_results/sim_0497_result.pkl
+[22:03:44] 📄 Saved JSON version for simulation 497 to simulation_results/sim_0497_result.json
+[22:03:44] 📊 Sim 474: Large cooperation gap - Strategy: 0.701, Behavioral: 0.120
+[22:03:45] 💾 Saved complete simulation 474 to simulation_results/sim_0474_result.pkl
+[22:03:45] 📄 Saved JSON version for simulation 474 to simulation_results/sim_0474_result.json
+[22:03:45] 📊 Sim 489: Large cooperation gap - Strategy: 0.985, Behavioral: 0.634
+[22:03:45] 💾 Saved complete simulation 489 to simulation_results/sim_0489_result.pkl
+[22:03:45] 📄 Saved JSON version for simulation 489 to simulation_results/sim_0489_result.json
+[22:03:47] 📊 Sim 499: Large cooperation gap - Strategy: 0.959, Behavioral: 0.610
+[22:03:47] 📊 Sim 481: Large cooperation gap - Strategy: 0.483, Behavioral: 0.060
+[22:03:47] 💾 Saved complete simulation 499 to simulation_results/sim_0499_result.pkl
+[22:03:47] 📄 Saved JSON version for simulation 499 to simulation_results/sim_0499_result.json
+[22:03:47] 💾 Saved complete simulation 481 to simulation_results/sim_0481_result.pkl
+[22:03:47] 📄 Saved JSON version for simulation 481 to simulation_results/sim_0481_result.json
+[22:03:49] 📊 Sim 498: Large cooperation gap - Strategy: 0.944, Behavioral: 0.731
+[22:03:49] 💾 Saved complete simulation 498 to simulation_results/sim_0498_result.pkl
+[22:03:49] 📄 Saved JSON version for simulation 498 to simulation_results/sim_0498_result.json
+[22:03:53] 📊 Sim 479: Large cooperation gap - Strategy: 0.325, Behavioral: 0.026
+[22:03:53] 💾 Saved complete simulation 479 to simulation_results/sim_0479_result.pkl
+[22:03:53] 📄 Saved JSON version for simulation 479 to simulation_results/sim_0479_result.json
+[22:03:56] 📊 Sim 483: Large cooperation gap - Strategy: 0.520, Behavioral: 0.307
+[22:03:57] 💾 Saved complete simulation 483 to simulation_results/sim_0483_result.pkl
+[22:03:57] 📄 Saved JSON version for simulation 483 to simulation_results/sim_0483_result.json
+[22:03:58] 💾 Saved complete simulation 487 to simulation_results/sim_0487_result.pkl
+[22:03:58] 📄 Saved JSON version for simulation 487 to simulation_results/sim_0487_result.json
+[22:03:58] ⚠️ Result validation warnings for simulation 495:
+[22:03:58]    - Behavioral cooperation (0.379) exceeds strategy cooperation (0.266) by large margin
+[22:03:58] ⚠️ Validation warnings for simulation 495:
+[22:03:58]    - Behavioral cooperation (0.379) exceeds strategy cooperation (0.266) by large margin
+[22:03:58] 💾 Saved complete simulation 495 to simulation_results/sim_0495_result.pkl
+[22:03:58] 📄 Saved JSON version for simulation 495 to simulation_results/sim_0495_result.json
+[22:03:58] 📊 Sim 493: Large cooperation gap - Strategy: 0.392, Behavioral: 0.035
+[22:03:58] 💾 Saved complete simulation 493 to simulation_results/sim_0493_result.pkl
+[22:03:58] 📄 Saved JSON version for simulation 493 to simulation_results/sim_0493_result.json
+[22:03:59] 📊 Sim 449: Large cooperation gap - Strategy: 0.708, Behavioral: 0.335
+[22:03:59] 💾 Saved complete simulation 449 to simulation_results/sim_0449_result.pkl
+[22:03:59] 📄 Saved JSON version for simulation 449 to simulation_results/sim_0449_result.json
+[22:03:59] 📂 Loading all completed v3 results...
+[22:04:02] 🎉 v3 EXPERIMENT COMPLETE: 500 simulations in 6420.86 seconds
+[22:04:02] 📊 Analyzing 500 v3 simulation results...
+[22:04:02] 🔍 Analyzing v3 emergent patterns...
+[22:04:02] 📈 Creating v3 visualizations...
+[22:04:02] 📊 Creating v3 visualization analysis...
+[22:04:05] ✅ v3 Visualization saved as v3_streamlined_analysis.png
+[22:04:05] 💾 Saving comprehensive v3 results...
+[22:04:05] 💾 Saving v3 results to: /home/spamtrashheap/society_sim
+[22:04:24] 
+✅ Successfully saved 6 v3 files:
+[22:04:24]    📊 event_log.csv (266626 events)
+[22:04:24]    📊 agent_diary.csv (124456 entries)
+[22:04:24]    📊 extras_diary.csv (1066933 entries)
+[22:04:24]    📊 v3_streamlined_simulation_results.csv (0.29 MB)
+[22:04:24]    📈 v3_summary_stats.csv
+[22:04:24]    📋 v3_experiment_summary.txt
+[22:04:25] ✅ v3 Experiment completed: 6 files saved
