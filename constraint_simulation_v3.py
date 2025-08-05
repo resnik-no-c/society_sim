@@ -2920,7 +2920,7 @@ def run_parameter_sweep(args):
         params_list = []
         
         # CRITICAL FIX #3: Sample across correct parameter dimensions
-        shock_intervals = [10, 15, 20, 25]  # Use documented ranges
+        shock_intervals = [3, 5, 10, 20]  # Use documented ranges
         num_groups_options = [1, 2, 3]
         
         timestamp_print(f"📋 Sweep grid: {len(shock_intervals)} shock intervals × {len(num_groups_options)} group configs")
