@@ -1247,12 +1247,14 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
                 partner.maslow_needs.love = min(10, partner.maslow_needs.love + 0.1)
                 
 
-            # Restore cooperation-dependent birth chance
+            # Birth possibility with turnover rate + cooperation bonus
+            base_birth_rate = params.turnover_rate
+            cooperation_bonus = 3.0 if (person_coop and partner_coop) else 1.0  # 3x bonus for mutual cooperation; fix for parameter interaction issue
+            effective_birth_rate = base_birth_rate * cooperation_bonus
+
             if (len(sim_ref.people) < params.max_population and 
-                random.random() < params.turnover_rate * person.base_coop):  # births ∝ cooperation
-                # Random partner selection for births (more realistic)
-                if random.random() < 0.3:  # 30% chance any interaction could lead to birth
-                    sim_ref._create_birth(person, partner)
+                random.random() < effective_birth_rate):
+                sim_ref._create_birth(person, partner)
                     
             elif not person_coop or not partner_coop:
                 # CRITICAL FIX #1: Count defections properly (one per defecting action)
