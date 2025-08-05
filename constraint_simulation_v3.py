@@ -474,8 +474,7 @@ class FastRelationship:
             self.trust = min(1.0, self.trust + delta)
         else:
             self.betrayal_count += 1
-            asymmetry_factor = 2.2  # Was 1.1 - now matches empirical loss aversion research
-            delta = -asymmetry_factor * base_delta * (group_bias if self.is_same_group else out_group_bias) * 2.3 #Make defection impact 2.3x stronger (empirically validated ratio)
+            delta = -2.3 * base_trust_delta * (group_bias if self.is_same_group else out_group_bias) #Make defection impact 2.3x stronger (empirically validated ratio)
             self.trust = max(0.0, self.trust + delta)
 
 @dataclass
@@ -1249,7 +1248,7 @@ def schedule_interactions(population: List[OptimizedPerson], params: SimulationC
 
             # Birth possibility with turnover rate + cooperation bonus
             base_birth_rate = params.turnover_rate
-            cooperation_bonus = 3.0 if (person_coop and partner_coop) else 1.0  # 3x bonus for mutual cooperation; fix for parameter interaction issue
+            cooperation_bonus = 2.0 if (person_coop and partner_coop) else 1.0  # 2x bonus for mutual cooperation; fix for parameter interaction issue
             effective_birth_rate = base_birth_rate * cooperation_bonus
 
             if (len(sim_ref.people) < params.max_population and 
