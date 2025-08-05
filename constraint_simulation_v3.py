@@ -474,7 +474,7 @@ class FastRelationship:
             self.trust = min(1.0, self.trust + delta)
         else:
             self.betrayal_count += 1
-            delta = -2.3 * base_trust_delta * (group_bias if self.is_same_group else out_group_bias) #Make defection impact 2.3x stronger (empirically validated ratio)
+            delta = -2.3 * base_delta * (group_bias if self.is_same_group else out_group_bias) #Make defection impact 2.3x stronger (empirically validated ratio)
             self.trust = max(0.0, self.trust + delta)
 
 @dataclass
