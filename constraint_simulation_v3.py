@@ -521,7 +521,7 @@ class SimulationConfig:
         assert self.shock_interval_years in [2, 5, 10, 20], f"Invalid shock_interval_years: {self.shock_interval_years}"
         assert 0.0 <= self.homophily_bias <= 0.8, f"Invalid homophily_bias: {self.homophily_bias}"
         assert self.num_groups in [1, 2, 3], f"Invalid num_groups: {self.num_groups}"
-        assert 0.90 <= self.out_group_trust_bias <= 1.05, f"Invalid out_group_trust_bias: {self.out_group_trust_bias}"
+        assert 0.85 <= self.out_group_trust_bias <= 1.00, f"Invalid out_group_trust_bias: {self.out_group_trust_bias}"
         assert 1.1 <= self.out_group_penalty <= 2.3, f"Invalid out_group_penalty: {self.out_group_penalty}"
         
         # SIGNIFICANT FIX #9: Standardized group assignment logic
@@ -534,7 +534,7 @@ class SimulationConfig:
         assert 0.05 <= self.intervention_scale <= 0.30, f"Invalid intervention_scale: {self.intervention_scale}"
         assert 1.5 <= self.event_bonus <= 2.5, f"Invalid event_bonus: {self.event_bonus}"
         assert 0.05 <= self.base_trust_delta <= 0.20, f"Invalid base_trust_delta: {self.base_trust_delta}"
-        assert 1.4 <= self.group_trust_bias <= 2, f"Invalid group_trust_bias: {self.group_trust_bias}"
+        assert 1.6 <= self.group_trust_bias <= 2, f"Invalid group_trust_bias: {self.group_trust_bias}"
         assert 0.0003 <= self.turnover_rate <= 0.0075, f"Invalid turnover_rate: {self.turnover_rate}"
         assert 0.0 <= self.social_diffusion <= 0.10, f"Invalid social_diffusion: {self.social_diffusion}"
         
@@ -920,7 +920,7 @@ class OptimizedPerson:
                            needs.esteem + needs.self_actualization) / 50
         
         # Accelerate decay to hit empirical target half-life
-        pressure_decay = self.stress_recovery_rate * need_satisfaction * 1.60
+        pressure_decay = self.stress_recovery_rate * need_satisfaction * 1.95
 
         # NEW: Very slow decay of out-group penalty accumulator (5x slower than normal decay)
         penalty_decay = pressure_decay / 5.0  # Much slower decay for accumulated penalties
@@ -1034,16 +1034,16 @@ def sample_config() -> SimulationConfig:
             intervention_interval = random.choice([10, 15, 20, 25])
         
         config = SimulationConfig(
-            shock_interval_years=random.choice([2, 5, 10, 20]),  # CRITICAL FIX #3: Use documented ranges
+            shock_interval_years=random.choice([3, 5, 10, 20]),  # CRITICAL FIX #3: Use documented ranges
             homophily_bias=homophily_bias,
             num_groups=num_groups,
-            out_group_trust_bias=random.uniform(0.90, 1.00),
+            out_group_trust_bias=random.uniform(0.85, 0.95),
             out_group_penalty=random.uniform(1.1, 2.3), # Up to 2.3x penalty based on empirical data
             intervention_interval=intervention_interval,
             intervention_scale=random.uniform(0.05, 0.30),
             event_bonus=random.uniform(1.5, 2.5),
             base_trust_delta=random.uniform(0.05, 0.2),
-            group_trust_bias=random.uniform(1.4, 2.0),
+            group_trust_bias=random.uniform(1.6, 2.0),
             resilience_profile={
                 'threshold': random.uniform(0.1, 0.4),
                 'noise': random.uniform(0.0, 0.15)
@@ -1566,7 +1566,7 @@ class EnhancedMassSimulation:
         for person in alive_people:
             try:
                 # Apply collective learning to reduce individual impact
-                individual_shock = effective_severity * 0.5 / learning_factor
+                individual_shock = effective_severity * 0.6 / learning_factor
                 person.acute_stress += individual_shock
                 person.chronic_queue.append(person.acute_stress)
                 person.last_shock_round = self.round  # Track when person experienced shock
