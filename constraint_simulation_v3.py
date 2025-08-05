@@ -518,7 +518,7 @@ class SimulationConfig:
     def __post_init__(self):
         """Validate parameters after initialization"""
         # CRITICAL FIX #3: Validate v3 parameters with correct ranges
-        assert self.shock_interval_years in [2, 5, 10, 20], f"Invalid shock_interval_years: {self.shock_interval_years}"
+        assert self.shock_interval_years in [3, 5, 10, 15, 20], f"Invalid shock_interval_years: {self.shock_interval_years}"
         assert 0.0 <= self.homophily_bias <= 0.8, f"Invalid homophily_bias: {self.homophily_bias}"
         assert self.num_groups in [1, 2, 3], f"Invalid num_groups: {self.num_groups}"
         assert 0.85 <= self.out_group_trust_bias <= 1.00, f"Invalid out_group_trust_bias: {self.out_group_trust_bias}"
