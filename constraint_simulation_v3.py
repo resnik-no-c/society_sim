@@ -920,7 +920,7 @@ class OptimizedPerson:
                            needs.esteem + needs.self_actualization) / 50
         
         # Accelerate decay to hit empirical target half-life
-        pressure_decay = self.stress_recovery_rate * need_satisfaction * 2.6
+        pressure_decay = self.stress_recovery_rate * need_satisfaction * 2.85
 
         # NEW: Very slow decay of out-group penalty accumulator (5x slower than normal decay)
         penalty_decay = pressure_decay / 5.0  # Much slower decay for accumulated penalties
@@ -1637,7 +1637,7 @@ class EnhancedMassSimulation:
     
     def _apply_social_diffusion(self, alive_people: List[OptimizedPerson]):
         """Apply network-neighbor diffusion of trust and update institutional memory."""
-        sd = self.params.social_diffusion
+        sd = self.params.social_diffusion * 1.20 # ↑ bump contagion weight by +20 %
         if sd <= 0:
             return
         # FIXED: Initialize missing variables that were causing NameError
